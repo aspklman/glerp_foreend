@@ -88,6 +88,12 @@ const queryUserRoleMap = (params)=>getAction("/sys/user/queryUserRoleMap",params
 // 重复校验
 const duplicateCheck = (params)=>getAction("/sys/duplicate/check",params);
 
+
+//客户管理
+const getCustomList = (params)=>getAction("/order/custom/list",params);
+
+
+
 export {
   // imgView,
   // doMian,
@@ -133,6 +139,8 @@ export {
   queryUserRoleMap,
   duplicateCheck,
   queryTreeListForRole,
+
+  getCustomList,
 }
 
 

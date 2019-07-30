@@ -34,7 +34,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="客户编号">
-              <j-select-custom v-model="custom" ></j-select-custom>
+              <j-select-custom v-decorator="['customNo', {}]"></j-select-custom>
 <!--              <j-select-user-by-dep v-decorator="['users']"/>-->
 <!--              <j-search-select-tag-->
 <!--                placeholder="请输入客户编号"-->
@@ -87,7 +87,7 @@
               :wrapperCol="wrapperCol"
               label="品牌编号">
 <!--              <j-search-select-tag-->
-<!--                placeholder="请输入型体编号"-->
+<!--                placeholder="请输入品牌编号"-->
 <!--                v-decorator="['brandNo', validatorRules.brandNo ]"-->
 <!--                v-model="asyncSelectValue"-->
 <!--                dict="brand,brand_nm||'('||brand_no||')',brand_no"-->
@@ -647,14 +647,14 @@
   import pick from 'lodash.pick'
   import { FormTypes } from '@/utils/JEditableTableUtil'
   import { JEditableTableMixin } from '@/mixins/JEditableTableMixin'
-  // import JSearchSelectTag from '@/components/dict/JSearchSelectTag'
+  import JSearchSelectTag from '@/components/dict/JSearchSelectTag'
   import JSelectCustom from '@/components/jeecgbiz/JSelectCustom'
 
   export default {
     name: 'OdrmModal',
     mixins: [JEditableTableMixin],
     components: {
-      // JSearchSelectTag,
+      JSearchSelectTag,
       JSelectCustom,
     },
     data() {
@@ -670,6 +670,7 @@
         validatorRules: {
           factNo: { rules: [{ required: true, message: '请输入厂区编号!' }] },
           factOdrNo: { rules: [{ required: true, message: '请输入订单批号!' }] },
+          customNo: { rules: [{ required: true, message: '请输入客户编号!' }] },
           styleNo: { rules: [{ required: true, message: '请输入型体编号!' }] },
           brandNo: { rules: [{ required: true, message: '请输入品牌编号!' }] },
           custReqDate: { rules: [{ required: true, message: '请输入客户要求交期!' }] },

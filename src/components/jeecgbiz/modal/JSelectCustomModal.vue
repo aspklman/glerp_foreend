@@ -23,13 +23,13 @@
 <!--          />-->
 <!--        </a-card>-->
 <!--      </a-col>-->
-      <a-col :md="18" :sm="24">
+<!--      <a-col :md="18" :sm="24">-->
         <a-card :bordered="false">
-          客户编号:
+          客户简称:
           <a-input-search
             :style="{width:'150px',marginBottom:'15px'}"
-            placeholder="请输入客户编号"
-            v-model="queryParam.custom_no"
+            placeholder="请输入客户简称88"
+            v-model="queryParam.customFnm"
             @search="onSearch"
           ></a-input-search>
           <a-button @click="searchReset(1)" style="margin-left: 20px" icon="redo">重置</a-button>
@@ -42,42 +42,42 @@
             :columns="columns"
             :dataSource="dataSource"
             :pagination="ipagination"
-            :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+            :rowSelection="{type: 'radio', selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
             @change="handleTableChange">
           </a-table>
         </a-card>
-      </a-col>
+<!--      </a-col>-->
     </a-row>
   </a-modal>
 </template>
 
 <script>
   import { filterObj } from '@/utils/util'
-  import { queryDepartTreeList, getUserList, queryCustomId, queryUserRoleMap } from '@/api/api'
+  import { queryDepartTreeList, getCustomList, queryUserByDepId, queryUserRoleMap } from '@/api/api'
   export default {
-    name: 'JSelectUserByDepModal',
+    name: 'JSelectCustomModal',
     components: {},
     props:['modalWidth'],
     data() {
       return {
         queryParam: {
-          username:"",
+          customNo:"",
         },
         columns: [
           {
             title: '客户编号',
             align: 'center',
-            dataIndex: 'username'
+            dataIndex: 'customNo'
           },
           {
             title: '客户简称',
             align: 'center',
-            dataIndex: 'custom_fnm'
+            dataIndex: 'customFnm'
           },
           {
             title: '客户全称',
             align: 'center',
-            dataIndex: 'custom_gnm'
+            dataIndex: 'customGnm'
           },
           // {
           //   title: '性别',
@@ -93,16 +93,16 @@
           //     }
           //   }
           // },
-          // {
-          //   title: '手机号码',
-          //   align: 'center',
-          //   dataIndex: 'phone'
-          // },
-          // {
-          //   title: '邮箱',
-          //   align: 'center',
-          //   dataIndex: 'email'
-          // }
+          {
+            title: '创建时间',
+            align: 'center',
+            dataIndex: 'createTime'
+          },
+          {
+            title: '修改时间',
+            align: 'center',
+            dataIndex: 'updateTime'
+          }
         ],
         scrollTrigger: {},
         dataSource: [],
@@ -144,7 +144,7 @@
           this.ipagination.current = 1;
         }
         let params = this.getQueryParams();//查询条件
-        getUserList(params).then((res) => {
+        getCustomList(params).then((res) => {
           if (res.success) {
             this.dataSource = res.result.records;
             this.assignRoleName(this.dataSource);
@@ -225,7 +225,7 @@
         let dataSource = this.dataSource;
         for (let i = 0, len = dataSource.length; i < len; i++) {
           if (rowId === dataSource[i].id) {
-            this.userNameArr.push(dataSource[i].realname);
+            this.userNameArr.push(dataSource[i].customNo);
           }
         }
       },

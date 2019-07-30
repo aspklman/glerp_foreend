@@ -2,7 +2,7 @@
   <div>
     <a-input-search
       v-model="selectedCustoms"
-      placeholder="请先选择客户"
+      placeholder="请选择客户编号"
       disabled
       @search="onSearchCustom">
       <a-button slot="enterButton" :disabled="disabled">选择客户</a-button>
@@ -53,7 +53,7 @@
       event: 'change'
     },
     methods: {
-      //通过组织机构筛选选择客户
+      //选择客户
       onSearchCustom() {
         this.$refs.selectModal.showModal()
         this.onSearchCustomCallBack('')

@@ -28,7 +28,7 @@
           客户简称:
           <a-input-search
             :style="{width:'150px',marginBottom:'15px'}"
-            placeholder="请输入客户简称888"
+            placeholder="请输入客户简称"
             v-model="queryParam.customFnm"
             @search="onSearch"
           ></a-input-search>

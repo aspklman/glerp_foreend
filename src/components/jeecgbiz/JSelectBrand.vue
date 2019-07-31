@@ -1,25 +1,25 @@
 <template>
   <div>
     <a-input-search
-      v-model="selectedCustoms"
-      placeholder="请选择客户编号"
+      v-model="selectedBrands"
+      placeholder="请选择品牌编号"
       disabled
-      @search="onSearchCustom">
-      <a-button slot="enterButton" :disabled="disabled">选择客户</a-button>
+      @search="onSearchBrand">
+      <a-button slot="enterButton" :disabled="disabled">选择品牌</a-button>
     </a-input-search>
-    <j-select-custom-modal
+    <j-select-brand-modal
       ref="selectModal"
       :modal-width="modalWidth"
-      @ok="onSearchCustomCallBack"/>
+      @ok="onSearchBrandCallBack"/>
   </div>
 </template>
 
 <script>
-  import JSelectCustomModal from './modal/JSelectCustomModal'
+  import JSelectBrandModal from './modal/JSelectBrandModal'
 
   export default {
-    name: 'JSelectCustom',
-    components: { JSelectCustomModal },
+    name: 'JSelectBrand',
+    components: { JSelectBrandModal },
     props: {
       modalWidth: {
         type: Number,
@@ -38,15 +38,15 @@
     },
     data() {
       return {
-        selectedCustoms: ''
+        selectedBrands: ''
       }
     },
     mounted() {
-      this.selectedCustoms = this.value
+      this.selectedBrands = this.value
     },
     watch: {
       value(val) {
-        this.selectedCustoms = val
+        this.selectedBrands = val
       }
     },
     model: {
@@ -54,14 +54,14 @@
       event: 'change'
     },
     methods: {
-      //选择客户
-      onSearchCustom() {
+      //选择品牌
+      onSearchBrand() {
         this.$refs.selectModal.showModal()
-        this.onSearchCustomCallBack('')
+        this.onSearchBrandCallBack('')
       },
-      onSearchCustomCallBack(selectedCustoms) {
-        this.selectedCustoms = selectedCustoms
-        this.$emit('change', selectedCustoms)
+      onSearchBrandCallBack(selectedBrands) {
+        this.selectedBrands = selectedBrands
+        this.$emit('change', selectedBrands)
       }
     }
   }

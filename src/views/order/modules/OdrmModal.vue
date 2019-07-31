@@ -34,7 +34,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="客户编号">
-              <j-select-custom v-decorator="['customNo', {}]"></j-select-custom>
+              <j-select-custom v-decorator="['customNo', validatorRules.customNo]"></j-select-custom>    <!-- 【客户编号】字段与【客户组件】关联 -->
 <!--              <j-select-user-by-dep v-decorator="['users']"/>-->
 <!--              <j-search-select-tag-->
 <!--                placeholder="请输入客户编号"-->
@@ -86,6 +86,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="品牌编号">
+              <j-select-brand v-decorator="['brandNo', validatorRules.brandNo]"></j-select-brand>
 <!--              <j-search-select-tag-->
 <!--                placeholder="请输入品牌编号"-->
 <!--                v-decorator="['brandNo', validatorRules.brandNo ]"-->
@@ -93,7 +94,7 @@
 <!--                dict="brand,brand_nm||'('||brand_no||')',brand_no"-->
 <!--                :async="true">-->
 <!--              </j-search-select-tag>-->
-              <a-input placeholder="请输入品牌编号" v-decorator="['brandNo', validatorRules.brandNo ]"/>
+<!--              <a-input placeholder="请输入品牌编号" v-decorator="['brandNo', validatorRules.brandNo ]"/>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -280,8 +281,9 @@
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
-              label="订单类别1.正式 2.销样">
-              <a-input placeholder="请输入订单类别1.正式 2.销样" v-decorator="['odrKind', validatorRules.odrKind ]"/>
+              label="订单类别">
+              <j-dict-select-tag v-decorator="['odrKind', validatorRules.odrKind]" dictCode="odr_kind" />
+<!--              <a-input placeholder="请输入订单类别1.正式 2.销样" v-decorator="['odrKind', validatorRules.odrKind ]"/>-->
             </a-form-item>
           </a-col>
         </a-row>
@@ -290,8 +292,9 @@
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
-              label="订单性质1.正式 2.客户PO 3.预购">
-              <a-input placeholder="请输入订单性质1.正式 2.客户PO 3.预购" v-decorator="['odrType', validatorRules.odrType ]"/>
+              label="订单性质">
+              <j-dict-select-tag v-decorator="['odrType', validatorRules.odrType]" dictCode="odr_type" />
+<!--              <a-input placeholder="请输入订单性质1.正式 2.客户PO 3.预购" v-decorator="['odrType', validatorRules.odrType ]"/>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -363,17 +366,18 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="币别">
-              <a-select v-decorator="['coinKind',validatorRules.coinKind]" placeholder="请选择币别" >
-                <a-select-option :value="1">1.新台币(NTD)</a-select-option>
-                <a-select-option :value="2">2.人民币(RMB)</a-select-option>
-                <a-select-option :value="3">3.港币(HKD)</a-select-option>
-                <a-select-option :value="4">4.美金(USD)</a-select-option>
-                <a-select-option :value="5">5.英镑(GBP)</a-select-option>
-                <a-select-option :value="6">6.德国马克(DEM)</a-select-option>
-                <a-select-option :value="7">7.日币(YEN)</a-select-option>
-                <a-select-option :value="8">8.里拉(ITL)</a-select-option>
-                <a-select-option :value="9">9.欧元(EUR)</a-select-option>
-              </a-select>
+              <j-dict-select-tag v-decorator="['coinKind', validatorRules.coinKind ]" dictCode="coin_kind"/>    <!-- 使用字典作为下拉窗口(1) -->
+<!--              <a-select v-decorator="['coinKind',validatorRules.coinKind]" placeholder="请选择币别" >-->
+<!--                <a-select-option :value="1">1.新台币(NTD)</a-select-option>-->
+<!--                <a-select-option :value="2">2.人民币(RMB)</a-select-option>-->
+<!--                <a-select-option :value="3">3.港币(HKD)</a-select-option>-->
+<!--                <a-select-option :value="4">4.美金(USD)</a-select-option>-->
+<!--                <a-select-option :value="5">5.英镑(GBP)</a-select-option>-->
+<!--                <a-select-option :value="6">6.德国马克(DEM)</a-select-option>-->
+<!--                <a-select-option :value="7">7.日币(YEN)</a-select-option>-->
+<!--                <a-select-option :value="8">8.里拉(ITL)</a-select-option>-->
+<!--                <a-select-option :value="9">9.欧元(EUR)</a-select-option>-->
+<!--              </a-select>-->
 <!--              <a-input placeholder="请输入币别" v-decorator="['coinKind', validatorRules.coinKind ]"/>-->
             </a-form-item>
           </a-col>
@@ -648,19 +652,23 @@
   import { FormTypes } from '@/utils/JEditableTableUtil'
   import { JEditableTableMixin } from '@/mixins/JEditableTableMixin'
   import JSearchSelectTag from '@/components/dict/JSearchSelectTag'
-  import JSelectCustom from '@/components/jeecgbiz/JSelectCustom'
+  import JSelectCustom from '@/components/jeecgbiz/JSelectCustom'       //引入【客户组件】
+  import JSelectBrand from '@/components/jeecgbiz/JSelectBrand'
+  import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'   //使用字典作为下拉窗口(2)
 
   export default {
     name: 'OdrmModal',
     mixins: [JEditableTableMixin],
     components: {
       JSearchSelectTag,
-      JSelectCustom,
+      JSelectCustom,    //导出【客户组件】
+      JSelectBrand,
+      JDictSelectTag,   //使用字典作为下拉窗口(3)
     },
     data() {
       return {
         // form: this.$form.createForm(this),
-        custom:"",
+        // custom:"",
         // selectValue:"",
         // asyncSelectValue:"",
 
@@ -670,9 +678,9 @@
         validatorRules: {
           factNo: { rules: [{ required: true, message: '请输入厂区编号!' }] },
           factOdrNo: { rules: [{ required: true, message: '请输入订单批号!' }] },
-          customNo: { rules: [{ required: true, message: '请输入客户编号!' }] },
+          customNo: { rules: [{ required: true, message: '请输入客户编号!' }], initialValue: 'CR001' },
           styleNo: { rules: [{ required: true, message: '请输入型体编号!' }] },
-          brandNo: { rules: [{ required: true, message: '请输入品牌编号!' }] },
+          brandNo: { rules: [{ required: true, message: '请输入品牌编号!' }], initialValue: 'CR' },
           custReqDate: { rules: [{ required: true, message: '请输入客户要求交期!' }] },
           revOdrDate: { rules: [{ required: true, message: '请输入接单日期!' }] },
           sizeKind: { rules: [{ required: true, message: '请输入SIZE种类!' }] },
@@ -680,8 +688,8 @@
           ctnPair: { rules: [{ required: true, message: '请输入每箱双数!' }] },
           odrTotCtn: { rules: [{ required: true, message: '请输入总箱数!' }] },
           odrYymm: { rules: [{ required: true, message: '请输入订单年月!' }] },
-          odrKind: { rules: [{ required: true, message: '请输入订单类别1.正式 2.销样!' }] },
-          odrType: { rules: [{ required: true, message: '请输入订单性质1.正式 2.客户PO 3.预购!' }] },
+          odrKind: { rules: [{ required: true, message: '请输入订单类别!' }], initialValue: '1'},
+          odrType: { rules: [{ required: true, message: '请输入订单性质!' }], initialValue: '1' },
           mainmatAddRate: { rules: [{ required: true, message: '请输入主料加成比!' }] },
           submatAddRate: { rules: [{ required: true, message: '请输入副料加成比!' }] },
           shipQty: { rules: [{ required: true, message: '请输入出货数量!' }] },

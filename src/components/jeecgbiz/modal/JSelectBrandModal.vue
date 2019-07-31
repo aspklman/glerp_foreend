@@ -11,15 +11,15 @@
   >
     <a-row :gutter="10" style="background-color: #ececec; padding: 10px; margin: -10px">
       <a-card :bordered="false">
-        客户简称:
+        品牌名称:
         <a-input-search
           :style="{width:'150px',marginBottom:'15px'}"
-          placeholder="请输入客户简称"
-          v-model="queryParam.customFnm"
+          placeholder="请输入品牌名称"
+          v-model="queryParam.brandNm"
           @search="onSearch"
         ></a-input-search>
         <a-button @click="searchReset(1)" style="margin-left: 20px" icon="redo">重置</a-button>
-        <!--客户列表-->
+        <!--品牌列表-->
         <a-table
           ref="table"
           :scroll="scrollTrigger"
@@ -38,32 +38,27 @@
 
 <script>
   import { filterObj } from '@/utils/util'
-  import { getCustomList } from '@/api/api'
+  import { getBrandList } from '@/api/api'
 
   export default {
-    name: 'JSelectCustomModal',
+    name: 'JSelectBrandModal',
     components: {},
     props: ['modalWidth'],
     data() {
       return {
         queryParam: {
-          customNo: ''
+          brandNo: ''
         },
         columns: [
           {
-            title: '客户编号',
+            title: '品牌编号',
             align: 'center',
-            dataIndex: 'customNo'
+            dataIndex: 'brandNo'
           },
           {
-            title: '客户简称',
+            title: '品牌名称',
             align: 'center',
-            dataIndex: 'customFnm'
-          },
-          {
-            title: '客户全称',
-            align: 'center',
-            dataIndex: 'customGnm'
+            dataIndex: 'brandNm'
           },
           {
             title: '创建时间',
@@ -79,8 +74,8 @@
         scrollTrigger: {},
         dataSource: [],
         selectedKeys: [],
-        customNameArr: [],
-        title: '选择客户',
+        brandNmArr: [],
+        title: '选择品牌',
         ipagination: {
           current: 1,
           pageSize: 10,
@@ -93,7 +88,7 @@
           total: 0
         },
         isorter: {
-          column: 'customNo',
+          column: 'brandNo',
           order: 'asc'
         },
         selectedRowKeys: [],
@@ -113,7 +108,7 @@
           this.ipagination.current = 1
         }
         let params = this.getQueryParams()//查询条件
-        getCustomList(params).then((res) => {
+        getBrandList(params).then((res) => {
           if (res.success) {
             this.dataSource = res.result.records
             this.ipagination.total = res.result.total
@@ -154,7 +149,7 @@
           that.loadData(1)
         }
         that.selectedRowKeys = []
-        that.customNameArr = []
+        that.brandNmArr = []
         that.selectedKeys = []
       },
       close() {
@@ -173,17 +168,17 @@
       handleSubmit() {
         let that = this
         for (let i = 0, len = this.selectedRowKeys.length; i < len; i++) {
-          this.getCustomNos(this.selectedRowKeys[i])
+          this.getBrandNos(this.selectedRowKeys[i])
         }
-        that.$emit('ok', that.customNameArr.join(','))
+        that.$emit('ok', that.brandNmArr.join(','))
         that.close()
       },
-      // 遍历匹配,获取【客户编号】
-      getCustomNos(rowId) {
+      // 遍历匹配,获取【品牌编号】
+      getBrandNos(rowId) {
         let dataSource = this.dataSource
         for (let i = 0, len = dataSource.length; i < len; i++) {
           if (rowId === dataSource[i].id) {
-            this.customNameArr.push(dataSource[i].customNo)
+            this.brandNmArr.push(dataSource[i].brandNo)
           }
         }
       },
@@ -207,7 +202,7 @@
     padding-bottom: 10px;
   }
 
-  #components-layout-demo-custom-trigger .trigger {
+  #components-layout-demo-brand-trigger .trigger {
     font-size: 18px;
     line-height: 64px;
     padding: 0 24px;

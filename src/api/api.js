@@ -90,7 +90,10 @@ const duplicateCheck = (params)=>getAction("/sys/duplicate/check",params);
 
 
 //客户管理
-const getCustomList = (params)=>getAction("/order/custom/list",params);
+const getCustomList = (params)=>getAction("/order/custom/list",params);     //第一步：定义
+
+//品牌管理
+const getBrandList = (params)=>getAction("/bom/brand/list",params);
 
 
 
@@ -140,7 +143,8 @@ export {
   duplicateCheck,
   queryTreeListForRole,
 
-  getCustomList,
+  getCustomList,    //第二步：输出
+  getBrandList,
 }
 
 

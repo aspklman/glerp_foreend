@@ -95,6 +95,8 @@ const getCustomList = (params)=>getAction("/order/custom/list",params);     //�
 //品牌管理
 const getBrandList = (params)=>getAction("/bom/brand/list",params);
 
+//目的地管理
+const getCountryList = (params)=>getAction("/order/country/list",params);
 
 
 export {
@@ -145,6 +147,7 @@ export {
 
   getCustomList,    //第二步：输出
   getBrandList,
+  getCountryList
 }
 
 

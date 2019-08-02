@@ -102,7 +102,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="楦头肥度">
-              <a-input placeholder="请输入楦头肥度" v-decorator="['lastWidth', {}]"/>
+              <a-input placeholder="请输入楦头肥度" v-decorator="['lastWidth', validatorRules.lastWidth]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -256,7 +256,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="目的国家">
-              <a-input placeholder="请输入目的国家" v-decorator="['destCountry', {}]"/>
+              <j-select-country v-decorator="['destCountry', validatorRules.destCountry]"></j-select-country>
+<!--              <a-input placeholder="请输入目的国家" v-decorator="['destCountry', {}]"/>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -264,7 +265,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="目的港口">
-              <a-input placeholder="请输入目的港口" v-decorator="['destPort', {}]"/>
+              <a-input v-decorator="['destPort', {}]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -274,7 +275,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="订单年月">
-              <a-input placeholder="请输入订单年月" v-decorator="['odrYymm', validatorRules.odrYymm ]"/>
+              <a-input v-decorator="['odrYymm', validatorRules.odrYymm ]" disabled/>
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -302,7 +303,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="原订单厂别">
-              <a-input placeholder="请输入原订单厂别" v-decorator="['oriFctryNo', {}]"/>
+              <a-input v-decorator="['oriFctryNo', {}]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -312,7 +313,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="代工厂别">
-              <a-input placeholder="请输入代工厂别" v-decorator="['outworkFctryNo', {}]"/>
+              <a-input v-decorator="['outworkFctryNo', {}]" disabled/>
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -320,7 +321,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="用量产生时间">
-              <a-input placeholder="请输入用量产生时间" v-decorator="['purplanDate', {}]"/>
+              <a-input v-decorator="['purplanDate', {}]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -330,7 +331,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="主料加成比">
-              <a-input placeholder="请输入主料加成比" v-decorator="['mainmatAddRate', validatorRules.mainmatAddRate ]"/>
+              <a-input v-decorator="['mainmatAddRate', validatorRules.mainmatAddRate ]" disabled/>
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -338,7 +339,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="副料加成比">
-              <a-input placeholder="请输入副料加成比" v-decorator="['submatAddRate', validatorRules.submatAddRate ]"/>
+              <a-input v-decorator="['submatAddRate', validatorRules.submatAddRate ]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -348,7 +349,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="厂内交期">
-              <a-input placeholder="请输入厂内交期" v-decorator="['factReqDate', {}]"/>
+              <a-input placeholder="请输入厂内交期" v-decorator="['factReqDate', {}]" disabled/>
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -356,7 +357,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="出货数量">
-              <a-input placeholder="请输入出货数量" v-decorator="['shipQty', validatorRules.shipQty ]"/>
+              <a-input placeholder="请输入出货数量" v-decorator="['shipQty', validatorRules.shipQty ]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -390,31 +391,31 @@
             </a-form-item>
           </a-col>
         </a-row>
-        <a-row>
-          <a-col :span="12" :gutter="8">
-            <a-form-item
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-              label="异动人">
-              <a-input placeholder="请输入异动人" v-decorator="['userNo', validatorRules.userNo ]"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12" :gutter="8">
-            <a-form-item
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-              label="异动时间">
-              <a-input placeholder="请输入异动时间" v-decorator="['modifyDt', validatorRules.modifyDt ]"/>
-            </a-form-item>
-          </a-col>
-        </a-row>
+<!--        <a-row>-->
+<!--          <a-col :span="12" :gutter="8">-->
+<!--            <a-form-item-->
+<!--              :labelCol="labelCol"-->
+<!--              :wrapperCol="wrapperCol"-->
+<!--              label="异动人">-->
+<!--              <a-input placeholder="请输入异动人" v-decorator="['userNo', validatorRules.userNo ]"/>-->
+<!--            </a-form-item>-->
+<!--          </a-col>-->
+<!--          <a-col :span="12" :gutter="8">-->
+<!--            <a-form-item-->
+<!--              :labelCol="labelCol"-->
+<!--              :wrapperCol="wrapperCol"-->
+<!--              label="异动时间">-->
+<!--              <a-input placeholder="请输入异动时间" v-decorator="['modifyDt', validatorRules.modifyDt ]"/>-->
+<!--            </a-form-item>-->
+<!--          </a-col>-->
+<!--        </a-row>-->
         <a-row>
           <a-col :span="12" :gutter="8">
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="预计用量版次">
-              <a-input placeholder="请输入预计用量版次" v-decorator="['edition', {}]"/>
+              <a-input placeholder="请输入预计用量版次" v-decorator="['edition', {}]" disabled/>
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -422,7 +423,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="用量转档注记">
-              <a-input placeholder="请输入用量转档注记" v-decorator="['tranRmk', validatorRules.tranRmk ]"/>
+              <a-input v-decorator="['tranRmk', validatorRules.tranRmk ]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -440,7 +441,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="验货数量">
-              <a-input placeholder="请输入验货数量" v-decorator="['insTqty', {}]"/>
+              <a-input placeholder="请输入验货数量" v-decorator="['insTqty', validatorRules.insTqty]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -457,8 +458,8 @@
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
-              label="固定装注记1斩刀用量 2订单主档">
-              <a-input placeholder="请输入固定装注记1斩刀用量 2订单主档" v-decorator="['ctnFixRmk', {}]"/>
+              label="固定装注记">
+              <a-input placeholder="请输入固定装注记" v-decorator="['ctnFixRmk', validatorRules.ctnFixRmk]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -468,7 +469,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="翻箱次数">
-              <a-input placeholder="请输入翻箱次数" v-decorator="['siCheckNum', validatorRules.siCheckNum ]"/>
+              <a-input placeholder="请输入翻箱次数" v-decorator="['siCheckNum', validatorRules.siCheckNum ]" disabled/>
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -476,7 +477,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="生产年月">
-              <a-input placeholder="请输入生产年月" v-decorator="['productYymm', {}]"/>
+              <a-input placeholder="请输入生产年月" v-decorator="['productYymm', {}]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -486,7 +487,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="生产周次">
-              <a-input placeholder="请输入生产周次" v-decorator="['productWeek', {}]"/>
+              <a-input v-decorator="['productWeek', validatorRules.productWeek]" disabled/>
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -494,7 +495,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="销售注记">
-              <a-input placeholder="请输入销售注记" v-decorator="['salRmk', validatorRules.salRmk ]"/>
+              <a-input v-decorator="['salRmk', validatorRules.salRmk ]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -504,7 +505,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="生产指令确认注记">
-              <a-input placeholder="请输入生产指令确认注记" v-decorator="['proeRmk', {}]"/>
+              <j-dict-select-tag v-decorator="['proeRmk', validatorRules.proeRmk]" dictCode="yn_status" disabled/>
+<!--              <a-input placeholder="请输入生产指令确认注记" v-decorator="['proeRmk', {}]"/>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -512,7 +514,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="生产指令确认人">
-              <a-input placeholder="请输入生产指令确认人" v-decorator="['proeUser', {}]"/>
+              <a-input v-decorator="['proeUser', {}]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -522,7 +524,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="生产指令确认时间">
-              <a-input placeholder="请输入生产指令确认时间" v-decorator="['proeDt', {}]"/>
+              <a-input v-decorator="['proeDt', {}]" disabled />
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -548,7 +550,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="条码批号">
-              <a-input placeholder="请输入条码批号" v-decorator="['lotNo', {}]"/>
+              <a-input v-decorator="['lotNo', {}]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -566,7 +568,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="销售类别(财务)">
-              <a-input placeholder="请输入销售类别(财务)" v-decorator="['salKind', {}]"/>
+              <j-dict-select-tag v-decorator="['salKind', validatorRules.salKind]" dictCode="sale_kind" />
+<!--              <a-input placeholder="销售类别(财务)" v-decorator="['salKind', validatorRules.salKind]" />-->
             </a-form-item>
           </a-col>
         </a-row>
@@ -576,7 +579,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="请款数量">
-              <a-input placeholder="请输入请款数量" v-decorator="['payQty', {}]"/>
+              <a-input v-decorator="['payQty', {}]" disabled/>
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -584,7 +587,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="审核注记">
-              <a-input placeholder="请输入审核注记" v-decorator="['verifyRmk', validatorRules.verifyRmk ]"/>
+              <j-dict-select-tag v-decorator="['verifyRmk', validatorRules.verifyRmk]" dictCode="audit_status" disabled/>
+<!--              <a-input placeholder="请输入审核注记" v-decorator="['verifyRmk', validatorRules.verifyRmk ]"/>-->
             </a-form-item>
           </a-col>
         </a-row>
@@ -594,7 +598,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="审核人">
-              <a-input placeholder="请输入审核人" v-decorator="['verifyUser', {}]"/>
+              <a-input v-decorator="['verifyUser', {}]" disabled/>
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -602,7 +606,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="审核时间">
-              <a-input placeholder="请输入审核时间" v-decorator="['verifyDt', {}]"/>
+              <a-input v-decorator="['verifyDt', {}]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -612,7 +616,9 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="需成品鞋利库">
-              <a-input placeholder="请输入需成品鞋利库" v-decorator="['avaRmk', {}]"/>
+              <j-dict-select-tag v-decorator="['avaRmk', validatorRules.avaRmk]" :type="'radio'" :triggerChange="true" dictCode="yn_status" />
+<!--              <j-dict-select-tag  v-decorator="['avaRmk', validatorRules.avaRmk]" :type="'radio'" :triggerChange="true" dictCode="yn"/>-->
+              <!--              <a-input placeholder="请输入需成品鞋利库" v-decorator="['avaRmk', {}]"/>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -620,7 +626,43 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="外包bom配色">
-              <a-input placeholder="请输入外包bom配色" v-decorator="['matchNo', {}]"/>
+              <a-input v-decorator="['matchNo', {}]" disabled/>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row>
+          <a-col :span="12" :gutter="8">
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="创建人">
+              <a-input v-decorator="['createBy', {}]" disabled/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12" :gutter="8">
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="创建时间">
+              <a-input v-decorator="['createTime', {}]" disabled/>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row>
+          <a-col :span="12" :gutter="8">
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="修改人">
+              <a-input v-decorator="['updateBy', {}]" disabled/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12" :gutter="8">
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="修改时间">
+              <a-input v-decorator="['updateTime', {}]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -654,6 +696,7 @@
   import JSearchSelectTag from '@/components/dict/JSearchSelectTag'
   import JSelectCustom from '@/components/jeecgbiz/JSelectCustom'       //引入【客户组件】
   import JSelectBrand from '@/components/jeecgbiz/JSelectBrand'
+  import JSelectCountry from '@/components/jeecgbiz/JSelectCountry'
   import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'   //使用字典作为下拉窗口(2)
 
   export default {
@@ -663,6 +706,7 @@
       JSearchSelectTag,
       JSelectCustom,    //导出【客户组件】
       JSelectBrand,
+      JSelectCountry,
       JDictSelectTag,   //使用字典作为下拉窗口(3)
     },
     data() {
@@ -681,6 +725,7 @@
           customNo: { rules: [{ required: true, message: '请输入客户编号!' }], initialValue: 'CR001' },
           styleNo: { rules: [{ required: true, message: '请输入型体编号!' }] },
           brandNo: { rules: [{ required: true, message: '请输入品牌编号!' }], initialValue: 'CR' },
+          lastWidth: { rules: [{ required: true, message: '请输入楦头肥度!' }], initialValue: 'M' },
           custReqDate: { rules: [{ required: true, message: '请输入客户要求交期!' }] },
           revOdrDate: { rules: [{ required: true, message: '请输入接单日期!' }] },
           sizeKind: { rules: [{ required: true, message: '请输入SIZE种类!' }] },
@@ -690,17 +735,23 @@
           odrYymm: { rules: [{ required: true, message: '请输入订单年月!' }] },
           odrKind: { rules: [{ required: true, message: '请输入订单类别!' }], initialValue: '1'},
           odrType: { rules: [{ required: true, message: '请输入订单性质!' }], initialValue: '1' },
-          mainmatAddRate: { rules: [{ required: true, message: '请输入主料加成比!' }] },
-          submatAddRate: { rules: [{ required: true, message: '请输入副料加成比!' }] },
-          shipQty: { rules: [{ required: true, message: '请输入出货数量!' }] },
+          mainmatAddRate: { rules: [{ required: true, message: '请输入主料加成比!' }], initialValue: 0 },
+          submatAddRate: { rules: [{ required: true, message: '请输入副料加成比!' }], initialValue: 0 },
+          shipQty: { rules: [{ required: true, message: '请输入出货数量!' }], initialValue: 0 },
           coinKind: { rules: [{ required: true, message: '请输入币别!' }], initialValue: '4' },
+          salKind: { rules: [{ required: true, message: '请选择销售类别(财务)!' }], initialValue: '2' },
           unitPrice: { rules: [{ required: true, message: '请输入含税单价!' }] },
           userNo: { rules: [{ required: true, message: '请输入异动人!' }] },
           modifyDt: { rules: [{ required: true, message: '请输入异动时间!' }] },
-          tranRmk: { rules: [{ required: true, message: '请输入用量转档注记!' }] },
-          siCheckNum: { rules: [{ required: true, message: '请输入翻箱次数!' }] },
-          salRmk: { rules: [{ required: true, message: '请输入销售注记!' }] },
-          verifyRmk: { rules: [{ required: true, message: '请输入审核注记!' }] },
+          tranRmk: { rules: [{ required: true, message: '请输入用量转档注记!' }], initialValue: 'N' },
+          insTqty: { rules: [{ required: true, message: '请输入验货数量!' }], initialValue: 0 },
+          ctnFixRmk: { rules: [{ required: true, message: '请输入翻箱次数!' }], initialValue: '1' },
+          siCheckNum: { rules: [{ required: true, message: '请输入固定装注记!' }], initialValue: 0 },
+          productWeek: { rules: [{ required: true, message: '请输入生产周次!' }], initialValue: '0' },
+          salRmk: { rules: [{ required: true, message: '请输入销售注记!' }], initialValue: '1' },
+          proeRmk: { rules: [{ required: true, message: '请选择生产指令确认注记!' }], initialValue: 'N' },
+          verifyRmk: { rules: [{ required: true, message: '请输入审核注记!' }], initialValue: 'N' },
+          avaRmk: { rules: [{ required: true, message: '请选择是否需成品鞋利库!' }], initialValue: 'N' },
         },
         refKeys: ['odrd', ],
         activeKey: 'odrd',

@@ -51,7 +51,7 @@
         },
         columns: [
           {
-            title: '目的地编号888',
+            title: '目的地编号',
             align: 'center',
             dataIndex: 'countryNo'
           },

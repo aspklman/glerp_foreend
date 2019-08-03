@@ -69,6 +69,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="型体编号">
+              <j-select-stylem v-decorator="['styleNo', validatorRules.styleNo]"></j-select-stylem>
 <!--              <j-search-select-tag-->
 <!--                placeholder="请输入型体编号"-->
 <!--                v-decorator="['styleNo', validatorRules.styleNo ]"-->
@@ -76,7 +77,7 @@
 <!--                dict="stylem,style_color||'('||style_no||')',style_no"-->
 <!--                :async="true">-->
 <!--              </j-search-select-tag>-->
-              <a-input placeholder="请输入型体编号" v-decorator="['styleNo', validatorRules.styleNo ]"/>
+<!--              <a-input placeholder="请输入型体编号" v-decorator="['styleNo', validatorRules.styleNo ]"/>-->
             </a-form-item>
           </a-col>
         </a-row>
@@ -120,7 +121,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="生产部别">
-              <a-input placeholder="请输入生产部别" v-decorator="['proDept', {}]"/>
+              <j-dict-select-tag v-decorator="['proDept', validatorRules.proDept]" dictCode="pro_dept"/>
+<!--              <a-input v-decorator="['proDept', validatorRules.proDept]" dictCode="pro_dept"/>-->
             </a-form-item>
           </a-col>
         </a-row>
@@ -138,7 +140,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="客户要求交期">
-              <a-input placeholder="请输入客户要求交期" v-decorator="['custReqDate', validatorRules.custReqDate ]"/>
+              <j-date placeholder="请选择客户要求交期" v-decorator="['custReqDate', validatorRules.custReqDate ]" :showTime="true" dateFormat="YYYY/MM/DD" />
+<!--              <a-input placeholder="请输入客户要求交期" v-decorator="['custReqDate', validatorRules.custReqDate ]"/>-->
             </a-form-item>
           </a-col>
         </a-row>
@@ -148,7 +151,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="接单日期">
-              <a-input placeholder="请输入接单日期" v-decorator="['revOdrDate', validatorRules.revOdrDate ]"/>
+              <j-date placeholder="请选择接单日期" v-decorator="['revOdrDate', validatorRules.revOdrDate ]" :showTime="true" dateFormat="YYYY/MM/DD" />
+              <!--              <a-input placeholder="请输入接单日期" v-decorator="['revOdrDate', validatorRules.revOdrDate ]"/>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -156,7 +160,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="预计用量编号">
-              <a-input placeholder="请输入预计用量编号" v-decorator="['purplanNo', {}]"/>
+              <a-input v-decorator="['purplanNo', {}]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -166,7 +170,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="第一次确认日">
-              <a-input placeholder="请输入第一次确认日" v-decorator="['fCfmDate', {}]"/>
+              <j-date v-decorator="['fCfmDate', validatorRules.fCfmDate ]" :showTime="true" dateFormat="YYYY/MM/DD" disabled/>
+              <!--              <a-input v-decorator="['fCfmDate', {}]" disabled/>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -174,7 +179,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="最后确认日">
-              <a-input placeholder="请输入最后确认日" v-decorator="['lCfmDate', {}]"/>
+              <j-date v-decorator="['lCfmDate', validatorRules.lCfmDate ]" :showTime="true" dateFormat="YYYY/MM/DD" disabled/>
+<!--              <a-input v-decorator="['lCfmDate', {}]" disabled/>-->
             </a-form-item>
           </a-col>
         </a-row>
@@ -184,7 +190,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="SIZE种类">
-              <a-input placeholder="请输入SIZE种类" v-decorator="['sizeKind', validatorRules.sizeKind ]"/>
+              <a-input v-decorator="['sizeKind', validatorRules.sizeKind ]" disabled/>
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -192,7 +198,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="订单双数">
-              <a-input placeholder="请输入订单双数" v-decorator="['odrQty', validatorRules.odrQty ]"/>
+              <a-input v-decorator="['odrQty', validatorRules.odrQty ]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -202,7 +208,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="每箱双数">
-              <a-input placeholder="请输入每箱双数" v-decorator="['ctnPair', validatorRules.ctnPair ]"/>
+              <a-input v-decorator="['ctnPair', validatorRules.ctnPair ]" disabled/>
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -210,7 +216,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="总箱数">
-              <a-input placeholder="请输入总箱数" v-decorator="['odrTotCtn', validatorRules.odrTotCtn ]"/>
+              <a-input v-decorator="['odrTotCtn', validatorRules.odrTotCtn ]" disabled/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -220,7 +226,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="安排验货日">
-              <a-input placeholder="请输入安排验货日" v-decorator="['arrInsDate', {}]"/>
+              <j-date v-decorator="['arrInsDate', validatorRules.arrInsDate ]" :showTime="true" dateFormat="YYYY/MM/DD" disabled/>
+              <!--              <a-input v-decorator="['arrInsDate', {}]" disabled/>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -228,7 +235,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="实际验货日">
-              <a-input placeholder="请输入实际验货日" v-decorator="['actInsDate', {}]"/>
+              <j-date v-decorator="['actInsDate', validatorRules.actInsDate ]" :showTime="true" dateFormat="YYYY/MM/DD" disabled/>
+              <!--              <a-input v-decorator="['actInsDate', {}]" disabled/>-->
             </a-form-item>
           </a-col>
         </a-row>
@@ -238,7 +246,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="实际出货日">
-              <a-input placeholder="请输入实际出货日" v-decorator="['shipDate', {}]"/>
+              <j-date v-decorator="['shipDate', validatorRules.shipDate ]" :showTime="true" dateFormat="YYYY/MM/DD" disabled/>
+              <!--              <a-input v-decorator="['shipDate', {}]" disabled/>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -246,7 +255,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="取消日期">
-              <a-input placeholder="请输入取消日期" v-decorator="['cancelDate', {}]"/>
+              <j-date placeholder="请输入取消日期" v-decorator="['cancelDate', validatorRules.cancelDate ]" :showTime="true" dateFormat="YYYY/MM/DD" />
+<!--              <a-input placeholder="请输入取消日期" v-decorator="['cancelDate', {}]"/>-->
             </a-form-item>
           </a-col>
         </a-row>
@@ -255,9 +265,9 @@
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
-              label="目的国家">
+              label="目的地编号">
               <j-select-country v-decorator="['destCountry', validatorRules.destCountry]"></j-select-country>
-<!--              <a-input placeholder="请输入目的国家" v-decorator="['destCountry', {}]"/>-->
+<!--              <a-input placeholder="请输入目的地编号" v-decorator="['destCountry', {}]"/>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -349,7 +359,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="厂内交期">
-              <a-input placeholder="请输入厂内交期" v-decorator="['factReqDate', {}]" disabled/>
+              <j-date v-decorator="['factReqDate', {} ]" :showTime="true" dateFormat="YYYY/MM/DD" disabled/>
+              <!--              <a-input placeholder="请输入厂内交期" v-decorator="['factReqDate', {}]" disabled/>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -450,8 +461,8 @@
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
-              label="SKU NO 开发版本编号">
-              <a-input placeholder="请输入SKU NO 开发版本编号" v-decorator="['skuNo', {}]"/>
+              label="开发版号">
+              <a-input placeholder="请输入开发版号" v-decorator="['skuNo', {}]"/>
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -542,7 +553,12 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="增值代码">
-              <a-input placeholder="请输入增值代码" v-decorator="['vaCode', {}]"/>
+              <j-multi-select-tag
+                placeholder="请选择增值代码"
+                v-decorator="['vaCode', {}]"
+                dictCode="vacode,vacode_no,vacode_no">
+              </j-multi-select-tag>
+<!--              <a-input placeholder="请输入增值代码" v-decorator="['vaCode', {}]"/>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="8">
@@ -606,7 +622,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="审核时间">
-              <a-input v-decorator="['verifyDt', {}]" disabled/>
+              <j-date v-decorator="['verifyDt', {} ]" :showTime="true" dateFormat="YYYY/MM/DD HH:mm:ss" disabled/>
+<!--              <a-input v-decorator="['verifyDt', {}]" disabled/>-->
             </a-form-item>
           </a-col>
         </a-row>
@@ -697,17 +714,23 @@
   import JSelectCustom from '@/components/jeecgbiz/JSelectCustom'       //引入【客户组件】
   import JSelectBrand from '@/components/jeecgbiz/JSelectBrand'
   import JSelectCountry from '@/components/jeecgbiz/JSelectCountry'
+  import JSelectStylem from '@/components/jeecgbiz/JSelectStylem'
   import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'   //使用字典作为下拉窗口(2)
+  import JDate from '@/components/jeecg/JDate'
+  import JMultiSelectTag from '@/components/dict/JMultiSelectTag'
 
   export default {
     name: 'OdrmModal',
     mixins: [JEditableTableMixin],
     components: {
+      JSelectStylem,
       JSearchSelectTag,
       JSelectCustom,    //导出【客户组件】
       JSelectBrand,
       JSelectCountry,
       JDictSelectTag,   //使用字典作为下拉窗口(3)
+      JDate,
+      JMultiSelectTag,
     },
     data() {
       return {
@@ -722,17 +745,19 @@
         validatorRules: {
           factNo: { rules: [{ required: true, message: '请输入厂区编号!' }] },
           factOdrNo: { rules: [{ required: true, message: '请输入订单批号!' }] },
-          customNo: { rules: [{ required: true, message: '请输入客户编号!' }], initialValue: 'CR001' },
-          styleNo: { rules: [{ required: true, message: '请输入型体编号!' }] },
-          brandNo: { rules: [{ required: true, message: '请输入品牌编号!' }], initialValue: 'CR' },
+          customNo: { rules: [{ required: true, message: '请选择客户编号!' }], initialValue: 'CR001' },
+          styleNo: { rules: [{ required: true, message: '请选择型体编号!' }] },
+          brandNo: { rules: [{ required: true, message: '请选择品牌编号!' }], initialValue: 'CR' },
           lastWidth: { rules: [{ required: true, message: '请输入楦头肥度!' }], initialValue: 'M' },
+          proDept: { rules: [{ required: true, message: '请输入部别编号!' }], initialValue: 'U' },
           custReqDate: { rules: [{ required: true, message: '请输入客户要求交期!' }] },
-          revOdrDate: { rules: [{ required: true, message: '请输入接单日期!' }] },
-          sizeKind: { rules: [{ required: true, message: '请输入SIZE种类!' }] },
+          revOdrDate: { rules: [{ required: true, message: '请输入接单日期!' }], initialValue: ((new Date()).getFullYear().toString()) + (((new Date()).getMonth()+1<10) ? ('0'+((new Date()).getMonth()+1).toString()) : (((new Date()).getMonth()+1).toString())) + (((new Date()).getDate()<10) ? ('0'+(new Date()).getDate().toString()) : ((new Date()).getDate().toString())) },
+          sizeKind: { rules: [{ required: true, message: '请输入SIZE种类!' }], initialValue: '1' },
           odrQty: { rules: [{ required: true, message: '请输入订单双数!' }] },
-          ctnPair: { rules: [{ required: true, message: '请输入每箱双数!' }] },
-          odrTotCtn: { rules: [{ required: true, message: '请输入总箱数!' }] },
+          ctnPair: { rules: [{ required: true, message: '请输入每箱双数!' }], initialValue: 0 },
+          odrTotCtn: { rules: [{ required: true, message: '请输入总箱数!' }], initialValue: 0 },
           odrYymm: { rules: [{ required: true, message: '请输入订单年月!' }] },
+          destCountry: { rules: [{ required: true, message: '请选择目的地编号!' }] },
           odrKind: { rules: [{ required: true, message: '请输入订单类别!' }], initialValue: '1'},
           odrType: { rules: [{ required: true, message: '请输入订单性质!' }], initialValue: '1' },
           mainmatAddRate: { rules: [{ required: true, message: '请输入主料加成比!' }], initialValue: 0 },

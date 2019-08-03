@@ -90,13 +90,16 @@ const duplicateCheck = (params)=>getAction("/sys/duplicate/check",params);
 
 
 //客户管理
-const getCustomList = (params)=>getAction("/order/custom/list",params);     //第一步：定义
+const getCustomList = (params)=>getAction("/order/custom/list",params);     //****** 第一步：定义
 
 //品牌管理
 const getBrandList = (params)=>getAction("/bom/brand/list",params);
 
 //目的地管理
 const getCountryList = (params)=>getAction("/order/country/list",params);
+
+//型体管理
+const getStylemList = (params)=>getAction("/bom/stylem/list",params);
 
 
 export {
@@ -145,9 +148,10 @@ export {
   duplicateCheck,
   queryTreeListForRole,
 
-  getCustomList,    //第二步：输出
-  getBrandList,
-  getCountryList
+  getCustomList,    //****** 第二步：输出
+  getBrandList, //品牌
+  getCountryList, //目的地
+  getStylemList //型体
 }
 
 

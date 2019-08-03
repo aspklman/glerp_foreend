@@ -256,7 +256,12 @@
       JSelectMultiUser,
       JCheckbox,
       JCodeEditor,
-      JDate, JEditor, JEllipsis, JGraphicCode, JSlider, JSelectMultiple,
+      JDate,
+      JEditor,
+      JEllipsis,
+      JGraphicCode,
+      JSlider,
+      JSelectMultiple,
       VueCron
     },
     data() {

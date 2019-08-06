@@ -553,11 +553,12 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="增值代码">
-              <j-multi-select-tag
-                placeholder="请选择增值代码"
-                v-decorator="['vaCode', {}]"
-                dictCode="vacode,vacode_no,vacode_no">
-              </j-multi-select-tag>
+              <j-select-vacode v-decorator="['vacodeNo', {}]"></j-select-vacode>
+              <!--              <j-multi-select-tag-->
+<!--                placeholder="请选择增值代码"-->
+<!--                v-decorator="['vaCode', {}]"-->
+<!--                dictCode="vacode,vacode_no,vacode_no">-->
+<!--              </j-multi-select-tag>-->
 <!--              <a-input placeholder="请输入增值代码" v-decorator="['vaCode', {}]"/>-->
             </a-form-item>
           </a-col>
@@ -715,6 +716,7 @@
   import JSelectBrand from '@/components/jeecgbiz/JSelectBrand'
   import JSelectCountry from '@/components/jeecgbiz/JSelectCountry'
   import JSelectStylem from '@/components/jeecgbiz/JSelectStylem'
+  import JSelectVacode from '@/components/jeecgbiz/JSelectVacode'
   import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'   //使用字典作为下拉窗口(2)
   import JDate from '@/components/jeecg/JDate'
   import JMultiSelectTag from '@/components/dict/JMultiSelectTag'
@@ -728,6 +730,7 @@
       JSelectCustom,    //导出【客户组件】
       JSelectBrand,
       JSelectCountry,
+      JSelectVacode,
       JDictSelectTag,   //使用字典作为下拉窗口(3)
       JDate,
       JMultiSelectTag,

@@ -12,13 +12,13 @@
 <!--            </a-form-item>-->
 <!--          </a-col>-->
           <a-col :md="6" :sm="8">
-            <a-form-item label="国家代号">
-              <a-input placeholder="请输入国家代号" v-model="queryParam.countryNo"></a-input>
+            <a-form-item label="目的地编号">
+              <a-input placeholder="请输入目的地编号" v-model="queryParam.countryNo"></a-input>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="8">
-          <a-form-item label="国名">
-            <a-input placeholder="请输入国名" v-model="queryParam.country"></a-input>
+          <a-form-item label="目的地名称">
+            <a-input placeholder="请输入目的地名称" v-model="queryParam.country"></a-input>
           </a-form-item>
         </a-col>
         <template v-if="toggleSearchStatus">
@@ -138,17 +138,17 @@
        //      dataIndex: 'factNo'
        //     },
 		   {
-            title: '国家代号',
+            title: '目的地编号',
             align:"center",
             dataIndex: 'countryNo'
            },
 		   {
-            title: '国名',
+            title: '目的地名称',
             align:"center",
             dataIndex: 'country'
            },
 		   {
-            title: '英文国名',
+            title: '目的地英文名称',
             align:"center",
             dataIndex: 'countryEng'
            },

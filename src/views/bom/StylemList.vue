@@ -137,11 +137,11 @@
             align:"center",
             dataIndex: 'articNo'
           },
-          {
-            title: '型体名称',
-            align:"center",
-            dataIndex: 'styleNm'
-          },
+          // {
+          //   title: '型体名称',
+          //   align:"center",
+          //   dataIndex: 'styleNm'
+          // },
           // {
           //   title: '财务型体简称,财务成本中心维护',
           //   align:"center",

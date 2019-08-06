@@ -101,6 +101,9 @@ const getCountryList = (params)=>getAction("/order/country/list",params);
 //型体管理
 const getStylemList = (params)=>getAction("/bom/stylem/list",params);
 
+//增值管理
+const getVacodeList = (params)=>getAction("/scan/vacode/list",params);
+
 
 export {
   // imgView,
@@ -149,9 +152,10 @@ export {
   queryTreeListForRole,
 
   getCustomList,    //****** 第二步：输出
-  getBrandList, //品牌
-  getCountryList, //目的地
-  getStylemList //型体
+  getBrandList,     //品牌
+  getCountryList,   //目的地
+  getStylemList,    //型体
+  getVacodeList,    //增值
 }
 
 

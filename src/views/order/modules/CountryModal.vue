@@ -1,13 +1,13 @@
 <template>
-  <a-modal
-    :title="title"
-    :width="800"
-    :visible="visible"
-    :confirmLoading="confirmLoading"
-    @ok="handleOk"
-    @cancel="handleCancel"
-    cancelText="关闭">
-    
+  <a-drawer
+      :title="title"
+      :width="800"
+      placement="right"
+      :closable="false"
+      @close="close"
+      :visible="visible"
+  >
+
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
       
@@ -20,20 +20,20 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="国家代号">
-          <a-input placeholder="请输入国家代号" v-decorator="['countryNo', validatorRules.countryNo ]" />
+          label="目的地编号">
+          <a-input placeholder="请输入目的地编号" v-decorator="['countryNo', validatorRules.countryNo ]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="国名">
-          <a-input placeholder="请输入国名" v-decorator="['country', validatorRules.country ]" />
+          label="目的地名称">
+          <a-input placeholder="请输入目的地名称" v-decorator="['country', validatorRules.country ]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="英文国名">
-          <a-input placeholder="请输入英文国名" v-decorator="['countryEng', {}]" />
+          label="目的地英文名称">
+          <a-input placeholder="目的地英文名称" v-decorator="['countryEng', {}]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -68,7 +68,9 @@
 		
       </a-form>
     </a-spin>
-  </a-modal>
+    <a-button type="primary" @click="handleOk">确定</a-button>
+    <a-button type="primary" @click="handleCancel">取消</a-button>
+  </a-drawer>
 </template>
 
 <script>
@@ -96,8 +98,8 @@
         form: this.$form.createForm(this),
         validatorRules:{
         factNo:{rules: [{ required: true, message: '请输入厂区编号!' }]},
-        countryNo:{rules: [{ required: true, message: '请输入国家代号!' }]},
-        country:{rules: [{ required: true, message: '请输入国名!' }]},
+        countryNo:{rules: [{ required: true, message: '请输入目的地编号!' }]},
+        country:{rules: [{ required: true, message: '请输入目的地名称!' }]},
         userNo:{rules: [{ required: true, message: '请输入异动人!' }]},
         modifyDt:{rules: [{ required: true, message: '请输入异动时间!' }]},
         },
@@ -173,5 +175,10 @@
 </script>
 
 <style lang="less" scoped>
-
+/** Button按钮间距 */
+  .ant-btn {
+    margin-left: 30px;
+    margin-bottom: 30px;
+    float: right;
+  }
 </style>

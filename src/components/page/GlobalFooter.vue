@@ -1,7 +1,7 @@
 <template>
   <div class="footer">
     <div class="links">
-      <a href="http://www.guoligroup.com.cn/" target="_blank">国立科技ERP系统 首页</a>
+      <a href="http://www.guoligroup.com.cn/" target="_blank">广东国立科技股份有限公司 首页</a>
 <!--      <a href="https://github.com/zhangdaiscott/jeecg-boot" target="_blank">-->
 <!--        <a-icon type="github"/>-->
 <!--      </a>-->

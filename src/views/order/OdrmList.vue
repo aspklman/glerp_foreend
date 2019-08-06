@@ -382,7 +382,7 @@
             title: '币别',
             align:"center",
             dataIndex: 'coinKind_dictText',
-            width: 80,
+            width: 120,
           },
           {
             title: '含税单价',

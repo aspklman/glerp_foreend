@@ -580,11 +580,11 @@
         // },
         // 请求参数
     	url: {
-              list: "/scan/odrm/list",
-              delete: "/scan/odrm/delete",
-              deleteBatch: "/scan/odrm/deleteBatch",
-              exportXlsUrl: "scan/odrm/exportXls",
-              importExcelUrl: "scan/odrm/importExcel",
+              list: "/order/odrm/list",
+              delete: "/order/odrm/delete",
+              deleteBatch: "/order/odrm/deleteBatch",
+              exportXlsUrl: "order/odrm/exportXls",
+              importExcelUrl: "order/odrm/importExcel",
            },
         }
       },
@@ -593,14 +593,10 @@
           return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
         }
       },
-
-
-    methods: {
-
-      initDictConfig() {
+      methods: {
+        initDictConfig() {
+        }
       }
-
-    }
   }
 </script>
 <style scoped>

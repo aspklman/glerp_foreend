@@ -2,7 +2,7 @@
   <div>
     <a-input-search
       v-model="selectedCountrys"
-      placeholder="请选择目的地编号"
+      placeholder="请选择目的地"
       disabled
       @search="onSearchCountry">
       <a-button slot="enterButton" :disabled="disabled">选择目的地</a-button>

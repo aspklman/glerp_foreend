@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+
+<!--  <script>-->
+<!--    function f() {-->
+<!--      console.log('I am outside!');-->
+<!--    };-->
+<!--    (function () {-->
+<!--      // if (false) {-->
+<!--        function f() { console.log('I am inside!'); }-->
+<!--      // }-->
+<!--      f();-->
+<!--    }());-->
+<!--    f();-->
+<!--  </script>-->
+
+<!--  <script>-->
+<!--    typeof x;-->
+<!--    let x;-->
+<!--  </script>-->
+
+<!--  <script>-->
+<!--    // console.log(foo);-->
+<!--    // var foo = 2;-->
+<!--    console.log(bar);-->
+<!--    let bar = 8;-->
+<!--  </script>-->
+
+<!--  <a id="ref" href="http://www.baidu.com" referrerpolicy="origin">百度</a>-->
+<!--  <script>-->
+<!--    var a = document.getElementById('ref');-->
+<!--    a.referrerPolicy;-->
+<!--  </script>-->
+
+<!--  <a id="lg" href="logo.png">公司LOGO</a>-->
+<!--  <script>-->
+<!--    var a = document.getElementById('log');-->
+<!--    a.download = 'companylogo.png';-->
+<!--  </script>-->
+
+<!--  <a id="bd" href="http://www.baidu.com">百度</a>-->
+<!--  <script>-->
+<!--    var a  = document.getElementById("bd");-->
+<!--    a.accessKey = 'x';  //按下alt + x访问-->
+<!--  </script>-->
+
+<!--  <script>-->
+<!--    var xhr = new XMLHttpRequest();-->
+<!--    xhr.open('get', 'test.xml', true);-->
+<!--    xhr.responseType = 'document';-->
+<!--    xhr.overrideMimeType = 'text/xml';-->
+<!--    xhr.onload = function() {-->
+<!--      console.log(xhr.responseXML);-->
+<!--    }-->
+<!--    xhr.send(null);-->
+<!--  </script>-->
+
+<!--  <script>-->
+<!--    var xhr = new XMLHttpRequest();-->
+<!--    xhr.open('GET', 'logo.png', true);-->
+<!--    xhr.responseType = 'arraybuffer';-->
+
+<!--    xhr.onload = function(e) {-->
+<!--      var uInt8Array = new Uint8Array(this.response);-->
+<!--      for (var i = 0, len = uInt8Array.length; i < len; ++i) {-->
+<!--        var byte = uInt8Array[i];-->
+<!--        console.log(byte);-->
+<!--      }-->
+<!--    };-->
+
+<!--    xhr.send();-->
+<!--  </script>-->
+
+<!--  <script>-->
+<!--    var xhr = new XMLHttpRequest();-->
+<!--    xhr.open('get', 'logo.png', true);-->
+<!--    xhr.responseType = 'blob';-->
+<!--    xhr.onload = function() {-->
+<!--      if (xhr.readyState === 4 && xhr.status === 200) {-->
+<!--        var blob = xhr.response;-->
+<!--      }-->
+<!--    }-->
+<!--    xhr.send();-->
+<!--  </script>-->
+
+<!--  <script>-->
+<!--    var xhr = new XMLHttpRequest();-->
+<!--    xhr.open('get', 'test.txt', true);-->
+<!--    xhr.responseType = 'text';-->
+<!--    xhr.onload = function() {-->
+<!--      if (xhr.readyState === 4 && xhr.status === 200) {-->
+<!--        console.log(xhr.responseText);-->
+<!--      }-->
+<!--    }-->
+<!--    xhr.send(null);-->
+<!--  </script>-->
+
+<!--  <a href="javascript: new Date().toLocaleTimeString();void 0">点击</a>-->
+
+<!--  <a href="javascript: console.log('Hello World!')">打印世界你好！</a>-->
+
+<!--  <button id="myButton" onclick="console.log('按钮ID是：' + this.id)">点击我</button>-->
+
+<!--  <script id='abc' type="application/javascript">-->
+<!--    console.log('Hello World!');-->
+<!--    document.getElementById('abc').text;-->
+<!--  </script>-->
+
+
+<!--  <script>-->
+<!--    window.addEventListener('pageshow', function(event) {-->
+<!--      console.log('pageshow: ', event);-->
+<!--    })-->
+<!--  </script>-->
+
+
+<!--  <script>-->
+<!--    window.addEventListener('beforeunload', function (e) {-->
+<!--      var confirmationMessage = '确认关闭窗口？';-->
+<!--      e.returnValue = confirmationMessage;-->
+<!--      return confirmationMessage;-->
+<!--    });-->
+<!--  </script>-->
+
+
+<!--  <select id="myselect">-->
+<!--    <option value="1">1</option>-->
+<!--    <option value="2">2</option>-->
+<!--    <option value="3">3</option>-->
+<!--  </select>-->
+
+<!--  <script>-->
+<!--    function inputHandler(e) {-->
+<!--      console.log('选择了: ' + e.target.value);-->
+<!--    }-->
+<!--    var myselect = document.querySelector('#myselect');-->
+<!--    myselect.addEventListener('input', inputHandler);-->
+<!--  </script>-->
+
+
+<!--  <script>-->
+<!--    document.addEventListener('click', function (e) {-->
+<!--      console.log(e.getModifierState('CapsLock'));-->
+<!--    }, false);-->
+<!--  </script>-->
+
+<!--  <div id="outer" style="height:50px;width:50px;border-width:1px solid black;">-->
+<!--    <div id="inner" style="height:25px;width:25px;border:1px solid black;"></div>-->
+<!--  </div>-->
+
+<!--  <script>-->
+<!--    var inner = document.getElementById('inner');-->
+<!--    inner.addEventListener('mouseover', function (event) {-->
+<!--      console.log('进入' + event.target.id + ' 离开' + event.relatedTarget.id);-->
+<!--    }, false);-->
+<!--    inner.addEventListener('mouseenter', function (event) {-->
+<!--      console.log('进入' + event.target.id + ' 离开' + event.relatedTarget.id);-->
+<!--    });-->
+<!--    inner.addEventListener('mouseout', function () {-->
+<!--      console.log('离开' + event.target.id + ' 进入' + event.relatedTarget.id);-->
+<!--    });-->
+<!--    inner.addEventListener("mouseleave", function (){-->
+<!--      console.log('离开' + event.target.id + ' 进入' + event.relatedTarget.id);-->
+<!--    });-->
+<!--  </script>-->
+
+<!--  <button onmouseup="whichButton(event)">点击</button>-->
+
+<!--  <script>-->
+<!--    var whichButton = function (e) {-->
+<!--      switch (e.button) {-->
+<!--        case 0:-->
+<!--          console.log('Left button clicked!');-->
+<!--          break;-->
+<!--        case 1:-->
+<!--          console.log('Middle button clicked!');-->
+<!--          break;-->
+<!--        case 2:-->
+<!--          console.log('Right button clicked!');-->
+<!--          break;-->
+<!--        default:-->
+<!--          console.log('unexpected code: ' + e.button);-->
+<!--      }-->
+<!--    }-->
+<!--  </script>-->
+
+<!--  <script>-->
+<!--    var previousX;-->
+<!--    var previousY;-->
+<!--    var previousT;-->
+
+<!--    window.addEventListener('mousemove', function(event) {-->
+<!--      if (-->
+<!--        previousX !== undefined &&-->
+<!--        previousY !== undefined &&-->
+<!--        previousT !== undefined-->
+<!--      ) {-->
+<!--        var deltaX = event.screenX - previousX;-->
+<!--        var deltaY = event.screenY - previousY;-->
+<!--        var deltaD = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));-->
+
+<!--        var deltaT = event.timeStamp - previousT;-->
+<!--        console.log(deltaD / deltaT * 1000);-->
+<!--      }-->
+
+<!--      previousX = event.screenX;-->
+<!--      previousY = event.screenY;-->
+<!--      previousT = event.timeStamp;-->
+<!--    });-->
+<!--  </script>-->
+
+
+<!--  <p id="para">Hello <em>World</em></p>-->
+<!--  <script>-->
+<!--    function hide(e) {-->
+<!--      // 不管点击 Hello 或 World，总是返回 true-->
+<!--      console.log(this === e.currentTarget);-->
+
+<!--      // 点击 Hello，返回 true-->
+<!--      // 点击 World，返回 false-->
+<!--      console.log(this === e.target);-->
+<!--    }-->
+
+<!--    document.getElementById('para').addEventListener('click', hide, false);-->
+<!--  </script>-->
+
+<!--  <script>-->
+<!--    var ev = new Event('look',-->
+<!--      {-->
+<!--        bubbles: true,-->
+<!--        cancelable: false,-->
+<!--      })-->
+<!--    document.dispatchEvent(ev);-->
+<!--  </script>-->
+
+
+<!--  <ul>-->
+<!--    <li>张三</li>-->
+<!--    <li>李四</li>-->
+<!--    <li>王五</li>-->
+<!--  </ul>-->
+<!--  <script>-->
+<!--    var ul = document.querySelector('ul');-->
+<!--    ul.addEventListener('click', function(event) {-->
+<!--      if (event.target.tagName.toLowerCase() === 'li') {-->
+<!--        console.log(event.target.valueOf());-->
+<!--      }-->
+<!--    })-->
+<!--  </script>-->
+
+
+<!--  <div>-->
+<!--    <p>点我</p>-->
+<!--  </div>-->
+<!--  <script>-->
+<!--    var phases = {-->
+<!--      1: 'capture',-->
+<!--      2: 'target',-->
+<!--      3: 'bubble',-->
+<!--    }-->
+<!--    var div = document.querySelector('div');-->
+<!--    var p = document.querySelector('p');-->
+<!--    div.addEventListener('click', callback, true);    //capture-->
+<!--    p.addEventListener('click', callback, true);      //target：嵌套最深的节点-->
+<!--    div.addEventListener('click', callback, false);   //bubble-->
+<!--    p.addEventListener('click', callback, false);     //target：嵌套最深的节点-->
+<!--    function callback(event) {-->
+<!--      var tag = event.currentTarget.tagName;-->
+<!--      var phase = phases[event.eventPhase];-->
+<!--      console.log("Tag: '" + tag + "'. EventPhase: '" + phase + "'");-->
+<!--    }-->
+<!--  </script>-->
+
+<!--  <button id="btn">点我</button>-->
+<!--  <script>-->
+<!--    btn.addEventListener('click', function(e) {-->
+<!--      console.log(this.id)-->
+<!--    },false);-->
+<!--  </script>-->
+
+
+<!--  <button id="btn">点我</button>-->
+<!--  <script>-->
+<!--    var btn = document.getElementById('btn');-->
+<!--    btn.onclick = function() {-->
+<!--      console.log(this.id);-->
+<!--    }-->
+<!--  </script>-->
+
+
+<!--  <button id="btn" onclick="console.log(this.id)">点我</button>-->
+
+<!--  <button id="btn">点我</button>-->
+<!--  <script>-->
+<!--    btn.setAttribute('onclick', 'doSomething()');-->
+<!--    function doSomething() {-->
+<!--      console.log('点击事件！');-->
+<!--    }-->
+<!--  </script>-->
+
+
+<!--  <button id="btn">点我</button>-->
+<!--  <script>-->
+<!--    function hello() {-->
+<!--      console.log('Hello world');-->
+<!--    }-->
+
+<!--    var button = document.getElementById('btn');-->
+<!--    button.addEventListener('click', hello, false);-->
+<!--  </script>-->
+</body>
+</html>

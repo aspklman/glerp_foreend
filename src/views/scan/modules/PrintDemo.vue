@@ -112,7 +112,6 @@
       this.getDate();
     },
     methods: {
-
       loadData(){
 
       },

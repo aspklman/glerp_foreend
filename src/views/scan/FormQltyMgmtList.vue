@@ -5,7 +5,7 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="24">
-<span>测试测试测试测试测试测试</span>
+
           <a-col :md="6" :sm="8">
             <a-form-item :label="$t('profactm.proFact')">
               <!--              <a-select-->

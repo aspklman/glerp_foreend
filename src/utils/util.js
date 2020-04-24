@@ -121,7 +121,7 @@ function  generateChildRouters (data) {
       hidden:item.hidden,
       //component:()=> import(`@/views/${item.component}.vue`),
       meta: {
-        title:item.meta.title ,
+        title:item.meta.title,
         icon: item.meta.icon,
         url:item.meta.url ,
         permissionList:item.meta.permissionList,

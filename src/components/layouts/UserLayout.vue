@@ -8,11 +8,11 @@
         <div class="header">
           <a href="/">
             <img src="~@/assets/logo.png" class="logo" alt="logo">
-            <span class="title">国立科技</span>
+            <span class="title"> {{this.$t('common.guoliTech')}} </span>
           </a>
         </div>
         <div class="desc">
-          股票代码：300716
+          {{this.$t('common.stockCode')}}：300716
         </div>
       </div>
 
@@ -25,7 +25,7 @@
 <!--          <a href="https://github.com/zhangdaiscott/jeecg-boot" target="_blank">条款</a>-->
         </div>
         <div class="copyright">
-          Copyright &copy; 2019 <a href="http://www.guoligroup.com.cn/" target="_blank">国立科技</a> 出品
+          {{ this.$t('common.copyRight') }} &copy; 2020 <a href="http://www.guoligroup.com.cn/" target="_blank"> {{this.$t('common.guoliTech')}} </a> {{this.$t('common.make')}}
         </div>
       </div>
     </div>

@@ -125,7 +125,21 @@ export default {
         <Item {...{ key: menu.path }}>
           <tag {...{ props, attrs }}>
             {this.renderIcon(menu.meta.icon)}
-            <span>{menu.meta.title}</span>
+            <span>
+              {
+                this.$i18n.locale=='zh-CN'?
+                  menu.meta.title:
+                  this.$i18n.locale=='en-US'?
+                    (menu.meta.titleEn==null?
+                     'Homepage':
+                      menu.meta.titleEn):
+                    this.$i18n.locale=='vi-VN'?
+                      (menu.meta.titleVn==null?
+                       'Trang':
+                       menu.meta.titleVn):
+                      menu.meta.title
+              }
+            </span>
           </tag>
         </Item>
       )
@@ -139,7 +153,17 @@ export default {
         <SubMenu {...{ key: menu.path }}>
           <span slot="title">
             {this.renderIcon(menu.meta.icon)}
-            <span>{menu.meta.title}</span>
+            <span>
+              {
+                this.$i18n.locale == 'zh-CN'?
+                  menu.meta.title:
+                  this.$i18n.locale == 'en-US'?
+                    menu.meta.titleEn:
+                    this.$i18n.locale == 'vi-VN'?
+                      menu.meta.titleVn:
+                      menu.meta.title
+              }
+            </span>
           </span>
           {itemArr}
         </SubMenu>

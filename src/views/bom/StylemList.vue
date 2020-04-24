@@ -125,17 +125,20 @@
           {
             title: '品牌编号',
             align:"center",
-            dataIndex: 'brandNo'
+            dataIndex: 'brandNo',
+            sorter: true,
           },
           {
             title: '型体编号',
             align:"center",
-            dataIndex: 'styleNo'
+            dataIndex: 'styleNo',
+            sorter: true,
           },
           {
             title: '客户型体编号',
             align:"center",
-            dataIndex: 'articNo'
+            dataIndex: 'articNo',
+            sorter: true,
           },
           // {
           //   title: '型体名称',
@@ -177,11 +180,12 @@
           //   align:"center",
           //   dataIndex: 'styleEngColor'
           // },
-          // {
-          //   title: '型体颜色',
-          //   align:"center",
-          //   dataIndex: 'styleColor'
-          // },
+          {
+            title: '型体颜色',
+            align:"center",
+            dataIndex: 'styleColor',
+            sorter: true,
+          },
           // {
           //   title: '型体工艺类别',
           //   align:"center",
@@ -227,11 +231,11 @@
           //   align:"center",
           //   dataIndex: 'quotationSizeNo'
           // },
-          {
-            title: '报价楦头肥度',
-            align:"center",
-            dataIndex: 'quotationLastWidth'
-          },
+          // {
+          //   title: '报价楦头肥度',
+          //   align:"center",
+          //   dataIndex: 'quotationLastWidth'
+          // },
           // {
           //   title: '纸版编号',
           //   align:"center",

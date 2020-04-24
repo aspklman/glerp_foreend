@@ -89,7 +89,8 @@
         printReason:'做一个打印测试',
         previewVisible: false,
         previewImage: '',
-        fileList: [{
+        fileList: [
+          {
           uid: '-1',
           name: 'xxx.png',
           status: 'done',

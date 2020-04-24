@@ -35,24 +35,24 @@
           label="目的地英文名称">
           <a-input placeholder="目的地英文名称" v-decorator="['countryEng', {}]" />
         </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="集团目的地代码">
-          <a-input placeholder="请输入集团目的地代码" v-decorator="['hkdestNm', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="XPC国家">
-          <a-input placeholder="请输入XPC国家" v-decorator="['market', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="半成品成型地代号">
-          <a-input placeholder="请输入半成品成型地代号" v-decorator="['assmNo', {}]" />
-        </a-form-item>
+<!--        <a-form-item-->
+<!--          :labelCol="labelCol"-->
+<!--          :wrapperCol="wrapperCol"-->
+<!--          label="集团目的地代码">-->
+<!--          <a-input placeholder="请输入集团目的地代码" v-decorator="['hkdestNm', {}]" />-->
+<!--        </a-form-item>-->
+<!--        <a-form-item-->
+<!--          :labelCol="labelCol"-->
+<!--          :wrapperCol="wrapperCol"-->
+<!--          label="XPC国家">-->
+<!--          <a-input placeholder="请输入XPC国家" v-decorator="['market', {}]" />-->
+<!--        </a-form-item>-->
+<!--        <a-form-item-->
+<!--          :labelCol="labelCol"-->
+<!--          :wrapperCol="wrapperCol"-->
+<!--          label="半成品成型地代号">-->
+<!--          <a-input placeholder="请输入半成品成型地代号" v-decorator="['assmNo', {}]" />-->
+<!--        </a-form-item>-->
 <!--        <a-form-item-->
 <!--          :labelCol="labelCol"-->
 <!--          :wrapperCol="wrapperCol"-->

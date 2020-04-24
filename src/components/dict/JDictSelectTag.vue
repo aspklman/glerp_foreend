@@ -4,7 +4,7 @@
   </a-radio-group>
 
   <a-select v-else-if="tagType=='select'" :placeholder="placeholder" :disabled="disabled" :value="value" @change="handleInput">
-    <a-select-option value="">请选择</a-select-option>
+    <a-select-option value="">{{$t('common.pleaseSelect')}}</a-select-option>
     <a-select-option v-for="(item, key) in dictOptions" :key="key" :value="item.value">
       <span style="display: inline-block;width: 100%" :title=" item.text || item.label ">
         {{ item.text || item.label }}
@@ -47,7 +47,7 @@
         //根据字典Code, 初始化字典数组
         ajaxGetDictItems(this.dictCode, null).then((res) => {
           if (res.success) {
-//                console.log(res.result);
+               // console.log(res.result);
             this.dictOptions = res.result;
           }
         })

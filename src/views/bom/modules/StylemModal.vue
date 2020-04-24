@@ -414,14 +414,14 @@
             //   placeholder: '请输入${title}',
             //   validateRules: [{ required: true, message: '${title}不能为空' }],
             // },
-            {
-              title: '型体编号',
-              key: 'styleNo',
-              type: FormTypes.input,
-              defaultValue: '',
-              placeholder: '请输入${title}',
-              validateRules: [{ required: true, message: '${title}不能为空' }],
-            },
+            // {
+            //   title: '型体编号',
+            //   key: 'styleNo',
+            //   type: FormTypes.input,
+            //   defaultValue: '',
+            //   placeholder: '请输入${title}',
+            //   validateRules: [{ required: true, message: '${title}不能为空' }],
+            // },
             {
               title: 'SIZE编号',
               key: 'sizeNo',
@@ -437,13 +437,13 @@
               defaultValue: '',
               placeholder: '请输入${title}',
             },
-            {
-              title: '鞋型基本资料表ID',
-              key: 'styleId',
-              type: FormTypes.input,
-              defaultValue: '',
-              placeholder: '请输入${title}',
-            },
+            // {
+            //   title: '鞋型基本资料表ID',
+            //   key: 'styleId',
+            //   type: FormTypes.input,
+            //   defaultValue: '',
+            //   placeholder: '请输入${title}',
+            // },
           ]
         },
         url: {

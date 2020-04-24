@@ -52,7 +52,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="生产部别">
-              <j-dict-select-tag v-decorator="['proDept', validatorRules.proDept]" dictCode="pro_dept" />
+              <j-dict-select-tag v-decorator="['proDept', validatorRules.proDept]" :triggerChange="true" dictCode="pro_dept" />
 <!--              <a-input placeholder="请输入生产部别" v-decorator="['proDept', {}]"/>-->
             </a-form-item>
           </a-col>
@@ -61,7 +61,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="生产日期">
-              <j-date v-decorator="['proDate', validatorRules.proDate]" :showTime="true" dateFormat="YYYYMMDD" />
+              <j-date v-decorator="['proDate', validatorRules.proDate]" />
 <!--              <a-input placeholder="请输入生产日期" v-decorator="['proDate', {}]"/>-->
             </a-form-item>
           </a-col>

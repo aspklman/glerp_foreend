@@ -5,20 +5,20 @@
     :title="title"
     @ok="handleSubmit"
     @cancel="close"
-    cancelText="关闭"
+    :cancelText="$t('common.close')"
     style="margin-top: -70px"
     wrapClassName="ant-modal-cust-warp"
   >
     <a-row :gutter="10" style="background-color: #ececec; padding: 10px; margin: -10px">
       <a-card :bordered="false">
-        型体编号:
+        {{$t('stylem.styleNo')}}:
         <a-input-search
           :style="{width:'150px',marginBottom:'15px'}"
-          placeholder="请输入型体编号"
+          :placeholder="$t('common.pleaseInput') + $t('stylem.styleNo')"
           v-model="queryParam.styleNo"
           @search="onSearch"
         ></a-input-search>
-        <a-button @click="searchReset(1)" style="margin-left: 20px" icon="redo">重置</a-button>
+        <a-button @click="searchReset(1)" style="margin-left: 20px" icon="redo">{{$t('common.reset')}}</a-button>
         <!--型体列表-->
         <a-table
           ref="table"
@@ -51,22 +51,22 @@
         },
         columns: [
           {
-            title: '型体编号',
+            title: this.$t('stylem.styleNo'),
             align: 'center',
             dataIndex: 'styleNo'
           },
           {
-            title: '客户型体编号',
+            title: this.$t('stylem.articNo'),
             align: 'center',
             dataIndex: 'articNo'
           },
           {
-            title: '创建时间',
+            title: this.$t('common.createTime'),
             align: 'center',
             dataIndex: 'createTime'
           },
           {
-            title: '修改时间',
+            title: this.$t('common.updateTime'),
             align: 'center',
             dataIndex: 'updateTime'
           }
@@ -74,14 +74,14 @@
         scrollTrigger: {},
         dataSource: [],
         selectedKeys: [],
-        stylemNmArr: [],
-        title: '选择型体',
+        styleNmArr: [],
+        title: this.$t('common.select') + this.$t('stylem.style'),
         ipagination: {
           current: 1,
           pageSize: 10,
           pageSizeOptions: ['10', '20', '30'],
           showTotal: (total, range) => {
-            return range[0] + '-' + range[1] + ' 共' + total + '条'
+            return range[0] + '-' + range[1] + this.$t('common.total') + total + this.$t('common.item')
           },
           showQuickJumper: true,
           showSizeChanger: true,
@@ -149,7 +149,7 @@
           that.loadData(1)
         }
         that.selectedRowKeys = []
-        that.stylemNmArr = []
+        that.styleNmArr = []
         that.selectedKeys = []
       },
       close() {
@@ -170,7 +170,7 @@
         for (let i = 0, len = this.selectedRowKeys.length; i < len; i++) {
           this.getStylemNos(this.selectedRowKeys[i])
         }
-        that.$emit('ok', that.stylemNmArr.join(','))
+        that.$emit('ok', that.styleNmArr.join(','))
         that.close()
       },
       // 遍历匹配,获取【型体编号】
@@ -178,7 +178,7 @@
         let dataSource = this.dataSource
         for (let i = 0, len = dataSource.length; i < len; i++) {
           if (rowId === dataSource[i].id) {
-            this.stylemNmArr.push(dataSource[i].styleNo)
+            this.styleNmArr.push(dataSource[i].styleNo)
           }
         }
       },

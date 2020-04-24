@@ -18,16 +18,17 @@
 <!--          <a-input placeholder="请输入厂区编号" v-decorator="['factNo', validatorRules.factNo ]" />-->
 <!--        </a-form-item>-->
         <a-form-item
+          :model="toUpperCase"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="品牌编号">
-          <a-input placeholder="请输入品牌编号" v-decorator="['brandNo', validatorRules.brandNo ]" />
+          <a-input placeholder="请输入品牌编号" v-decorator="['brandNo', validatorRules.brandNo]" maxlength="2" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="品牌名称">
-          <a-input placeholder="请输入品牌名称" v-decorator="['brandNm', validatorRules.brandNm ]" />
+          <a-input placeholder="请输入品牌名称" v-decorator="['brandNm', validatorRules.brandNm ]" maxlength="15" />
         </a-form-item>
 		
       </a-form>
@@ -81,9 +82,7 @@
         this.visible = true;
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model,'factNo','brandNo','brandNm'))
-		  //时间格式化
         });
-
       },
       close () {
         this.$emit('close');
@@ -119,18 +118,13 @@
               that.confirmLoading = false;
               that.close();
             })
-
-
-
           }
         })
       },
       handleCancel () {
         this.close()
       },
-
-
-    }
+    },
   }
 </script>
 

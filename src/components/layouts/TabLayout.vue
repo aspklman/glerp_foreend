@@ -37,7 +37,7 @@
     name: 'TabLayout',
     components: {
       GlobalLayout,
-      Contextmenu
+      Contextmenu,
     },
     mixins: [mixin, mixinDevice],
     data() {
@@ -47,9 +47,9 @@
         activePage: '',
         menuVisible: false,
         menuItemList: [
-          { key: '1', icon: 'arrow-left', text: '关闭左侧' },
-          { key: '2', icon: 'arrow-right', text: '关闭右侧' },
-          { key: '3', icon: 'close', text: '关闭其它' }
+          { key: '1', icon: 'arrow-left', text: this.$t('menu.closeLeft') },
+          { key: '2', icon: 'arrow-right', text: this.$t('menu.closeRight') },
+          { key: '3', icon: 'close', text: this.$t('menu.closeOther') }
         ]
       }
     },
@@ -71,7 +71,7 @@
           fullPath: indexKey,
           meta: {
             icon: 'dashboard',
-            title: '首页'
+            title: this.$t('common.homePage')
           }
         })
         this.linkList.push(indexKey)
@@ -86,13 +86,31 @@
         if (!this.multipage) {
           this.linkList = [newRoute.fullPath]
           this.pageList = [Object.assign({},newRoute)]
+          // console.log(`非多页1:${this.pageList}`)
         } else if (this.linkList.indexOf(newRoute.fullPath) < 0) {
           this.linkList.push(newRoute.fullPath)
           this.pageList.push(Object.assign({},newRoute))
+          // let obj = this.pageList;
+          // Object.keys(obj).forEach(function(key) {
+          //   console.log(`非多页2:${key}:${obj[key]}`)
+          //   // if (obj.name == 'meta') {
+          //     Object.keys(obj[key]).forEach(function(childKey) {
+          //       console.log(`非多页2-2:${childKey}:${obj[key][childKey]}`)
+          //       Object.keys(obj[key][childKey]).forEach(function(childChildKey) {
+          //         console.log(`非多页2-2-2:${childChildKey}:${obj[key][childKey][childChildKey]}`)
+          //         Object.keys(obj[key][childKey][childChildKey]).forEach(function(childChildChildKey) {
+          //           console.log(`非多页2-2-2:${childChildChildKey}:${obj[key][childKey][childChildKey][childChildChildKey]}`)
+          //         })
+          //       })
+          //     })
+          //   // }
+          //
+          // })
         } else if (this.linkList.indexOf(newRoute.fullPath) >= 0) {
           let oldIndex = this.linkList.indexOf(newRoute.fullPath)
           let oldPositionRoute = this.pageList[oldIndex]
           this.pageList.splice(oldIndex, 1, Object.assign({},newRoute,{meta:oldPositionRoute.meta}))
+          // console.log(`非多页3:${this.pageList}`)
         }
       },
       'activePage': function(key) {
@@ -116,11 +134,11 @@
       },
       remove(key) {
         if (key == indexKey) {
-          this.$message.warning('首页不能关闭!')
+          this.$message.warning(this.$t('common.homePageCannotClose'))
           return
         }
         if (this.pageList.length === 1) {
-          this.$message.warning('这是最后一页，不能再关闭了啦')
+          this.$message.warning(this.$t('common.lastPageCannotClose'))
           return
         }
         this.pageList = this.pageList.filter(item => item.fullPath !== key)

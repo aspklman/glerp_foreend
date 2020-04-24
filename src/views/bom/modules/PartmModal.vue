@@ -1,7 +1,7 @@
 <template>
   <a-modal
     :title="title"
-    :width="800"
+    :width="580"
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleOk"
@@ -39,26 +39,28 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="部位种类">
-          <a-select placeholder="请输入部位种类" v-decorator="['partMode', validatorRules.partMode ]" >
-            <a-select-option value="1">1.面部部位</a-select-option>
-            <a-select-option value="2">2.底部部位</a-select-option>
-            <a-select-option value="3">3.内盒部位</a-select-option>
-            <a-select-option value="4">4.外箱部位</a-select-option>
-            <a-select-option value="5">5.配件部位</a-select-option>
-            <a-select-option value="6">6.布标部位</a-select-option>
-            <a-select-option value="7">7.SIZE印刷部位</a-select-option>
-            <a-select-option value="8">8.标签部位</a-select-option>
-            <a-select-option value="9">9.车绣线部位</a-select-option>
-            <a-select-option value="A">A.胶药水部位</a-select-option>
-            <a-select-option value="I">I.成品类</a-select-option>
-          </a-select>
+<!--          <a-select placeholder="请输入部位种类" v-decorator="['partMode', validatorRules.partMode ]" >-->
+<!--            <a-select-option value="1">1.面部部位</a-select-option>-->
+<!--            <a-select-option value="2">2.底部部位</a-select-option>-->
+<!--            <a-select-option value="3">3.内盒部位</a-select-option>-->
+<!--            <a-select-option value="4">4.外箱部位</a-select-option>-->
+<!--            <a-select-option value="5">5.配件部位</a-select-option>-->
+<!--            <a-select-option value="6">6.布标部位</a-select-option>-->
+<!--            <a-select-option value="7">7.SIZE印刷部位</a-select-option>-->
+<!--            <a-select-option value="8">8.标签部位</a-select-option>-->
+<!--            <a-select-option value="9">9.车绣线部位</a-select-option>-->
+<!--            <a-select-option value="A">A.胶药水部位</a-select-option>-->
+<!--            <a-select-option value="I">I.成品类</a-select-option>-->
+<!--          </a-select>-->
 <!--          <a-input placeholder="请输入部位种类" v-decorator="['partMode', validatorRules.partMode ]" />-->
+          <j-dict-select-tag placeholder="请选择部位种类" v-decorator="['partMode', validatorRules.partMode]" :triggerChange="true" dictCode="part_type"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="主料注记编码">
-          <a-input placeholder="请输入主料注记编码" v-decorator="['sameRmk', validatorRules.sameRmk ]" disabled="true" />
+<!--          <a-input v-decorator="['sameRmk', validatorRules.sameRmk ]" disabled="true" />-->
+          <j-dict-select-tag v-decorator="['sameRmk', validatorRules.sameRmk ]" :type="'radio'" dictCode="yn_status" disabled="true" />
         </a-form-item>
 
 <!--        <a-form-item-->
@@ -107,9 +109,15 @@
   import { httpAction } from '@/api/manage'
   import pick from 'lodash.pick'
   import moment from "moment"
+  import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'
+  import JCheckbox from '@/components/jeecg/JCheckbox'
 
   export default {
     name: "PartmModal",
+    components: {
+      JDictSelectTag,
+      JCheckbox
+    },
     data () {
       return {
         title:"操作",
@@ -130,7 +138,7 @@
         factNo:{rules: [{ required: true, message: '请输入厂区编号!' }]},
         partNo:{rules: [{ required: true, message: '请输入部位编号!' }]},
         partNm:{rules: [{ required: true, message: '请输入部位名称!' }]},
-        partMode:{rules: [{ required: true, message: '请输入部位种类!' }]},
+        partMode:{rules: [{ required: true, message: '请选择部位种类!' }]},
         sameRmk:{rules: [{ required: true, message: '请输入主料注记编码!' }], initialValue: 'N'},
         userNo:{rules: [{ required: true, message: '请输入异动人!' }]},
         modifyDt:{rules: [{ required: true, message: '请输入异动时间!' }]},

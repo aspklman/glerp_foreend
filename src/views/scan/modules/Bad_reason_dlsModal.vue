@@ -1,49 +1,76 @@
 <template>
-  <a-drawer
-      :title="title"
-      :width="800"
-      placement="right"
-      :closable="false"
-      @close="close"
-      :visible="visible"
-  >
-
+  <a-modal
+    :title="title"
+    :width="680"
+    :visible="visible"
+    :confirmLoading="confirmLoading"
+    @ok="handleOk"
+    @cancel="handleCancel"
+    cancelText="关闭">
+    
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
       
+<!--        <a-form-item-->
+<!--          :labelCol="labelCol"-->
+<!--          :wrapperCol="wrapperCol"-->
+<!--          label="厂区编号">-->
+<!--          <a-input placeholder="请输入厂区编号" v-decorator="['factNo', validatorRules.factNo ]" />-->
+<!--        </a-form-item>-->
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="厂区编号">
-          <a-input placeholder="请输入厂区编号" v-decorator="['factNo', validatorRules.factNo ]" />
+          label="不良等级">
+<!--          <a-input placeholder="请输入不良等级" v-decorator="['badLevel', validatorRules.badLevel ]" />-->
+          <j-dict-select-tag v-decorator="['badLevel', validatorRules.badLevel ]" :type="'radio'" :triggerChange="true" dictCode="bad_level"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="品牌编号">
-          <a-input placeholder="请输入品牌编号" v-decorator="['brandNo', validatorRules.brandNo ]" />
+          label="原因编号">
+          <a-input placeholder="请输入原因编号" v-decorator="['badNo', validatorRules.badNo ]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="品牌名称">
-          <a-input placeholder="请输入品牌名称" v-decorator="['brandNm', validatorRules.brandNm ]" />
+          label="中文原因说明">
+          <a-input placeholder="请输入中文原因说明" v-decorator="['badCause', validatorRules.badCause ]" />
+        </a-form-item>
+<!--        <a-form-item-->
+<!--          :labelCol="labelCol"-->
+<!--          :wrapperCol="wrapperCol"-->
+<!--          label="异动人">-->
+<!--          <a-input placeholder="请输入异动人" v-decorator="['userNo', {}]" />-->
+<!--        </a-form-item>-->
+<!--        <a-form-item-->
+<!--          :labelCol="labelCol"-->
+<!--          :wrapperCol="wrapperCol"-->
+<!--          label="异动时间">-->
+<!--          <a-input placeholder="请输入异动时间" v-decorator="['modifyDt', {}]" />-->
+<!--        </a-form-item>-->
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="英文原因说明">
+          <a-input placeholder="请输入英文原因说明" v-decorator="['badCauseEn', {}]" />
         </a-form-item>
 		
       </a-form>
     </a-spin>
-    <a-button type="primary" @click="handleOk">确定</a-button>
-    <a-button type="primary" @click="handleCancel">取消</a-button>
-  </a-drawer>
+  </a-modal>
 </template>
 
 <script>
   import { httpAction } from '@/api/manage'
   import pick from 'lodash.pick'
   import moment from "moment"
+  import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'
 
   export default {
-    name: "BrandModal",
+    name: "Bad_reason_dlsModal",
+    components: {
+      JDictSelectTag,
+    },
     data () {
       return {
         title:"操作",
@@ -62,12 +89,13 @@
         form: this.$form.createForm(this),
         validatorRules:{
         factNo:{rules: [{ required: true, message: '请输入厂区编号!' }]},
-        brandNo:{rules: [{ required: true, message: '请输入品牌编号!' }]},
-        brandNm:{rules: [{ required: true, message: '请输入品牌名称!' }]},
+        badLevel:{rules: [{ required: true, message: '请输入不良等级!' }]},
+        badNo:{rules: [{ required: true, message: '请输入原因编号!' }]},
+        badCause:{rules: [{ required: true, message: '请输入中文原因说明!' }]},
         },
         url: {
-          add: "/bom/brand/add",
-          edit: "/bom/brand/edit",
+          add: "/scan/bad_reason_dls/add",
+          edit: "/scan/bad_reason_dls/edit",
         },
       }
     },
@@ -82,7 +110,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'factNo','brandNo','brandNm'))
+          this.form.setFieldsValue(pick(this.model,'factNo','badLevel','badNo','badCause','userNo','modifyDt','badCauseEn'))
 		  //时间格式化
         });
 
@@ -137,10 +165,5 @@
 </script>
 
 <style lang="less" scoped>
-/** Button按钮间距 */
-  .ant-btn {
-    margin-left: 30px;
-    margin-bottom: 30px;
-    float: right;
-  }
+
 </style>

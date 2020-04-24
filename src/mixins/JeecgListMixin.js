@@ -23,7 +23,7 @@ export const JeecgListMixin = {
         pageSize: 10,
         pageSizeOptions: ['10', '20', '30'],
         showTotal: (total, range) => {
-          return range[0] + "-" + range[1] + " 共" + total + "条"
+          return range[0] + "-" + range[1] + this.$t('common.total') + total + this.$t('common.item')    //共  条
         },
         showQuickJumper: true,
         showSizeChanger: true,
@@ -146,8 +146,8 @@ export const JeecgListMixin = {
         }
         var that = this;
         this.$confirm({
-          title: "确认删除",
-          content: "是否删除选中数据?",
+          title: this.$t('common.deleteConfirmTitle'),        //确认删除
+          content: this.$t('common.deleteConfirmContent'),    //是否删除选中数据?
           onOk: function () {
             deleteAction(that.url.deleteBatch, {ids: ids}).then((res) => {
               if (res.success) {
@@ -179,12 +179,12 @@ export const JeecgListMixin = {
     },
     handleEdit: function (record) {
       this.$refs.modalForm.edit(record);
-      this.$refs.modalForm.title = "编辑";
+      this.$refs.modalForm.title = this.$t('common.edit');    //编辑
       this.$refs.modalForm.disableSubmit = false;
     },
     handleAdd: function () {
       this.$refs.modalForm.add();
-      this.$refs.modalForm.title = "新增";
+      this.$refs.modalForm.title = this.$t('common.add');       //新增
       this.$refs.modalForm.disableSubmit = false;
     },
     handleTableChange(pagination, filters, sorter) {
@@ -206,7 +206,7 @@ export const JeecgListMixin = {
     },
     handleDetail:function(record){
       this.$refs.modalForm.edit(record);
-      this.$refs.modalForm.title="详情";
+      this.$refs.modalForm.title=this.$t('common.detail');      //详情
       this.$refs.modalForm.disableSubmit = true;
     },
     /* 导出 */

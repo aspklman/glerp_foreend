@@ -1,13 +1,13 @@
 <template>
-  <a-drawer
-      :title="title"
-      :width="800"
-      placement="right"
-      :closable="false"
-      @close="close"
-      :visible="visible"
-  >
-
+  <a-modal
+    :title="title"
+    :width="800"
+    :visible="visible"
+    :confirmLoading="confirmLoading"
+    @ok="handleOk"
+    @cancel="handleCancel"
+    cancelText="关闭">
+    
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
       
@@ -20,75 +20,43 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="部位编号">
-          <a-input placeholder="请输入部位编号" v-decorator="['partNo', validatorRules.partNo ]" />
+          label="不良等级">
+          <a-input placeholder="请输入不良等级" v-decorator="['badLevel', validatorRules.badLevel ]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="部位名称">
-          <a-input placeholder="请输入部位名称" v-decorator="['partNm', validatorRules.partNm ]" />
+          label="原因编号">
+          <a-input placeholder="请输入原因编号" v-decorator="['badNo', validatorRules.badNo ]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="部位种类">
-          <a-input placeholder="请输入部位种类" v-decorator="['partMode', validatorRules.partMode ]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="主料注记编码">
-          <a-input placeholder="请输入主料注记编码" v-decorator="['sameRmk', validatorRules.sameRmk ]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="部位英文名">
-          <a-input placeholder="请输入部位英文名" v-decorator="['partEngNm', {}]" />
+          label="中文原因说明">
+          <a-input placeholder="请输入中文原因说明" v-decorator="['badCause', validatorRules.badCause ]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="异动人">
-          <a-input placeholder="请输入异动人" v-decorator="['userNo', validatorRules.userNo ]" />
+          <a-input placeholder="请输入异动人" v-decorator="['userNo', {}]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="异动时间">
-          <a-input placeholder="请输入异动时间" v-decorator="['modifyDt', validatorRules.modifyDt ]" />
+          <a-input placeholder="请输入异动时间" v-decorator="['modifyDt', {}]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="成本部位编号">
-          <a-input placeholder="请输入成本部位编号" v-decorator="['cpartNo', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="成本部位名称">
-          <a-input placeholder="请输入成本部位名称" v-decorator="['cpartNm', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="预计用量可修改">
-          <a-input placeholder="请输入预计用量可修改" v-decorator="['purplanRmk', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="依订单计算用量时用">
-          <a-input placeholder="请输入依订单计算用量时用" v-decorator="['odrqRmk', {}]" />
+          label="英文原因说明">
+          <a-input placeholder="请输入英文原因说明" v-decorator="['badCauseEn', {}]" />
         </a-form-item>
 		
       </a-form>
     </a-spin>
-    <a-button type="primary" @click="handleOk">确定</a-button>
-    <a-button type="primary" @click="handleCancel">取消</a-button>
-  </a-drawer>
+  </a-modal>
 </template>
 
 <script>
@@ -97,7 +65,7 @@
   import moment from "moment"
 
   export default {
-    name: "PartmModal",
+    name: "FormQltyMgmtModal",
     data () {
       return {
         title:"操作",
@@ -116,16 +84,13 @@
         form: this.$form.createForm(this),
         validatorRules:{
         factNo:{rules: [{ required: true, message: '请输入厂区编号!' }]},
-        partNo:{rules: [{ required: true, message: '请输入部位编号!' }]},
-        partNm:{rules: [{ required: true, message: '请输入部位名称!' }]},
-        partMode:{rules: [{ required: true, message: '请输入部位种类!' }]},
-        sameRmk:{rules: [{ required: true, message: '请输入主料注记编码!' }]},
-        userNo:{rules: [{ required: true, message: '请输入异动人!' }]},
-        modifyDt:{rules: [{ required: true, message: '请输入异动时间!' }]},
+        badLevel:{rules: [{ required: true, message: '请输入不良等级!' }]},
+        badNo:{rules: [{ required: true, message: '请输入原因编号!' }]},
+        badCause:{rules: [{ required: true, message: '请输入中文原因说明!' }]},
         },
         url: {
-          add: "/bom/partm/add",
-          edit: "/bom/partm/edit",
+          add: "/scan/formQltyMgmt/add",
+          edit: "/scan/formQltyMgmt/edit",
         },
       }
     },
@@ -140,7 +105,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'factNo','partNo','partNm','partMode','sameRmk','partEngNm','userNo','modifyDt','cpartNo','cpartNm','purplanRmk','odrqRmk'))
+          this.form.setFieldsValue(pick(this.model,'factNo','badLevel','badNo','badCause','userNo','modifyDt','badCauseEn'))
 		  //时间格式化
         });
 
@@ -195,10 +160,5 @@
 </script>
 
 <style lang="less" scoped>
-/** Button按钮间距 */
-  .ant-btn {
-    margin-left: 30px;
-    margin-bottom: 30px;
-    float: right;
-  }
+
 </style>

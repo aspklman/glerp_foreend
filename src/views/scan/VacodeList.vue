@@ -1,35 +1,50 @@
 <template>
   <a-card :bordered="false">
 
+    <!--    <a-locale-provider :locale="locale">-->
+    <!--      <div class="locale-components" :key="(!!locale).toString()">-->
+
     <!-- 查询区域 -->
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="24">
 
-<!--          <a-col :md="6" :sm="8">-->
-<!--            <a-form-item label="工厂编号">-->
-<!--              <a-input placeholder="请输入工厂编号" v-model="queryParam.factNo"></a-input>-->
-<!--            </a-form-item>-->
-<!--          </a-col>-->
+          <!--          <a-col :md="6" :sm="8">-->
+          <!--            <a-form-item label="厂区编号">-->
+          <!--              <a-input placeholder="请输入厂区编号" v-model="queryParam.factNo"></a-input>-->
+          <!--            </a-form-item>-->
+          <!--          </a-col>-->
           <a-col :md="6" :sm="8">
-            <a-form-item label="增值编号">
-              <a-input placeholder="请输入增值编号" v-model="queryParam.vacodeNo"></a-input>
+            <a-form-item :label="this.$t('vacode.vacodeNo')">
+              <a-input :placeholder="this.$t('common.pleaseInput') + this.$t('vacode.vacodeNo')"
+                       v-model="queryParam.vacodeNo"></a-input>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="8">
-          <a-form-item label="增值名称">
-            <a-input placeholder="请输入增值名称" v-model="queryParam.vacodeNm"></a-input>
-          </a-form-item>
-        </a-col>
-        <template v-if="toggleSearchStatus">
+            <a-form-item :label="this.$t('vacode.vacodeNm')">
+              <a-input :placeholder="this.$t('common.pleaseInput') + this.$t('vacode.vacodeNm')"
+                       v-model="queryParam.vacodeNm"></a-input>
+            </a-form-item>
+          </a-col>
+          <template v-if="toggleSearchStatus">
 
-        </template>
-          <a-col :md="6" :sm="8" >
+            <!--          <a-col :md="6" :sm="8">-->
+            <!--            <a-form-item label="异动人">-->
+            <!--              <a-input placeholder="请输入异动人" v-model="queryParam.userNo"></a-input>-->
+            <!--            </a-form-item>-->
+            <!--          </a-col>-->
+            <!--          <a-col :md="6" :sm="8">-->
+            <!--            <a-form-item label="异动时间">-->
+            <!--              <a-input placeholder="请输入异动时间" v-model="queryParam.modifyDt"></a-input>-->
+            <!--            </a-form-item>-->
+            <!--          </a-col>-->
+          </template>
+          <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
-              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+              <a-button type="primary" @click="searchQuery" icon="search">{{$t('common.query')}}</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">{{$t('common.reset')}}</a-button>
               <a @click="handleToggleSearch" style="margin-left: 8px">
-                {{ toggleSearchStatus ? '收起' : '展开' }}
+                {{ toggleSearchStatus ? $t('common.retract') : $t('common.expand') }}
                 <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
               </a>
             </span>
@@ -41,24 +56,31 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('增值表')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
+      <a-button @click="handleAdd" type="primary" icon="plus">{{$t('common.add')}}</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('增值表')">{{$t('common.export')}}</a-button>
+      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
+                @change="handleImportExcel">
+        <a-button type="primary" icon="import">{{$t('common.import')}}</a-button>
       </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
-          <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
+          <a-menu-item key="1" @click="batchDel">
+            <a-icon type="delete"/>
+            {{$t('common.delete')}}
+          </a-menu-item>
         </a-menu>
-        <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
+        <a-button style="margin-left: 8px"> {{$t('common.batchOperation')}}
+          <a-icon type="down"/>
+        </a-button>
       </a-dropdown>
     </div>
 
     <!-- table区域-begin -->
     <div>
       <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
-        <a style="margin-left: 24px" @click="onClearSelected">清空</a>
+        <i class="anticon anticon-info-circle ant-alert-icon"></i> {{$t('common.selected')}} <a
+        style="font-weight: 600">{{ selectedRowKeys.length }}</a> {{$t('common.item')}}
+        <a style="margin-left: 24px" @click="onClearSelected">{{$t('common.empty')}}</a>
       </div>
 
       <a-table
@@ -74,15 +96,15 @@
         @change="handleTableChange">
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+          <a @click="handleEdit(record)">{{$t('common.edit')}}</a>
 
-          <a-divider type="vertical" />
+          <a-divider type="vertical"/>
           <a-dropdown>
-            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
+            <a class="ant-dropdown-link">{{$t('common.more')}} <a-icon type="down"/></a>
             <a-menu slot="overlay">
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
+                  <a>{{$t('common.delete')}}</a>
                 </a-popconfirm>
               </a-menu-item>
             </a-menu>
@@ -95,82 +117,102 @@
 
     <!-- 表单区域 -->
     <vacode-modal ref="modalForm" @ok="modalFormOk"></vacode-modal>
+
+    <!--      </div>-->
+    <!--    </a-locale-provider>-->
+
   </a-card>
 </template>
 
 <script>
   import VacodeModal from './modules/VacodeModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  // import enUS from 'ant-design-vue/lib/locale-provider/en_US';
+  // import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN';
+  // import viVN from 'ant-design-vue/lib/locale-provider/vi_VN';
 
   export default {
-    name: "VacodeList",
-    mixins:[JeecgListMixin],
+    name: 'VacodeList',
+    mixins: [JeecgListMixin],
     components: {
       VacodeModal
     },
-    data () {
+    data() {
       return {
+        // locale: enUS,
+        // locale: zhCN,
+        // locale: viVN,
         description: '增值表管理页面',
         // 表头
         columns: [
           {
             title: '#',
             dataIndex: '',
-            key:'rowIndex',
-            width:60,
-            align:"center",
-            customRender:function (t,r,index) {
-              return parseInt(index)+1;
+            key: 'rowIndex',
+            width: 60,
+            align: 'center',
+            customRender: function(t, r, index) {
+              return parseInt(index) + 1
             }
-           },
-		   // {
-       //      title: '工厂编号',
-       //      align:"center",
-       //      dataIndex: 'factNo'
-       //     },
-		   {
-            title: '增值编号',
-            align:"center",
-            dataIndex: 'vacodeNo'
-           },
-		   {
-            title: '增值名称',
-            align:"center",
-            dataIndex: 'vacodeNm'
-           },
+          },
+          // {
+          //      title: '厂区编号',
+          //      align:"center",
+          //      dataIndex: 'factNo'
+          //     },
           {
-            title: '创建时间',
-            align:"center",
-            dataIndex: 'createTime'
+            title: this.$t('vacode.vacodeNo'),
+            align: 'center',
+            dataIndex: 'vacodeNo'
           },
           {
-            title: '修改时间',
-            align:"center",
+            title: this.$t('vacode.vacodeNm'),
+            align: 'center',
+            dataIndex: 'vacodeNm'
+          },
+          {
+            title: this.$t('common.createTime'),
+            align: 'center',
+            dataIndex: 'createBy'
+          },
+          {
+            title: this.$t('common.updateTime'),
+            align: 'center',
             dataIndex: 'updateTime'
           },
           {
-            title: '操作',
+            title: this.$t('common.action'),
             dataIndex: 'action',
-            align:"center",
-            scopedSlots: { customRender: 'action' },
+            align: 'center',
+            scopedSlots: { customRender: 'action' }
           }
         ],
-		url: {
-          list: "/scan/vacode/list",
-          delete: "/scan/vacode/delete",
-          deleteBatch: "/scan/vacode/deleteBatch",
-          exportXlsUrl: "scan/vacode/exportXls",
-          importExcelUrl: "scan/vacode/importExcel",
-       },
-    }
-  },
-  computed: {
-    importExcelUrl: function(){
-      return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
-    }
-  },
+        url: {
+          list: '/scan/vacode/list',
+          delete: '/scan/vacode/delete',
+          deleteBatch: '/scan/vacode/deleteBatch',
+          exportXlsUrl: 'scan/vacode/exportXls',
+          importExcelUrl: 'scan/vacode/importExcel'
+        }
+      }
+    },
+    computed: {
+      importExcelUrl: function() {
+        return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
+      }
+    },
     methods: {
-     
+
+      // handleDelete() {
+      //   let createByUser = this.columns["createBy"];
+      //   console.log("建立用户：" + createByUser);
+      //   let currentUser = this.$store.state.user.username;
+      //   console.log("当前用户：" + currentUser);
+      //   if (createByUser != currentUser) {
+      //     alert('非本用户建立资料，不可删除！')
+      //   }
+      // }
+
     }
   }
 </script>

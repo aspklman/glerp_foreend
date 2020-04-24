@@ -303,11 +303,6 @@
        //      dataIndex: 'cusReceiptdate'
        //     },
 		   // {
-       //      title: '审核状态',
-       //      align:"center",
-       //      dataIndex: 'cusIfapproved'
-       //     },
-		   // {
        //      title: '审核人',
        //      align:"center",
        //      dataIndex: 'cusApprovedby'
@@ -325,32 +320,43 @@
 		   {
             title: '客户编号',
             align:"center",
-            dataIndex: 'customNo'
+            dataIndex: 'customNo',
+         sorter: true,
            },
           {
             title: '客户简称',
             align:"center",
-            dataIndex: 'customFnm'
+            dataIndex: 'customFnm',
+            sorter: true,
           },
 		   {
             title: '客户全称',
             align:"center",
-            dataIndex: 'customGnm'
+            dataIndex: 'customGnm',
+         sorter: true,
            },
-		   {
-            title: '客户英文名称',
+		   // {
+       //      title: '客户英文名称',
+       //      align:"center",
+       //      dataIndex: 'customEnm'
+       //     },
+          {
+            title: '审核状态',
             align:"center",
-            dataIndex: 'customEnm'
-           },
+            dataIndex: 'cusIfapproved_dictText',
+            sorter: true,
+          },
           {
             title: '创建时间',
             align:"center",
-            dataIndex: 'createTime'
+            dataIndex: 'createTime',
+            sorter: true,
           },
           {
             title: '修改时间',
             align:"center",
-            dataIndex: 'updateTime'
+            dataIndex: 'updateTime',
+            sorter: true,
           },
 		   // {
        //      title: '工商备案号',

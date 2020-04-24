@@ -39,7 +39,13 @@ import hasPermission from '@/utils/hasPermission'
 import vueBus from '@/utils/vueBus';
 import JeecgComponents from '@/components/jeecg/index'
 
-Vue.config.productionTip = false
+//国际化第一步
+import VueI18n from 'vue-i18n'
+import LangENUS from '@/components/lang/en-US'
+import LangZHCN from '@/components/lang/zh-CN'
+import LangVIVN from '@/components/lang/vi-VN'
+
+Vue.config.productionTip = false    //设置为 false 以阻止 vue 在启动时生成生产提示
 Vue.use(Storage, config.storageOptions)
 Vue.use(Antd)
 Vue.use(VueAxios, router)
@@ -52,10 +58,26 @@ Vue.component('apexchart', VueApexCharts)
 Vue.use(preview)
 Vue.use(vueBus);
 Vue.use(JeecgComponents);
+//国际化第二步
+Vue.use(VueI18n)
+
+//国际化第三步
+const i18n = new VueI18n({
+  // locale: 'en-US',    //全局切换语言
+  // locale: 'zh-CN',    //全局切换语言
+  // locale: 'vi-VN',    //全局切换语言
+  locale: Vue.ls.get('language', 'zh-CN'),
+  messages: {
+    'en-US': LangENUS,
+    'zh-CN': LangZHCN,
+    'vi-VN': LangVIVN,
+  }
+})
 
 new Vue({
   router,
   store,
+  i18n,   //国际化第四步
   mounted () {
     store.commit('SET_SIDEBAR_TYPE', Vue.ls.get(SIDEBAR_TYPE, true))
     store.commit('TOGGLE_THEME', Vue.ls.get(DEFAULT_THEME, config.navTheme))

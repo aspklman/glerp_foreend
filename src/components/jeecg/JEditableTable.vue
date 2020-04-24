@@ -6,13 +6,13 @@
 
     <!-- 操作按钮 -->
     <div v-if="actionButton" class="action-button">
-      <a-button type="primary" icon="plus" @click="handleClickAdd">新增</a-button>
+      <a-button type="primary" icon="plus" @click="handleClickAdd">{{$t('common.add')}}</a-button>
       <span class="gap"/>
       <template v-if="selectedRowIds.length>0">
         <a-popconfirm
-          :title="`确定要删除这 ${selectedRowIds.length} 项吗?`"
+          :title="`确定要删除这 ${selectedRowIds.length} 项吗？`"
           @confirm="handleConfirmDelete">
-          <a-button type="primary" icon="minus">删除</a-button>
+          <a-button type="primary" icon="minus">{{$t('common.delete')}}</a-button>
         </a-popconfirm>
         <template v-if="showClearSelectButton">
           <span class="gap"/>
@@ -60,7 +60,7 @@
           <div class="tr-expand" :style="`height:${getExpandHeight}px; z-index:${loading?'11':'9'};`"></div>
           <!-- 无数据时显示 -->
           <div v-if="rows.length===0" class="tr-nodata">
-            <span>暂无数据</span>
+            <span>{{$t('common.noData')}}</span>
           </div>
           <!-- 动态生成tr -->
           <template v-for="(row,rowIndex) in rows">

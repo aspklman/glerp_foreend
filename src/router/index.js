@@ -5,6 +5,9 @@ import { constantRouterMap } from '@/config/router.config'
 Vue.use(Router)
 
 export default new Router({
+  // 极简部署
+  // mode: 'hash',
+  // JAR/WAR部署
   mode: 'history',
   base: process.env.BASE_URL,
   scrollBehavior: () => ({ y: 0 }),

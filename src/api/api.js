@@ -104,6 +104,24 @@ const getStylemList = (params)=>getAction("/bom/stylem/list",params);
 //增值管理
 const getVacodeList = (params)=>getAction("/scan/vacode/list",params);
 
+//材料管理
+const getMatmList = (params)=>getAction("/bom/matm/list",params);
+
+//仓库管理
+const getStkidmList = (params)=>getAction("/stock/stkidm/list",params);
+
+//存放区域管理
+const getLocateList = (params)=>getAction("/stock/locate/list",params);
+
+//派工阶段管理
+const getDeptmList = (params)=>getAction("/product/deptm/list",params);
+
+//产量阶段管理
+const getStgmList = (params)=>getAction("/product/stgm/list",params);
+
+//组别管理
+const getSecList = (params)=>getAction("/product/sec/list",params);
+
 
 export {
   // imgView,
@@ -156,6 +174,12 @@ export {
   getCountryList,   //目的地
   getStylemList,    //型体
   getVacodeList,    //增值
+  getMatmList,       //材料
+  getStkidmList,       //仓库
+  getLocateList,       //存放区域
+  getDeptmList,     //派工阶段
+  getStgmList,      //产量阶段
+  getSecList,       //组别
 }
 
 

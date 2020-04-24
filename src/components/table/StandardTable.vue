@@ -1,4 +1,5 @@
 <template>
+
   <div class="standard-table">
     <div class="alert">
       <a-alert type="info" :show-icon="true">
@@ -29,6 +30,7 @@
 </template>
 
 <script>
+
   export default {
     name: "StandardTable",
     // props: ['bordered', 'loading', 'columns', 'data', 'rowKey', 'pagination', 'selectedRows'],

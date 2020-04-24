@@ -6,7 +6,7 @@
     :confirmLoading="confirmLoading"
     @ok="handleOk"
     @cancel="handleCancel"
-    cancelText="关闭"
+    :cancelText="this.$t('common.close')"
   >
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
@@ -14,22 +14,22 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="旧密码">
-          <a-input type="password" placeholder="请输入旧密码" v-decorator="[ 'oldpassword', validatorRules.oldpassword]" />
+          :label="this.$t('common.old') + this.$t('common.password')">
+          <a-input type="password" :placeholder="this.$t('common.please') + this.$t('common.input') + this.$t('common.old') + this.$t('common.password')" v-decorator="[ 'oldpassword', validatorRules.oldpassword]" />
         </a-form-item>
 
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="新密码">
-          <a-input type="password" placeholder="请输入新密码" v-decorator="[ 'password', validatorRules.password]" />
+          :label="this.$t('common.new') + this.$t('common.password')">
+          <a-input type="password" :placeholder="this.$t('common.please') + this.$t('common.input') + this.$t('common.new') + this.$t('common.password')" v-decorator="[ 'password', validatorRules.password]" />
         </a-form-item>
 
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="确认新密码">
-          <a-input type="password" @blur="handleConfirmBlur" placeholder="请确认新密码" v-decorator="[ 'confirmpassword', validatorRules.confirmpassword]"/>
+          :label="this.$t('common.confirm') + this.$t('common.new') + this.$t('common.password')">
+          <a-input type="password" @blur="handleConfirmBlur" :placeholder="this.$t('common.please') + this.$t('common.confirm') + this.$t('common.new') + this.$t('common.password')" v-decorator="[ 'confirmpassword', validatorRules.confirmpassword]"/>
         </a-form-item>
 
       </a-form>
@@ -45,26 +45,26 @@
     name: "UserPassword",
     data () {
       return {
-        title:"修改密码",
+        title:this.$t('common.passwordChange'),     //修改密码
         modalWidth:800,
         visible: false,
         confirmLoading: false,
         validatorRules:{
           oldpassword:{
             rules: [{
-              required: true, message: '请输入旧密码!',
+              required: true, message: this.$t('common.please') + this.$t('common.input') + this.$t('common.old') + this.$t('common.password'),   //请输入旧密码!
             }],
           },
           password:{
             rules: [{
-              required: true, message: '请输入新密码!',
+              required: true, message: this.$t('common.please') + this.$t('common.input') + this.$t('common.new') + this.$t('common.password'),    //请输入新密码!
             }, {
               validator: this.validateToNextPassword,
             }],
           },
           confirmpassword:{
             rules: [{
-              required: true, message: '请确认新密码!',
+              required: true, message: this.$t('common.please') + this.$t('common.confirm') + this.$t('common.new') + this.$t('common.password'),    //请确认新密码!
             }, {
               validator: this.compareToFirstPassword,
             }],

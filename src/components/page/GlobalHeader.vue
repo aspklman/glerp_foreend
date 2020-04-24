@@ -17,8 +17,8 @@
         :type="collapsed ? 'menu-unfold' : 'menu-fold'"
         @click.native="toggle"/>
 
-      <span v-if="device === 'desktop'">欢迎进入国立科技ERP系统</span>
-      <span v-else>国立科技</span>
+      <span v-if="device === 'desktop'"> {{this.$t('common.welcomeToERP')}} </span>
+      <span v-else> {{this.$t('common.guoliTech')}} </span>
 
       <user-menu :theme="theme"/>
     </div>

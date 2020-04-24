@@ -11,11 +11,11 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
 
-        <a-form-item label="菜单类型" :labelCol="labelCol" :wrapperCol="wrapperCol" >
+        <a-form-item :label="this.$t('menu.menuType')" :labelCol="labelCol" :wrapperCol="wrapperCol" >
           <a-radio-group @change="onChangeMenuType" v-decorator="['menuType',{'initialValue':localMenuType}]">
-            <a-radio :value="0">一级菜单</a-radio>
-            <a-radio :value="1">子菜单</a-radio>
-            <a-radio :value="2">按钮/权限</a-radio>
+            <a-radio :value="0">{{$t('menu.menuTypeFirstMenu')}}</a-radio>
+            <a-radio :value="1">{{$t('menu.menuTypeSubMenu')}}</a-radio>
+            <a-radio :value="2">{{$t('menu.menuTypeButtonAuthority')}}</a-radio>
           </a-radio-group>
         </a-form-item>
 
@@ -24,7 +24,7 @@
           :wrapperCol="wrapperCol"
           :label="menuLabel"
           hasFeedback >
-          <a-input placeholder="请输入菜单名称" v-decorator="[ 'name', validatorRules.name]" :readOnly="disableSubmit"/>
+          <a-input :placeholder="this.$t('common.pleaseInput') + this.$t('menu.name')" v-decorator="[ 'name', validatorRules.name]" :readOnly="disableSubmit"/>
         </a-form-item>
 
 
@@ -51,24 +51,24 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="菜单路径">
-          <a-input placeholder="请输入菜单路径" v-decorator="[ 'url',validatorRules.url]" :readOnly="disableSubmit"/>
+          :label="this.$t('menu.url')">
+          <a-input :placeholder="this.$t('common.pleaseInput') + this.$t('menu.url')" v-decorator="[ 'url',validatorRules.url]" :readOnly="disableSubmit"/>
         </a-form-item>
 
         <a-form-item
           v-show="show"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="前端组件">
-          <a-input placeholder="请输入前端组件" v-decorator="[ 'component',validatorRules.component]" :readOnly="disableSubmit"/>
+          :label="this.$t('menu.component')">
+          <a-input :placeholder="this.$t('common.pleaseInput') + this.$t('menu.component')" v-decorator="[ 'component',validatorRules.component]" :readOnly="disableSubmit"/>
         </a-form-item>
 
         <a-form-item
           v-show="localMenuType==0"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="默认跳转地址">
-          <a-input placeholder="请输入路由参数 redirect" v-decorator="[ 'redirect',{}]" :readOnly="disableSubmit"/>
+          :label="this.$t('menu.redirect')">
+          <a-input :placeholder="this.$t('common.pleaseInput') + this.$t('menu.redirect')" v-decorator="[ 'redirect',{}]" :readOnly="disableSubmit"/>
         </a-form-item>
 
         <a-form-item
@@ -101,8 +101,8 @@
           v-show="show"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="菜单图标">
-          <a-input placeholder="点击右侧按钮选择图标" v-model="model.icon" :readOnly="disableSubmit">
+          :label="this.$t('menu.icon')">
+          <a-input :placeholder="this.$t('common.pleaseSelect') + this.$t('menu.icon')" v-model="model.icon" :readOnly="disableSubmit">
             <a-icon slot="addonAfter" type="setting" @click="selectIcons" />
           </a-input>
         </a-form-item>
@@ -111,32 +111,32 @@
           v-show="show"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="排序">
-          <a-input-number placeholder="请输入菜单排序" style="width: 200px" v-decorator="[ 'sortNo',validatorRules.sortNo]" :readOnly="disableSubmit"/>
+          :label="this.$t('common.sort')">
+          <a-input-number :placeholder="this.$t('common.pleaseInput') + this.$t('common.sort')" style="width: 200px" v-decorator="[ 'sortNo',validatorRules.sortNo]" :readOnly="disableSubmit"/>
         </a-form-item>
 
         <a-form-item
           v-show="show"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="是否路由菜单">
-          <a-switch checkedChildren="是" unCheckedChildren="否" v-model="routeSwitch"/>
+          :label="this.$t('menu.routeSwitch')">
+          <a-switch :checkedChildren="this.$t('common.yes')" :unCheckedChildren="this.$t('common.no')" v-model="routeSwitch"/>
         </a-form-item>
 
         <a-form-item
           v-show="show"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="隐藏路由">
-          <a-switch checkedChildren="是" unCheckedChildren="否" v-model="menuHidden"/>
+          :label="this.$t('menu.menuHidden')">
+          <a-switch :checkedChildren="this.$t('common.yes')" :unCheckedChildren="this.$t('common.no')" v-model="menuHidden"/>
         </a-form-item>
 
         <a-form-item
           v-show="show"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="是否缓存路由">
-          <a-switch checkedChildren="是" unCheckedChildren="否" v-model="isKeepalive"/>
+          :label="this.$t('menu.isKeepalive')">
+          <a-switch :checkedChildren="this.$t('common.yes')" :unCheckedChildren="this.$t('common.no')" v-model="isKeepalive"/>
         </a-form-item>
 
 
@@ -144,8 +144,8 @@
           v-show="show"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="聚合路由">
-          <a-switch checkedChildren="是" unCheckedChildren="否" v-model="alwaysShow"/>
+          :label="this.$t('menu.alwaysShow')">
+          <a-switch :checkedChildren="this.$t('common.yes')" :unCheckedChildren="this.$t('common.no')" v-model="alwaysShow"/>
         </a-form-item>
 
 
@@ -156,9 +156,9 @@
     </a-spin>
       <a-row :style="{textAlign:'right'}">
         <a-button :style="{marginRight: '8px'}" @click="handleCancel">
-          关闭
+          {{$t('common.close')}}
         </a-button>
-        <a-button :disabled="disableSubmit" @click="handleOk" type="primary">确定</a-button>
+        <a-button :disabled="disableSubmit" @click="handleOk" type="primary">{{$t('common.submit')}}</a-button>
       </a-row>
     </div>
   </a-drawer>
@@ -188,7 +188,7 @@
         routeSwitch:true, //是否路由菜单
         isKeepalive:true, //是否缓存路由
         show:true,//根据菜单类型，动态显示隐藏表单元素
-        menuLabel:'菜单名称',
+        menuLabel:this.$t('menu.name'),
         isRequrie:true,  // 是否需要验证
         labelCol: {
           xs: { span: 24 },
@@ -209,10 +209,10 @@
     computed:{
       validatorRules:function() {
         return {
-          name:{rules: [{ required: true, message: '请输入菜单标题!' }]},
-          component:{rules: [{ required: this.show, message: '请输入前端组件!' }]},
-          url:{rules: [{ required: this.show, message: '请输入菜单路径!' }]},
-          permsType:{rules: [{ required: true, message: '请输入授权策略!' }]},
+          name:{rules: [{ required: true, message: this.$t('common.pleaseInput') + this.$t('menu.name') + '!' }]},
+          component:{rules: [{ required: this.show, message: this.$t('common.pleaseInput') + this.$t('menu.component') + '!' }]},
+          url:{rules: [{ required: this.show, message: this.$t('common.pleaseInput') + this.$t('menu.url') + '!' }]},
+          permsType:{rules: [{ required: true, message: this.$t('common.pleaseInput') + this.$t('menu.permsType') + '!' }]},
           sortNo:{rules: [{initialValue:1.0,validator: this.validateNumber}]},
         }
       }
@@ -265,7 +265,7 @@
 
         //console.log('record.menuType', record.menuType);
         this.show = record.menuType==2?false:true;
-        this.menuLabel = record.menuType==2?'按钮/权限':'菜单名称';
+        this.menuLabel = record.menuType==2?this.$t('menu.menuTypeButtonAuthority'):this.$t('menu.name');
 
         if(this.model.parentId){
           this.localMenuType = 1;
@@ -340,10 +340,10 @@
         this.localMenuType=e.target.value
         if(e.target.value == 2){
           this.show = false;
-          this.menuLabel = '按钮/权限';
+          this.menuLabel = this.$t('menu.menuTypeButtonAuthority');
         }else{
           this.show = true;
-          this.menuLabel = '菜单名称';
+          this.menuLabel = this.$t('menu.name');
         }
         this.$nextTick(() => {
           this.form.validateFields(['url','component'], { force: true });

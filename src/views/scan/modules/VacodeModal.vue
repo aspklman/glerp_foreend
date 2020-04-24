@@ -6,7 +6,7 @@
     :confirmLoading="confirmLoading"
     @ok="handleOk"
     @cancel="handleCancel"
-    cancelText="关闭">
+    :cancelText="this.$t('common.close')">
     
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
@@ -14,21 +14,33 @@
 <!--        <a-form-item-->
 <!--          :labelCol="labelCol"-->
 <!--          :wrapperCol="wrapperCol"-->
-<!--          label="工厂编号">-->
-<!--          <a-input placeholder="请输入工厂编号" v-decorator="['factNo', {}]" />-->
+<!--          label="厂区编号">-->
+<!--          <a-input placeholder="请输入厂区编号" v-decorator="['factNo', validatorRules.factNo ]" />-->
 <!--        </a-form-item>-->
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="增值编号">
-          <a-input placeholder="请输入增值编号" v-decorator="['vacodeNo', {}]" />
+          :label="this.$t('vacode.vacodeNo')">
+          <a-input :placeholder="this.$t('common.pleaseInput') + this.$t('vacode.vacodeNo')" v-decorator="['vacodeNo', validatorRules.vacodeNo ]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="增值名称">
-          <a-input placeholder="请输入增值名称" v-decorator="['vacodeNm', {}]" />
+          :label="this.$t('vacode.vacodeNm')">
+          <a-input :placeholder="this.$t('common.pleaseInput') + this.$t('vacode.vacodeNm')" v-decorator="['vacodeNm', validatorRules.vacodeNm ]" />
         </a-form-item>
+<!--        <a-form-item-->
+<!--          :labelCol="labelCol"-->
+<!--          :wrapperCol="wrapperCol"-->
+<!--          label="异动人">-->
+<!--          <a-input placeholder="请输入异动人" v-decorator="['userNo', {}]" />-->
+<!--        </a-form-item>-->
+<!--        <a-form-item-->
+<!--          :labelCol="labelCol"-->
+<!--          :wrapperCol="wrapperCol"-->
+<!--          label="异动时间">-->
+<!--          <a-input placeholder="请输入异动时间" v-decorator="['modifyDt', {}]" />-->
+<!--        </a-form-item>-->
 		
       </a-form>
     </a-spin>
@@ -59,6 +71,9 @@
         confirmLoading: false,
         form: this.$form.createForm(this),
         validatorRules:{
+        factNo:{rules: [{ required: true, message: '请输入厂区编号!' }]},
+        vacodeNo:{rules: [{ required: true, message: '请输入增值编号!' }]},
+        vacodeNm:{rules: [{ required: true, message: '请输入增值名称!' }]},
         },
         url: {
           add: "/scan/vacode/add",
@@ -77,7 +92,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'factNo','vacodeNo','vacodeNm'))
+          this.form.setFieldsValue(pick(this.model,'factNo','vacodeNo','vacodeNm','userNo','modifyDt'))
 		  //时间格式化
         });
 

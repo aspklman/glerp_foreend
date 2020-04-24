@@ -2,10 +2,10 @@
   <div>
     <a-input-search
       v-model="selectedStylems"
-      placeholder="请选择型体编号"
+      :placeholder="$t('common.pleaseSelect') + $t('stylem.style')"
       disabled
       @search="onSearchStylem">
-      <a-button slot="enterButton" :disabled="disabled">选择型体</a-button>
+      <a-button slot="enterButton" :disabled="disabled">{{$t('common.select')}}</a-button>
     </a-input-search>
     <j-select-stylem-modal
       ref="selectModal"

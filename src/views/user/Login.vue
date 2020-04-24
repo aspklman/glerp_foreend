@@ -5,13 +5,32 @@
         :activeKey="customActiveKey"
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
         @change="handleTabClick">
-        <a-tab-pane key="tab1" tab="账户密码登陆">
+        <a-tab-pane key="tab1" :tab="this.$t('common.accountPasswordLogin')">
+
           <a-form-item>
-            <a-select size="large" defaultValue="广东国立科技股份有限公司" style="width: 368px" @change="handleChange">
-              <a-icon slot="suffixIcon" type="smile" />
-              <a-select-option value="0006">广东国立科技股份有限公司</a-select-option>
-<!--              <a-select-option value="0005">东莞市国立新材制品有限公司</a-select-option>-->
-<!--              <a-select-option value="0002">东莞市国立飞织制品有限公司</a-select-option>-->
+            <a-radio-group
+              @change="changeLanguage"
+              :defaultValue="this.$i18n.locale"
+              buttonStyle="solid"
+              style="width:100%; text-align:center">
+              <a-radio-button style="width:33%" value="zh-CN">中文</a-radio-button>
+              <a-radio-button style="width:33%" value="en-US">English</a-radio-button>
+              <a-radio-button style="width:34%" value="vi-VN">Việt Nam</a-radio-button>
+            </a-radio-group>
+          </a-form-item>
+
+          <a-form-item>
+            <a-select
+              @change="changeFactNo"
+              :value="this.factNo"
+              :placeholder="this.$t('common.pleaseSelect') + this.$t('common.company')"
+              size="large"
+              style="width: 368px">
+              <a-icon slot="suffixIcon" type="smile"/>
+              <a-select-option value="0000">{{this.$t('common.pleaseSelect') + this.$t('common.company')}}</a-select-option>
+<!--              <a-select-option value="0001">{{this.$t('common.guoliIndustry')}}</a-select-option>-->
+<!--              <a-select-option value="0002">{{this.$t('common.guoliFlyingWeaving')}}</a-select-option>-->
+              <a-select-option value="0006">{{this.$t('common.guoliTech')}}</a-select-option>
             </a-select>
           </a-form-item>
 
@@ -20,7 +39,7 @@
               size="large"
               v-decorator="['username',validatorRules.username,{ validator: this.handleUsernameOrEmail }]"
               type="text"
-              placeholder="请输入账户">
+              :placeholder="this.$t('common.pleaseEnterAccount')">
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
@@ -31,7 +50,7 @@
               size="large"
               type="password"
               autocomplete="false"
-              placeholder="请输入密码">
+              :placeholder="this.$t('common.pleaseEnterPassword')">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
@@ -44,63 +63,65 @@
                   size="large"
                   type="text"
                   @change="inputCodeChange"
-                  placeholder="请输入验证码">
-                  <a-icon slot="prefix" v-if=" inputCodeContent==verifiedCode " type="smile" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+                  :placeholder="this.$t('common.pleaseEnterVCode')">
+                  <a-icon slot="prefix" v-if=" inputCodeContent==verifiedCode " type="smile"
+                          :style="{ color: 'rgba(0,0,0,.25)' }"/>
                   <a-icon slot="prefix" v-else type="frown" :style="{ color: 'rgba(0,0,0,.25)' }"/>
                 </a-input>
               </a-form-item>
             </a-col>
-            <a-col  :span="10">
+            <a-col :span="10">
               <j-graphic-code @success="generateCode" style="float: right"></j-graphic-code>
             </a-col>
           </a-row>
         </a-tab-pane>
 
 
-        <a-tab-pane key="tab2" tab="手机号登陆">
-          <a-form-item>
-            <a-input
-              v-decorator="['mobile',validatorRules.mobile]"
-              size="large"
-              type="text"
-              placeholder="手机号">
-              <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
+        <!--        <a-tab-pane key="tab2" :tab="this.$t('common.mobileNumberLogin')">-->
+        <!--          <a-form-item>-->
+        <!--            <a-input-->
+        <!--              v-decorator="['mobile',validatorRules.mobile]"-->
+        <!--              size="large"-->
+        <!--              type="text"-->
+        <!--              placeholder="手机号">-->
+        <!--              <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
+        <!--            </a-input>-->
+        <!--          </a-form-item>-->
 
-          <a-row :gutter="16">
-            <a-col class="gutter-row" :span="16">
-              <a-form-item>
-                <a-input
-                  v-decorator="['captcha',validatorRules.captcha]"
-                  size="large"
-                  type="text"
-                  placeholder="请输入验证码">
-                  <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-                </a-input>
-              </a-form-item>
-            </a-col>
-            <a-col class="gutter-row" :span="8">
-              <a-button
-                class="getCaptcha"
-                tabindex="-1"
-                :disabled="state.smsSendBtn"
-                @click.stop.prevent="getCaptcha"
-                v-text="!state.smsSendBtn && '获取验证码' || (state.time+' s')"></a-button>
-            </a-col>
-          </a-row>
-        </a-tab-pane>
+        <!--          <a-row :gutter="16">-->
+        <!--            <a-col class="gutter-row" :span="16">-->
+        <!--              <a-form-item>-->
+        <!--                <a-input-->
+        <!--                  v-decorator="['captcha',validatorRules.captcha]"-->
+        <!--                  size="large"-->
+        <!--                  type="text"-->
+        <!--                  placeholder="请输入验证码">-->
+        <!--                  <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
+        <!--                </a-input>-->
+        <!--              </a-form-item>-->
+        <!--            </a-col>-->
+        <!--            <a-col class="gutter-row" :span="8">-->
+        <!--              <a-button-->
+        <!--                class="getCaptcha"-->
+        <!--                tabindex="-1"-->
+        <!--                :disabled="state.smsSendBtn"-->
+        <!--                @click.stop.prevent="getCaptcha"-->
+        <!--                v-text="!state.smsSendBtn && '获取验证码' || (state.time+' s')"></a-button>-->
+        <!--            </a-col>-->
+        <!--          </a-row>-->
+        <!--        </a-tab-pane>-->
       </a-tabs>
 
-<!--      <a-form-item>-->
-<!--        <a-checkbox v-model="formLogin.rememberMe">自动登陆</a-checkbox>-->
-<!--        <router-link :to="{ name: 'alteration'}" class="forge-password" style="float: right;">-->
-<!--          忘记密码-->
-<!--        </router-link>-->
-<!--        <router-link :to="{ name: 'register'}" class="forge-password" style="float: right;margin-right: 10px" >-->
-<!--          注册账户-->
-<!--        </router-link>-->
-<!--      </a-form-item>-->
+
+      <!--      <a-form-item>-->
+      <!--        <a-checkbox v-model="formLogin.rememberMe">自动登陆</a-checkbox>-->
+      <!--        <router-link :to="{ name: 'alteration'}" class="forge-password" style="float: right;">-->
+      <!--          忘记密码-->
+      <!--        </router-link>-->
+      <!--        <router-link :to="{ name: 'register'}" class="forge-password" style="float: right;margin-right: 10px" >-->
+      <!--          注册账户-->
+      <!--        </router-link>-->
+      <!--      </a-form-item>-->
 
       <a-form-item style="margin-top:24px">
         <a-button
@@ -110,7 +131,7 @@
           class="login-button"
           :loading="loginBtn"
           @click.stop.prevent="handleSubmit"
-          :disabled="loginBtn">确定
+          :disabled="loginBtn">{{this.$t('common.submit')}}
         </a-button>
       </a-form-item>
 
@@ -148,14 +169,15 @@
           :wrapperCol="{span:20}"
           style="margin-bottom:10px"
           :validate-status="validate_status">
-          <a-tooltip placement="topLeft" >
+          <a-tooltip placement="topLeft">
             <template slot="title">
               <span>您隶属于多部门，请选择登录部门</span>
             </template>
-            <a-avatar style="backgroundColor:#87d068" icon="gold" />
+            <a-avatar style="backgroundColor:#87d068" icon="gold"/>
           </a-tooltip>
-          <a-select @change="departChange" :class="{'valid-error':validate_status=='error'}" placeholder="请选择登录部门" style="margin-left:10px;width: 80%">
-            <a-icon slot="suffixIcon" type="gold" />
+          <a-select @change="departChange" :class="{'valid-error':validate_status=='error'}" placeholder="请选择登录部门"
+                    style="margin-left:10px;width: 80%">
+            <a-icon slot="suffixIcon" type="gold"/>
             <a-select-option
               v-for="d in departList"
               :key="d.id"
@@ -167,7 +189,6 @@
       </a-form>
 
 
-
     </a-modal>
 
   </div>
@@ -177,14 +198,14 @@
   //import md5 from "md5"
   import api from '@/api'
   import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
-  import { mapActions } from "vuex"
-  import { timeFix } from "@/utils/util"
+  import { mapActions } from 'vuex'
+  import { timeFix } from '@/utils/util'
   import Vue from 'vue'
-  import { ACCESS_TOKEN } from "@/store/mutation-types"
+  import { ACCESS_TOKEN } from '@/store/mutation-types'
   import JGraphicCode from '@/components/jeecg/JGraphicCode'
   import { putAction } from '@/api/manage'
   import { postAction } from '@/api/manage'
-  import { getAction} from '@/api/manage'
+  import { getAction } from '@/api/manage'
   import { encryption } from '@/utils/encryption/aesEncrypt'
 
   export default {
@@ -192,9 +213,10 @@
       TwoStepCaptcha,
       JGraphicCode
     },
-    data () {
+    data() {
       return {
-        customActiveKey: "tab1",
+        factNo: '',
+        customActiveKey: 'tab1',
         loginBtn: false,
         // login type: 0 email, 1 username, 2 telephone
         loginType: 0,
@@ -203,36 +225,46 @@
         form: this.$form.createForm(this),
         state: {
           time: 60,
-          smsSendBtn: false,
+          smsSendBtn: false
         },
         formLogin: {
-          username: "",
-          password: "",
-          captcha: "",
-          mobile: "",
+          // factNo: "",   //增加工厂编号
+          username: '',
+          password: '',
+          captcha: '',
+          mobile: '',
           rememberMe: true
         },
-        validatorRules:{
-          username:{rules: [{ required: true, message: '请输入账户!',validator: 'click'}]},
-          password:{rules: [{ required: true, message: '请输入密码!',validator: 'click'}]},
-          mobile:{rules: [{validator:this.validateMobile}]},
-          captcha:{rule: [{ required: true, message: '请输入验证码!'}]},
-          inputCode:{rules: [{ required: true, message: '请输入验证码!'},{validator: this.validateInputCode}]}
+        validatorRules: {
+          // factNo: {
+          //   rules: [{ required: true, message: this.$t('common.pleaseSelect') + this.$t('common.company') }],
+          //   initialValue: this.factNo == ''||this.factNo == null||this.factNo == undefined ? '0006' : this.factNo
+          // },
+          username: { rules: [{ required: true, message: this.$t('common.pleaseEnterAccount'), validator: 'click' }] },
+          password: { rules: [{ required: true, message: this.$t('common.pleaseEnterPassword'), validator: 'click' }] },
+          mobile: { rules: [{ validator: this.validateMobile }] },
+          captcha: { rule: [{ required: true, message: this.$t('common.pleaseEnterVCode') }] },
+          inputCode: {
+            rules: [{
+              required: true,
+              message: this.$t('common.pleaseEnterVCode')
+            }, { validator: this.validateInputCode }]
+          }
         },
-        verifiedCode:"",
-        inputCodeContent:"",
-        inputCodeNull:true,
+        verifiedCode: '',
+        inputCodeContent: '',
+        inputCodeNull: true,
 
-        departList:[],
-        departVisible:false,
-        departSelected:"",
-        currentUsername:"",
-        validate_status:""
+        departList: [],
+        departVisible: false,
+        departSelected: '',
+        currentUsername: '',
+        validate_status: ''
       }
     },
-    created () {
+    created() {
       Vue.ls.remove(ACCESS_TOKEN)
-      this.getRouterData();
+      this.getRouterData()
       // update-begin- --- author:scott ------ date:20190225 ---- for:暂时注释，未实现登录验证码功能
 //      this.$http.get('/auth/2step-code')
 //        .then(res => {
@@ -244,11 +276,38 @@
       // this.requiredTwoStepCaptcha = true
 
     },
+
+    mounted() {
+      this.factNo = Vue.ls.get('factNo', '0006')
+    },
+
+    computed: {
+    },
+
     methods: {
-      ...mapActions([ "Login", "Logout","PhoneLogin" ]),
+      changeLanguage(e) {
+        let language = e.target.value
+        this.$i18n.locale = language
+        Vue.ls.set('language', language)
+
+        let obj = { locale: language.slice(0, 2) + language.slice(3) };
+        Vue.ls.set('languageAntd', obj);
+        let lang = Vue.ls.get('languageAntd', 'zhCN')
+        // Object.keys(lang).forEach(function(key) {
+        //   console.log(`语言：${key}:${lang['locale']}`);
+        // });
+
+      },
+
+      changeFactNo(e) {
+        Vue.ls.set('factNo', e)
+        this.factNo = e
+      },
+
+      ...mapActions(['Login', 'Logout', 'PhoneLogin']),
       // handler
-      handleUsernameOrEmail (rule, value, callback) {
-        const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+      handleUsernameOrEmail(rule, value, callback) {
+        const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
         if (regex.test(value)) {
           this.loginType = 0
         } else {
@@ -256,212 +315,214 @@
         }
         callback()
       },
-      handleTabClick (key) {
+      handleTabClick(key) {
         this.customActiveKey = key
         // this.form.resetFields()
       },
-      handleSubmit () {
+      handleSubmit() {
         let that = this
         let loginParams = {
           remember_me: that.formLogin.rememberMe
-        };
+        }
 
         // 使用账户密码登陆
         if (that.customActiveKey === 'tab1') {
-          that.form.validateFields([ 'username', 'password','inputCode' ], { force: true }, (err, values) => {
+          that.form.validateFields(['username', 'password', 'inputCode'], { force: true }, (err, values) => {
             if (!err) {
-              getAction("/sys/getEncryptedString",{}).then((res)=>{
+              getAction('/sys/getEncryptedString', {}).then((res) => {
+                // loginParams.factNo = values.factNo
                 loginParams.username = values.username
                 //loginParams.password = md5(values.password)
-                loginParams.password = encryption(values.password,res.result.key,res.result.iv)
+                loginParams.password = encryption(values.password, res.result.key, res.result.iv)
                 that.Login(loginParams).then((res) => {
                   this.departConfirm(res)
                 }).catch((err) => {
-                  that.requestFailed(err);
+                  that.requestFailed(err)
                 })
               }).catch((err) => {
-                that.requestFailed(err);
-              });
+                that.requestFailed(err)
+              })
             }
           })
           // 使用手机号登陆
         } else {
-          that.form.validateFields([ 'mobile', 'captcha' ], { force: true }, (err, values) => {
+          that.form.validateFields(['mobile', 'captcha'], { force: true }, (err, values) => {
             if (!err) {
               loginParams.mobile = values.mobile
               loginParams.captcha = values.captcha
               that.PhoneLogin(loginParams).then((res) => {
-                console.log(res.result);
+                console.log(res.result)
                 this.departConfirm(res)
               }).catch((err) => {
-                that.requestFailed(err);
+                that.requestFailed(err)
               })
 
             }
           })
         }
       },
-      getCaptcha (e) {
-        e.preventDefault();
-        let that = this;
-        this.form.validateFields([ 'mobile' ], { force: true },(err,values) => {
-            if(!values.mobile){
-              that.cmsFailed("请输入手机号");
-            }else if (!err) {
-              this.state.smsSendBtn = true;
+      getCaptcha(e) {
+        e.preventDefault()
+        let that = this
+        this.form.validateFields(['mobile'], { force: true }, (err, values) => {
+            if (!values.mobile) {
+              that.cmsFailed('请输入手机号')
+            } else if (!err) {
+              this.state.smsSendBtn = true
               let interval = window.setInterval(() => {
                 if (that.state.time-- <= 0) {
-                  that.state.time = 60;
-                  that.state.smsSendBtn = false;
-                  window.clearInterval(interval);
+                  that.state.time = 60
+                  that.state.smsSendBtn = false
+                  window.clearInterval(interval)
                 }
-              }, 1000);
+              }, 1000)
 
-              const hide = this.$message.loading('验证码发送中..', 0);
-              let smsParams = {};
-                  smsParams.mobile=values.mobile;
-                  smsParams.smsmode="0";
-              postAction("/sys/sms",smsParams)
+              const hide = this.$message.loading('验证码发送中..', 0)
+              let smsParams = {}
+              smsParams.mobile = values.mobile
+              smsParams.smsmode = '0'
+              postAction('/sys/sms', smsParams)
                 .then(res => {
-                  if(!res.success){
-                    setTimeout(hide, 0);
-                    this.cmsFailed(res.message);
+                  if (!res.success) {
+                    setTimeout(hide, 0)
+                    this.cmsFailed(res.message)
                   }
-                  console.log(res);
-                  setTimeout(hide, 500);
+                  console.log(res)
+                  setTimeout(hide, 500)
                 })
                 .catch(err => {
-                  setTimeout(hide, 1);
-                  clearInterval(interval);
-                  that.state.time = 60;
-                  that.state.smsSendBtn = false;
-                  this.requestFailed(err);
-                });
+                  setTimeout(hide, 1)
+                  clearInterval(interval)
+                  that.state.time = 60
+                  that.state.smsSendBtn = false
+                  this.requestFailed(err)
+                })
             }
           }
-        );
+        )
       },
-      stepCaptchaSuccess () {
+      stepCaptchaSuccess() {
         this.loginSuccess()
       },
-      stepCaptchaCancel () {
+      stepCaptchaCancel() {
         this.Logout().then(() => {
           this.loginBtn = false
           this.stepCaptchaVisible = false
         })
       },
-      loginSuccess () {
+      loginSuccess() {
         this.loginBtn = false
-        this.$router.push({ name: "dashboard" })
+        this.$router.push({ name: 'dashboard' })
         this.$notification.success({
-          message: '欢迎',
-          description: `${timeFix()}，欢迎回来`,
-        });
+          message: this.$t('common.welcome'),
+          description: `${timeFix()}，` + this.$t('common.welcome') + this.$t('common.back')
+        })
       },
-      cmsFailed(err){
-        this.$notification[ 'error' ]({
-          message: "登录失败",
-          description:err,
-          duration: 4,
-        });
+      cmsFailed(err) {
+        this.$notification['error']({
+          message: this.$t('common.loginFailed'),
+          description: err,
+          duration: 4
+        })
       },
-      requestFailed (err) {
-        this.$notification[ 'error' ]({
-          message: '登录失败',
-          description: ((err.response || {}).data || {}).message || err.message || "请求出现错误，请稍后再试",
-          duration: 4,
-        });
-        this.loginBtn = false;
+      requestFailed(err) {
+        this.$notification['error']({
+          message: this.$t('common.loginFailed'),
+          description: ((err.response || {}).data || {}).message || err.message || '请求出现错误，请稍后再试',
+          duration: 4
+        })
+        this.loginBtn = false
       },
-      validateMobile(rule,value,callback){
-        if (!value || new RegExp(/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/).test(value)){
-          callback();
-        }else{
-          callback("您的手机号码格式不正确!");
+      validateMobile(rule, value, callback) {
+        if (!value || new RegExp(/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/).test(value)) {
+          callback()
+        } else {
+          callback('您的手机号码格式不正确!')
         }
 
       },
-      validateInputCode(rule,value,callback){
-        if(!value || this.verifiedCode==this.inputCodeContent){
-          callback();
-        }else{
-          callback("您输入的验证码不正确!");
+      validateInputCode(rule, value, callback) {
+        if (!value || this.verifiedCode == this.inputCodeContent) {
+          callback()
+        } else {
+          callback('您输入的验证码不正确!')
         }
       },
-      generateCode(value){
+      generateCode(value) {
         this.verifiedCode = value.toLowerCase()
       },
-      inputCodeChange(e){
+      inputCodeChange(e) {
         this.inputCodeContent = e.target.value
-        if(!e.target.value||0==e.target.value){
-          this.inputCodeNull=true
-        }else{
+        if (!e.target.value || 0 == e.target.value) {
+          this.inputCodeNull = true
+        } else {
           this.inputCodeContent = this.inputCodeContent.toLowerCase()
-          this.inputCodeNull=false
+          this.inputCodeNull = false
         }
       },
-      departConfirm(res){
-        if(res.success){
+      departConfirm(res) {
+        if (res.success) {
           let multi_depart = res.result.multi_depart
           //0:无部门 1:一个部门 2:多个部门
-          if(multi_depart==0){
+          if (multi_depart == 0) {
             this.loginSuccess()
             this.$notification.warn({
               message: '提示',
               description: `您尚未归属部门,请确认账号信息`,
-              duration:3
-            });
-          }else if(multi_depart==2){
-            this.departVisible=true
-            this.currentUsername=this.form.getFieldValue("username")
+              duration: 3
+            })
+          } else if (multi_depart == 2) {
+            this.departVisible = true
+            this.currentUsername = this.form.getFieldValue('username')
             this.departList = res.result.departs
-          }else {
+          } else {
             this.loginSuccess()
           }
-        }else{
+        } else {
           this.requestFailed(res)
-          this.Logout();
+          this.Logout()
         }
       },
-      departOk(){
-        if(!this.departSelected){
-          this.validate_status='error'
+      departOk() {
+        if (!this.departSelected) {
+          this.validate_status = 'error'
           return false
         }
-       let obj = {
-          orgCode:this.departSelected,
-          username:this.form.getFieldValue("username")
+        let obj = {
+          orgCode: this.departSelected,
+          username: this.form.getFieldValue('username')
         }
-        putAction("/sys/selectDepart",obj).then(res=>{
-          if(res.success){
+        putAction('/sys/selectDepart', obj).then(res => {
+          if (res.success) {
             this.departClear()
             this.loginSuccess()
-          }else{
+          } else {
             this.requestFailed(res)
-            this.Logout().then(()=>{
+            this.Logout().then(() => {
               this.departClear()
-            });
+            })
           }
         })
       },
-      departClear(){
-        this.departList=[]
-        this.departSelected=""
-        this.currentUsername=""
-        this.departVisible=false
-        this.validate_status=''
+      departClear() {
+        this.departList = []
+        this.departSelected = ''
+        this.currentUsername = ''
+        this.departVisible = false
+        this.validate_status = ''
       },
-      departChange(value){
-        this.validate_status='success'
+      departChange(value) {
+        this.validate_status = 'success'
         this.departSelected = value
       },
-    getRouterData(){
-      this.$nextTick(() => {
-        this.form.setFieldsValue({
-        'username': this.$route.params.username
-      });
-    })
-    },
+      getRouterData() {
+        this.$nextTick(() => {
+          this.form.setFieldsValue({
+            // 'factNo': this.$route.params.factNo,      //增加工厂编号
+            'username': this.$route.params.username
+          })
+        })
+      }
     }
   }
 </script>
@@ -497,7 +558,7 @@
 
       .item-icon {
         font-size: 24px;
-        color: rgba(0,0,0,.2);
+        color: rgba(0, 0, 0, .2);
         margin-left: 16px;
         vertical-align: middle;
         cursor: pointer;
@@ -516,7 +577,7 @@
 
 </style>
 <style>
-  .valid-error .ant-select-selection__placeholder{
+  .valid-error .ant-select-selection__placeholder {
     color: #f5222d;
   }
 </style>

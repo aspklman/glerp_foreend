@@ -5,7 +5,7 @@
       placement="right"
       :closable="false"
       @close="onClose"
-      :visible="visible"
+      :visible="false"
       :style="{}"
     >
       <div class="setting-drawer-index-content">

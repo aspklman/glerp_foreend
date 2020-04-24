@@ -140,42 +140,47 @@
 		   {
             title: '目的地编号',
             align:"center",
-            dataIndex: 'countryNo'
+            dataIndex: 'countryNo',
+         sorter: true,
            },
 		   {
             title: '目的地名称',
             align:"center",
-            dataIndex: 'country'
+            dataIndex: 'country',
+         sorter: true,
            },
 		   {
             title: '目的地英文名称',
             align:"center",
-            dataIndex: 'countryEng'
+            dataIndex: 'countryEng',
+         sorter: true,
            },
-		   {
-            title: '集团目的地代码',
-            align:"center",
-            dataIndex: 'hkdestNm'
-           },
-		   {
-            title: 'XPC国家',
-            align:"center",
-            dataIndex: 'market'
-           },
-		   {
-            title: '半成品成型地代号',
-            align:"center",
-            dataIndex: 'assmNo'
-           },
+		   // {
+       //      title: '集团目的地代码',
+       //      align:"center",
+       //      dataIndex: 'hkdestNm'
+       //     },
+		   // {
+       //      title: 'XPC国家',
+       //      align:"center",
+       //      dataIndex: 'market'
+       //     },
+		   // {
+       //      title: '半成品成型地代号',
+       //      align:"center",
+       //      dataIndex: 'assmNo'
+       //     },
 		   {
             title: '创建时间',
             align:"center",
-            dataIndex: 'createTime'
+            dataIndex: 'createTime',
+            sorted: 'true'
            },
 		   {
             title: '修改时间',
             align:"center",
-            dataIndex: 'updateTime'
+            dataIndex: 'updateTime',
+            sorted: 'true'
            },
           {
             title: '操作',

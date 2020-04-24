@@ -1,7 +1,7 @@
 <template>
   <div class="footer">
     <div class="links">
-      <a href="http://www.guoligroup.com.cn/" target="_blank">广东国立科技股份有限公司 首页</a>
+      <a href="http://www.guoligroup.com.cn/" target="_blank">{{this.$t('common.guoliTechCompany')}} {{this.$t('common.homePage')}}</a>
 <!--      <a href="https://github.com/zhangdaiscott/jeecg-boot" target="_blank">-->
 <!--        <a-icon type="github"/>-->
 <!--      </a>-->
@@ -9,9 +9,9 @@
 <!--      <a href="https://vuecomponent.github.io/ant-design-vue/docs/vue/introduce-cn/">Vue Antd</a>-->
     </div>
     <div class="copyright">
-      Copyright
+      {{ this.$t('common.copyRight') }}
       <a-icon type="copyright"/>
-      2019 <span>国立科技 All rights reserves</span>
+      2020 <span>{{ this.$t('common.guoliTech') }} {{this.$t('common.allRightsReserved')}}</span>
     </div>
   </div>
 </template>

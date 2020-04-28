@@ -22,14 +22,14 @@
           <a-form-item>
             <a-select
               @change="changeFactNo"
-              :value="this.factNo"
               :placeholder="this.$t('common.pleaseSelect') + this.$t('common.company')"
+              v-decorator="['factNo', validatorRules.factNo]"
               size="large"
               style="width: 368px">
               <a-icon slot="suffixIcon" type="smile"/>
               <a-select-option value="0000">{{this.$t('common.pleaseSelect') + this.$t('common.company')}}</a-select-option>
-<!--              <a-select-option value="0001">{{this.$t('common.guoliIndustry')}}</a-select-option>-->
-<!--              <a-select-option value="0002">{{this.$t('common.guoliFlyingWeaving')}}</a-select-option>-->
+              <a-select-option value="0001">{{this.$t('common.guoliIndustry')}}</a-select-option>
+              <a-select-option value="0002">{{this.$t('common.guoliFlyingWeaving')}}</a-select-option>
               <a-select-option value="0006">{{this.$t('common.guoliTech')}}</a-select-option>
             </a-select>
           </a-form-item>
@@ -215,7 +215,6 @@
     },
     data() {
       return {
-        factNo: '',
         customActiveKey: 'tab1',
         loginBtn: false,
         // login type: 0 email, 1 username, 2 telephone
@@ -236,10 +235,10 @@
           rememberMe: true
         },
         validatorRules: {
-          // factNo: {
-          //   rules: [{ required: true, message: this.$t('common.pleaseSelect') + this.$t('common.company') }],
-          //   initialValue: this.factNo == ''||this.factNo == null||this.factNo == undefined ? '0006' : this.factNo
-          // },
+          factNo: {
+            rules: [{ required: true, message: this.$t('common.pleaseSelect') + this.$t('common.company') }],
+            initialValue: Vue.ls.get('factNo', '0006')
+          },
           username: { rules: [{ required: true, message: this.$t('common.pleaseEnterAccount'), validator: 'click' }] },
           password: { rules: [{ required: true, message: this.$t('common.pleaseEnterPassword'), validator: 'click' }] },
           mobile: { rules: [{ validator: this.validateMobile }] },
@@ -277,12 +276,12 @@
 
     },
 
-    mounted() {
-      this.factNo = Vue.ls.get('factNo', '0006')
-    },
-
-    computed: {
-    },
+    // mounted() {
+    //   this.factNo = Vue.ls.get('factNo', '0006')
+    // },
+    //
+    // computed: {
+    // },
 
     methods: {
       changeLanguage(e) {
@@ -301,7 +300,7 @@
 
       changeFactNo(e) {
         Vue.ls.set('factNo', e)
-        this.factNo = e
+        // this.factNo = e
       },
 
       ...mapActions(['Login', 'Logout', 'PhoneLogin']),
@@ -327,10 +326,10 @@
 
         // 使用账户密码登陆
         if (that.customActiveKey === 'tab1') {
-          that.form.validateFields(['username', 'password', 'inputCode'], { force: true }, (err, values) => {
+          that.form.validateFields(['username', 'password', 'inputCode'], { force: true }, (err, values) => {   //工厂编号
             if (!err) {
               getAction('/sys/getEncryptedString', {}).then((res) => {
-                // loginParams.factNo = values.factNo
+                // loginParams.factNo = values.factNo       //工厂编号
                 loginParams.username = values.username
                 //loginParams.password = md5(values.password)
                 loginParams.password = encryption(values.password, res.result.key, res.result.iv)

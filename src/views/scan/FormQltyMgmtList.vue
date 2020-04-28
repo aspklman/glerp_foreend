@@ -46,7 +46,7 @@
           </a-col>
           <a-col :md="6" :sm="8">
             <a-form-item :label="$t('sec.sec')">
-              <j-select-sec v-model="queryParam.secNo" @change="getBadNoQty"/>
+              <j-select-sec v-model="queryParam.secNo" @change="getBadNoQty" />
               <!--                <a-input placeholder="请输入组别" v-model="queryParam.secNo"></a-input>-->
             </a-form-item>
           </a-col>
@@ -167,7 +167,7 @@
         <a-list-item slot="renderItem" slot-scope="item, index">
           <a-card :title="item.badCause">
             <span slot="extra">{{ badQty[index] }}</span>
-            <a-button-group :size="size" style="padding-left: 20px" slot="extra">
+            <a-button-group style="padding-left: 20px" slot="extra">
               <a-button type="primary"
                         @click="addQty(index, item.badLevel, item.badCause, item.badCauseEn, item.badCauseVn)">
                 <a-icon type="plus-circle"/>
@@ -192,7 +192,7 @@
         <a-list-item slot="renderItem" slot-scope="item, index">
           <a-card :title="item.badCauseEn">
             <span slot="extra">{{ badQty[index] }}</span>
-            <a-button-group :size="size" style="padding-left: 20px" slot="extra">
+            <a-button-group style="padding-left: 20px" slot="extra">
               <a-button type="primary"
                         @click="addQty(index, item.badLevel, item.badCause, item.badCauseEn, item.badCauseVn)">
                 <a-icon type="plus-circle"/>
@@ -398,6 +398,7 @@
 
       //根据查询参数获取不良名称及不良数
       getBadNoQty() {
+        let that=this
         if (!this.url.getBadNoQty) {
           this.$message.error('请设置url.getBadNoQty属性!')
           return

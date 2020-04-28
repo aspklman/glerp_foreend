@@ -11,14 +11,36 @@
   >
     <a-row :gutter="10" style="background-color: #ececec; padding: 10px; margin: -10px">
       <a-card :bordered="false">
+
+        <p>
+          {{$t('profactm.proFact')}}:
+          <j-dict-select-tag v-if="this.$i18n.locale=='zh-CN'"
+                             v-model="queryParam.proFact"
+                             :change="filterProFact"
+                             :type="'radio'"
+                             dictCode="pro_fact_cn"/>
+          <j-dict-select-tag v-else-if="this.$i18n.locale=='en-US'"
+                             v-model="queryParam.proFact"
+                             :change="filterProFact"
+                             :type="'radio'"
+                             dictCode="pro_fact_en"/>
+          <j-dict-select-tag v-else-if="this.$i18n.locale=='vi-VN'"
+                             v-model="queryParam.proFact"
+                             :change="filterProFact"
+                             :type="'radio'"
+                             dictCode="pro_fact_vn"/>
+        </p>
+
+
         {{$t('sec.secName')}}:
         <a-input-search
           :style="{width:'150px',marginBottom:'15px'}"
           :placeholder="$t('common.pleaseInput') + $t('sec.secName')"
           v-model="queryParam.secNm"
-          @search="onSearch"
-        ></a-input-search>
+          @search="onSearch"/>
         <a-button @click="searchReset(1)" style="margin-left: 20px" icon="redo">{{$t('common.reset')}}</a-button>
+
+
         <!--组别列表-->
         <a-table
           ref="table"
@@ -39,14 +61,18 @@
 <script>
   import { filterObj } from '@/utils/util'
   import { getSecList } from '@/api/api'
+  import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'
 
   export default {
     name: 'JSelectSecModal',
-    components: {},
+    components: {
+      JDictSelectTag
+    },
     props: ['modalWidth'],
     data() {
       return {
         queryParam: {
+          proFact: '',
           secNo: ''
         },
         columns: [
@@ -63,7 +89,7 @@
           {
             title: this.$t('profactm.proFact'),
             align: 'center',
-            dataIndex: 'proFact_dictText',
+            dataIndex: 'proFact_dictText'
           },
           {
             title: this.$t('common.createTime'),
@@ -107,6 +133,13 @@
       this.resetScreenSize()
       this.loadData()
     },
+
+    computed: {
+      filterProFact() {
+        this.loadData()
+      }
+    },
+
     methods: {
       loadData(arg) {
         if (arg === 1) {
@@ -197,6 +230,7 @@
       modalFormOk() {
         this.loadData()
       }
+
     }
   }
 </script>

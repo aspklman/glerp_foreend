@@ -14,7 +14,7 @@ import { queryPermissionsByUser } from '@/api/api'
 const user = {
   state: {
     token: '',
-    // fact_no: '',   //工厂编号
+    // factNo: '',   //工厂编号
     username: '',
     realname: '',
     welcome: '',
@@ -28,12 +28,12 @@ const user = {
       state.token = token
     },
     SET_NAME: (state, {
-      // fact_no,      //工厂编号
+      // factNo,      //工厂编号
       username,
       realname,
       welcome
     }) => {
-      // state.fact_no = fact_no      //工厂编号
+      // state.factNo = factNo      //工厂编号
       state.username = username
       state.realname = realname
       state.welcome = welcome
@@ -58,13 +58,13 @@ const user = {
             const result = response.result
             const userInfo = result.userInfo
             Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
-            // Vue.ls.set(FACT_NO, userInfo.fact_no, 7 * 24 * 60 * 60 * 1000)      //工厂编号
+            // Vue.ls.set(FACT_NO, userInfo.factNo, 7 * 24 * 60 * 60 * 1000)      //工厂编号
             Vue.ls.set(USER_NAME, userInfo.username, 7 * 24 * 60 * 60 * 1000)
             Vue.ls.set(USER_INFO, userInfo, 7 * 24 * 60 * 60 * 1000)
             commit('SET_TOKEN', result.token)
             commit('SET_INFO', userInfo)
             commit('SET_NAME', {
-              // fact_no: userInfo.fact_no,      //工厂编号
+              // factNo: userInfo.factNo,      //工厂编号
               username: userInfo.username,
               realname: userInfo.realname,
               welcome: welcome() })

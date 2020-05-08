@@ -27,9 +27,9 @@
   export default {
     data () {
       return {
-        locale: enUS,
+        // locale: enUS,
         // locale: Vue.ls.get('language') == 'zh-CN' ? zhCN : viVN,
-        // locale: zhCN,
+        locale: zhCN,
         // locale: viVN,
         // locale: {},
       }

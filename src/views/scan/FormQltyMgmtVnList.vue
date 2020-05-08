@@ -46,19 +46,25 @@
           </a-col>
           <a-col :md="6" :sm="8">
             <a-form-item :label="$t('sec.sec')">
-              <j-select-sec v-model="queryParam.secNo" @change="getBadNoQty" />
+<!--              <keep-alive>-->
+                <j-select-sec v-model="queryParam.secNo" @change="getBadNoQty" />
+<!--              </keep-alive>-->
               <!--                <a-input placeholder="请输入组别" v-model="queryParam.secNo"></a-input>-->
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="8">
-            <a-form-item :label="$t('common.recDate')">
-              <j-date
-                :placeholder="$t('common.pleaseSelect') + $t('common.recDate')"
-                v-model="queryParam.recDate"
-                @change="getBadNoQty"/>
-              <!--                <a-input placeholder="请输入日期" v-model="queryParam.recDate" value="2020-04-02"></a-input>-->
-            </a-form-item>
-          </a-col>
+            <a-col :md="6" :sm="8">
+              <a-form-item :label="$t('common.recDate')">
+<!--                <keep-alive>-->
+                  <j-date
+                    :placeholder="$t('common.pleaseSelect') + $t('common.recDate')"
+                    v-model="queryParam.recDate"
+                    @change="getBadNoQty"/>
+<!--                </keep-alive>-->
+
+                <!--                <a-input placeholder="请输入日期" v-model="queryParam.recDate" value="2020-04-02"></a-input>-->
+              </a-form-item>
+            </a-col>
+
 
           <!--          <template v-if="toggleSearchStatus">-->
 
@@ -380,9 +386,9 @@
         ],
         url: {
           list: '/scan/formQltyMgmt/list',
-          getBadNoQty: '/scan/formQltyMgmt/getBadNoQty',
-          insertBadNoQty: '/scan/formQltyMgmt/insertBadNoQty',
-          deleteBadNoQty: '/scan/formQltyMgmt/deleteBadNoQty',
+          getBadNoQty: '/scan/formQltyMgmt/getBadNoQtyVn',
+          insertBadNoQty: '/scan/formQltyMgmt/insertBadNoQtyVn',
+          deleteBadNoQty: '/scan/formQltyMgmt/deleteBadNoQtyVn',
           delete: '/scan/formQltyMgmt/delete',
           deleteBatch: '/scan/formQltyMgmt/deleteBatch',
           exportXlsUrl: 'scan/formQltyMgmt/exportXls',
@@ -417,7 +423,7 @@
           }
         })
         // //当用户选择了所有查询条件时，才执行后台数据查询
-        // for (let i = 1; i < pp.length; i++) {
+        // for (let i = 0; i < pp.length; i++) {
         //   if (pp[i] == null || pp[i] == undefined || pp[i] == '') {
         //     // 4个查询条件中有任何一个值为null，则将所有不良数设置为null
         //     for (let j = 0; j < this.badQty.length; j++) {

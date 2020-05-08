@@ -113,6 +113,9 @@ const getStkidmList = (params)=>getAction("/stock/stkidm/list",params);
 //存放区域管理
 const getLocateList = (params)=>getAction("/stock/locate/list",params);
 
+//存放地点管理
+const getAreasList = (params)=>getAction("/stock/areas/list",params);
+
 //派工阶段管理
 const getDeptmList = (params)=>getAction("/product/deptm/list",params);
 
@@ -177,6 +180,7 @@ export {
   getMatmList,       //材料
   getStkidmList,       //仓库
   getLocateList,       //存放区域
+  getAreasList,       //存放地点
   getDeptmList,     //派工阶段
   getStgmList,      //产量阶段
   getSecList,       //组别

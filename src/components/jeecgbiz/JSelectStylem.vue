@@ -5,7 +5,7 @@
       :placeholder="$t('common.pleaseSelect') + $t('stylem.style')"
       disabled
       @search="onSearchStylem">
-      <a-button slot="enterButton" :disabled="disabled">{{$t('common.select')}}</a-button>
+      <a-button slot="enterButton" :disabled="disabled">{{$t('common.select')}}{{$t('stylem.style')}}</a-button>
     </a-input-search>
     <j-select-stylem-modal
       ref="selectModal"

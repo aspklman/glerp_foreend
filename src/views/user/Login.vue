@@ -28,8 +28,8 @@
               style="width: 368px">
               <a-icon slot="suffixIcon" type="smile"/>
               <a-select-option value="0000">{{this.$t('common.pleaseSelect') + this.$t('common.company')}}</a-select-option>
-              <a-select-option value="0001">{{this.$t('common.guoliIndustry')}}</a-select-option>
-              <a-select-option value="0002">{{this.$t('common.guoliFlyingWeaving')}}</a-select-option>
+<!--              <a-select-option value="0001">{{this.$t('common.guoliIndustry')}}</a-select-option>-->
+<!--              <a-select-option value="0002">{{this.$t('common.guoliFlyingWeaving')}}</a-select-option>-->
               <a-select-option value="0006">{{this.$t('common.guoliTech')}}</a-select-option>
             </a-select>
           </a-form-item>

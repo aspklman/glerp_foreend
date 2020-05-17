@@ -19,7 +19,7 @@
 
           <a-col :md="6" :sm="8">
             <a-form-item label="订单编号">
-              <a-input placeholder="请输入订单编号" v-model="queryParam.订单编号"></a-input>
+              <a-input placeholder="请输入订单编号" v-model="queryParam.订单编号" />
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="8">
@@ -30,21 +30,21 @@
 
           <template v-if="toggleSearchStatus">
 
-          <a-col :md="10" :sm="8">
-            <a-form-item label="接单日期">
-              <j-date
-                v-model="queryParam.接单日期_begin"
-                date-format="YYYYMMDD"
-                style="width:45%"
-                placeholder="请选择开始日期"></j-date>
-              <span style="width: 10px;">~</span>
-              <j-date
-                v-model="queryParam.接单日期_end"
-                date-format="YYYYMMDD"
-                style="width:45%"
-                placeholder="请选择结束日期"></j-date>
-            </a-form-item>
-          </a-col>
+            <a-col :md="10" :sm="8">
+              <a-form-item label="接单日期">
+                <j-date
+                  v-model="queryParam.接单日期_begin"
+                  date-format="YYYYMMDD"
+                  style="width:45%"
+                  placeholder="请选择开始日期"></j-date>
+                <span style="width: 10px;">~</span>
+                <j-date
+                  v-model="queryParam.接单日期_end"
+                  date-format="YYYYMMDD"
+                  style="width:45%"
+                  placeholder="请选择结束日期"></j-date>
+              </a-form-item>
+            </a-col>
 
             <a-col :md="10" :sm="8">
               <a-form-item label="客户交期">
@@ -184,39 +184,39 @@
           //      dataIndex: '厂区编号'
           //     },
           // {
-          //      title: '生产厂别',
-          //      align:"center",
-          //      dataIndex: '生产厂别'
-          //     },
+          //   title: '生产厂别',
+          //   align: 'center',
+          //   dataIndex: 'proDept'
+          // },
           {
             title: '订单编号',
             align: 'center',
             dataIndex: '订单编号',
-            sorter: true,
+            sorter: true
           },
           {
             title: '型体',
             align: 'center',
             dataIndex: '型体',
-            sorter: true,
+            sorter: true
           },
           {
             title: '颜色',
             align: 'center',
             dataIndex: '颜色',
-            sorter: true,
+            sorter: true
           },
           {
             title: '接单日期',
             align: 'center',
             dataIndex: '接单日期',
-            sorter: true,
+            sorter: true
           },
           {
             title: '客户交期',
             align: 'center',
             dataIndex: '客户交期',
-            sorter: true,
+            sorter: true
           },
           {
             title: 'size编号',

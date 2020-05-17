@@ -24,17 +24,17 @@
               <j-dict-select-tag v-if="this.$i18n.locale=='zh-CN'"
                                  :placeholder="$t('common.pleaseSelect') + $t('profactm.proFact')"
                                  v-model="queryParam.proFact"
-                                 :change="getBadNoQty"
+                                 @change="getBadNoQty"
                                  dictCode="pro_fact_cn" />
               <j-dict-select-tag v-else-if="this.$i18n.locale=='en-US'"
                                  :placeholder="$t('common.pleaseSelect') + $t('profactm.proFact')"
                                  v-model="queryParam.proFact"
-                                 :change="getBadNoQty"
+                                 @change="getBadNoQty"
                                  dictCode="pro_fact_en" />
               <j-dict-select-tag v-else-if="this.$i18n.locale=='vi-VN'"
                                  :placeholder="$t('common.pleaseSelect') + $t('profactm.proFact')"
                                  v-model="queryParam.proFact"
-                                 :change="getBadNoQty"
+                                 @change="getBadNoQty"
                                  dictCode="pro_fact_vn" />
             </a-form-item>
           </a-col>

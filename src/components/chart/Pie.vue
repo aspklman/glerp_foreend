@@ -1,5 +1,6 @@
 <template>
-  <v-chart :forceFit="true" :height="height" :data="data" :scale="scale">
+  <v-chart :forceFit="true" :height="height" :data="data" :scale="scale" :onClick="handleClick">
+    <h4 :style="{ marginBottom: '20px', textAlign: 'center'}">{{ title }}</h4>
     <v-tooltip :showTitle="false" dataKey="item*percent"/>
     <v-axis/>
     <v-legend dataKey="item"/>
@@ -10,8 +11,11 @@
 
 <script>
   const DataSet = require('@antv/data-set')
+  import { ChartEventMixins } from './mixins/ChartMixins'
 
   export default {
+    name: 'Pie',
+    mixins: [ChartEventMixins],
     props: {
       title: {
         type: String,

@@ -3,7 +3,7 @@
 
     <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
       <div class="salesCard">
-        <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
+        <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}" @change="changeTab">
           <div class="extra-wrapper" slot="tabBarExtraContent">
             <div class="extra-item">
               <a @click="getCustRevOdrQty('today')">今日</a>
@@ -16,10 +16,17 @@
           <a-tab-pane loading="true" tab="客户" key="1">
             <a-row>
               <a-col :xl="12" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar title="订单数量" :dataSource="odrQty" />
+                <bar
+                  title="订单数量"
+                  :dataSource="custOdrQty"
+                  yaxisText="订单数量"
+                  :height="height" />
               </a-col>
               <a-col :xl="12" :lg="12" :md="12" :sm="24" :xs="24">
-                <pie title="订单数比率" :dataSource="odrQtyPercent"/>
+                <pie
+                  title="订单比率"
+                  :dataSource="custOdrQtyPercent"
+                  :height="height"/>
               </a-col>
 <!--              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">-->
 <!--                <rank-list title="门店销售排行榜" :list="rankList"/>-->
@@ -29,10 +36,17 @@
           <a-tab-pane tab="品牌" key="2">
             <a-row>
               <a-col :xl="12" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar title="订单数 - 按接单日期" :dataSource="barData"/>
+                <bar
+                  title="订单数量"
+                  :dataSource="brandOdrQty"
+                  yaxisText="订单数量"
+                  :height="height" />
               </a-col>
               <a-col :xl="12" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar title="订单数 - 按客户交期" :dataSource="barData"/>
+                <pie
+                  title="订单比率"
+                  :dataSource="brandOdrQtyPercent"
+                  :height="height"/>
               </a-col>
 <!--              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">-->
 <!--                <rank-list title="门店销售排行榜" :list="rankList"/>-->
@@ -42,10 +56,17 @@
           <a-tab-pane tab="型体" key="3">
             <a-row>
               <a-col :xl="12" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar title="订单数 - 按接单日期" :dataSource="barData"/>
+                <bar
+                  title="订单数量"
+                  :dataSource="styleOdrQty"
+                  yaxisText="订单数量"
+                  :height="height" />
               </a-col>
               <a-col :xl="12" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar title="订单数 - 按客户交期" :dataSource="barData"/>
+                <pie
+                  title="订单比率"
+                  :dataSource="styleOdrQtyPercent"
+                  :height="height"/>
               </a-col>
 <!--              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">-->
 <!--                <rank-list title="门店销售排行榜" :list="rankList"/>-->
@@ -125,6 +146,8 @@
         loading: true,
         center: null,
         rankList,
+          height: 500,
+        selectedTab: 1,   //默认选择tab1
         // odrQty: [
         //   {x: "卡洛驰", y: 88888},
         //   {x: "迪卡侬", y: 99999},
@@ -132,6 +155,9 @@
         //   {x: "迪士尼", y: 55555},
         // ],
         odrQty: [],
+        custOdrQty: [],
+        brandOdrQty: [],
+        styleOdrQty: [],
         // odrQtyPercent: [
         //   {item: "卡洛驰", count: 88888},
         //   {item: "迪卡侬", count: 99999},
@@ -139,12 +165,25 @@
         //   {item: "迪士尼", count: 55555},
         // ],
         odrQtyPercent: [],
+        custOdrQtyPercent: [],
+        brandOdrQtyPercent: [],
+        styleOdrQtyPercent: [],
         url: {
           getCustRevByToday: '/order/orderAnalyze/getCustRevByToday',
+          getBrandRevByToday: '/order/orderAnalyze/getBrandRevByToday',
+          getStyleRevByToday: '/order/orderAnalyze/getStyleRevByToday',
           getCustRevByWeek: '/order/orderAnalyze/getCustRevByWeek',
+          getBrandRevByWeek: '/order/orderAnalyze/getBrandRevByWeek',
+          getStyleRevByWeek: '/order/orderAnalyze/getStyleRevByWeek',
           getCustRevByMonth: '/order/orderAnalyze/getCustRevByMonth',
+          getBrandRevByMonth: '/order/orderAnalyze/getBrandRevByMonth',
+          getStyleRevByMonth: '/order/orderAnalyze/getStyleRevByMonth',
           getCustRevByYear: '/order/orderAnalyze/getCustRevByYear',
-          getCustRevPeriodOdrQty: '/order/orderAnalyze/getCustRevPeriodOdrQty',
+          getBrandRevByYear: '/order/orderAnalyze/getBrandRevByYear',
+          getStyleRevByYear: '/order/orderAnalyze/getStyleRevByYear',
+          getCustRevByPeriod: '/order/orderAnalyze/getCustRevByPeriod',
+          getBrandRevByPeriod: '/order/orderAnalyze/getBrandRevByPeriod',
+          getStyleRevByPeriod: '/order/orderAnalyze/getStyleRevByPeriod',
         },
         barData,
         loginfo:{},
@@ -160,36 +199,83 @@
       this.initLogInfo();
     },
 
-    computed: {
+    mounted() {
+        // this.getCustRevOdrQty("month")
+        // return
     },
 
     methods: {
+      changeTab(e) {
+          this.selectedTab = e
+          this.custOdrQty = []
+          this.custOdrQtyPercent = []
+          this.brandOdrQty = []
+          this.brandOdrQtyPercent = []
+          this.styleOdrQty = []
+          this.styleOdrQtyPercent = []
+          // this.getCustRevOdrQty("month")
+      },
+
       // 按客户、接单日期（今日、本周、本月、本年)查询订单数量
       getCustRevOdrQty(e) {
-        let that=this
-        if (!this.url.getCustRevByMonth) {
-          this.$message.error('请设置url.getCustRevByMonth属性!')
-          return
-        }
+        // let that=this
+        // if (!this.url.getCustRevByMonth) {
+        //   this.$message.error('请设置url.getCustRevByMonth属性!')
+        //   return
+        // }
         let tempUrl = "";
         switch (e) {
           case "today":
-            tempUrl = this.url.getCustRevByToday;
-            break;
+              if (this.selectedTab == 1) {
+                  tempUrl = this.url.getCustRevByToday;
+              } else if (this.selectedTab == 2) {
+                  tempUrl = this.url.getBrandRevByToday;
+              } else if (this.selectedTab == 3) {
+                  tempUrl = this.url.getStyleRevByToday;
+              }
+              break;
           case "week":
-            tempUrl = this.url.getCustRevByWeek;
-            break;
+              if (this.selectedTab == 1) {
+                  tempUrl = this.url.getCustRevByWeek;
+              } else if (this.selectedTab == 2) {
+                  tempUrl = this.url.getBrandRevByWeek;
+              } else if (this.selectedTab == 3) {
+                  tempUrl = this.url.getStyleRevByWeek;
+              }
+              break;
           case "month":
-            tempUrl = this.url.getCustRevByMonth;
-            break;
+              if (this.selectedTab == 1) {
+                  tempUrl = this.url.getCustRevByMonth;
+              } else if (this.selectedTab == 2) {
+                  tempUrl = this.url.getBrandRevByMonth;
+              } else if (this.selectedTab == 3) {
+                  tempUrl = this.url.getStyleRevByMonth;
+              }
+              break;
           case "year":
-            tempUrl = this.url.getCustRevByYear;
-            break;
+              if (this.selectedTab == 1) {
+                  tempUrl = this.url.getCustRevByYear;
+              } else if (this.selectedTab == 2) {
+                  tempUrl = this.url.getBrandRevByYear;
+              } else if (this.selectedTab == 3) {
+                  tempUrl = this.url.getStyleRevByYear;
+              }
+              break;
         }
         getAction(tempUrl).then((res) => {
           if (res.success) {
-            this.odrQty = JSON.parse(JSON.stringify(res.result).replace(/CUSTOM_FNM/g,"x").replace(/odr_qty/g,"y"));
-            this.odrQtyPercent = JSON.parse(JSON.stringify(res.result).replace(/CUSTOM_FNM/g,"item").replace(/odr_qty/g,"count"));
+              this.odrQty = JSON.parse(JSON.stringify(res.result).replace(/nm/g,"x").replace(/odr_qty/g,"y"));
+              this.odrQtyPercent = JSON.parse(JSON.stringify(res.result).replace(/nm/g,"item").replace(/odr_qty/g,"count"));
+              if (this.selectedTab == 1) {
+                  this.custOdrQty = this.odrQty;
+                  this.custOdrQtyPercent = this.odrQtyPercent;
+              } else if (this.selectedTab == 2) {
+                  this.brandOdrQty = this.odrQty;
+                  this.brandOdrQtyPercent = this.odrQtyPercent;
+              } else if (this.selectedTab == 3) {
+                  this.styleOdrQty = this.odrQty;
+                  this.styleOdrQtyPercent = this.odrQtyPercent;
+              }
           }
           if (res.code === 510) {
             this.$message.warning(res.message)
@@ -201,18 +287,36 @@
 
       // 按客户、接单日期（开始日期~结束日期)查询订单数量
       getCustRevPeriodOdrQty(date, dateString) {
-        // let that=this
-        if (!this.url.getCustRevPeriodOdrQty) {
-          this.$message.error('请设置url.getCustRevPeriodOdrQty属性!')
-          return
-        }
+        // // let that=this
+        // if (!this.url.getCustRevPeriodOdrQty) {
+        //   this.$message.error('请设置url.getCustRevPeriodOdrQty属性!')
+        //   return
+        // }
         // let p = new Array(2);
+          let tempUrl = '';
+          if (this.selectedTab == 1) {
+              tempUrl = this.url.getCustRevByPeriod;
+          } else if (this.selectedTab == 2) {
+              tempUrl = this.url.getBrandRevByPeriod;
+          } else if (this.selectedTab == 3) {
+              tempUrl = this.url.getStyleRevByPeriod;
+          }
         let p = dateString.toString().replace(/-/g,'').split(',');
         let period = p.toString();
-        getAction(this.url.getCustRevPeriodOdrQty, {period: period}).then((res) => {
+        getAction(tempUrl, {period: period}).then((res) => {
           if (res.success) {
-            this.odrQty = JSON.parse(JSON.stringify(res.result).replace(/CUSTOM_FNM/g,"x").replace(/odr_qty/g,"y"));
-            this.odrQtyPercent = JSON.parse(JSON.stringify(res.result).replace(/CUSTOM_FNM/g,"item").replace(/odr_qty/g,"count"));
+              this.odrQty = JSON.parse(JSON.stringify(res.result).replace(/nm/g,"x").replace(/odr_qty/g,"y"));
+              this.odrQtyPercent = JSON.parse(JSON.stringify(res.result).replace(/nm/g,"item").replace(/odr_qty/g,"count"));
+              if (this.selectedTab == 1) {
+                  this.custOdrQty = this.odrQty;
+                  this.custOdrQtyPercent = this.odrQtyPercent;
+              } else if (this.selectedTab == 2) {
+                  this.brandOdrQty = this.odrQty;
+                  this.brandOdrQtyPercent = this.odrQtyPercent;
+              } else if (this.selectedTab == 3) {
+                  this.styleOdrQty = this.odrQty;
+                  this.styleOdrQtyPercent = this.odrQtyPercent;
+              }
           }
           if (res.code === 510) {
             this.$message.warning(res.message)

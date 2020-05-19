@@ -1,50 +1,50 @@
 <template>
   <div :style="{ padding: '0 0 32px 32px' }">
     <h4 :style="{ marginBottom: '20px', textAlign: 'center' }">{{ title }}</h4>
-    <v-chart :forceFit="true" :height="height" :data="dataSource" :scale="scale" :padding="padding" >
+    <v-chart :forceFit="true" :height="height" :data="dataSource" :scale="scale" :padding="padding">
       <v-tooltip />
-      <v-axis/>
-      <v-bar position="x*y"/>
+      <v-axis />
+      <v-bar position="x*y" :label="['y', { offset: 10 }]" />
     </v-chart>
   </div>
 </template>
 
 <script>
-  import { triggerWindowResizeEvent } from '@/utils/util'
+    import {triggerWindowResizeEvent} from '@/utils/util'
 
-  export default {
-    name: 'Bar',
-    props: {
-      dataSource: {
-        type: Array,
-        required: true
-      },
-      yaxisText: {
-        type: String,
-        default: 'y'
-      },
-      title: {
-        type: String,
-        default: ''
-      },
-      height: {
-        type: Number,
-        default: 254
-      }
-    },
-    data() {
-      return { padding: ['auto', 'auto', '40', '50'] }
-    },
-    computed: {
-      scale() {
-        return [{
-          dataKey: 'y',
-          alias: this.yaxisText
-        }]
-      },
-    },
-    mounted() {
-      triggerWindowResizeEvent()
+    export default {
+        name: 'Bar',
+        props: {
+            dataSource: {
+                type: Array,
+                required: true
+            },
+            yaxisText: {
+                type: String,
+                default: 'y'
+            },
+            title: {
+                type: String,
+                default: ''
+            },
+            height: {
+                type: Number,
+                default: 254
+            }
+        },
+        data() {
+            return {padding: ['15', 'auto', '60', '60']}
+        },
+        computed: {
+            scale() {
+                return [{
+                    dataKey: 'y',
+                    alias: this.yaxisText
+                }]
+            },
+        },
+        mounted() {
+            triggerWindowResizeEvent()
+        }
     }
-  }
 </script>

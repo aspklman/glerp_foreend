@@ -11,6 +11,8 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/user/login', '/user/register', '/user/register-result','/user/alteration'] // no redirect whitelist
 
+// const main_tab_arr =['home','work','wait','apply','personalHome']
+
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
 

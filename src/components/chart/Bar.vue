@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ padding: '0 0 32px 32px' }">
+  <div class="barClass" :style="{ padding: '0 0 32px 32px' }">
     <h4 :style="{ marginBottom: '20px', textAlign: 'center' }">{{ title }}</h4>
     <v-chart :forceFit="true" :height="height" :data="dataSource" :scale="scale" :padding="padding">
       <v-tooltip />
@@ -33,7 +33,7 @@
             }
         },
         data() {
-            return {padding: ['15', 'auto', '60', '60']}
+            return {padding: ['60', '60', '60', '60']}
         },
         computed: {
             scale() {
@@ -48,3 +48,12 @@
         }
     }
 </script>
+
+<style lang="less" scoped>
+  /*div.barClass {*/
+  /*  border-top: 1px dashed black;*/
+  /*  border-right: 1px solid black;*/
+  /*  border-bottom: 1px solid black;*/
+  /*  border-left: 1px solid black;*/
+  /*}*/
+</style>

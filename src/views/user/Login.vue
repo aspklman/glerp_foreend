@@ -26,7 +26,7 @@
               v-decorator="['factNo', validatorRules.factNo]"
               size="large"
               style="width: 368px">
-              <a-icon slot="suffixIcon" type="smile"/>
+              <a-icon slot="suffixIcon" type="bank"/>
               <a-select-option value="0000">{{this.$t('common.pleaseSelect') + this.$t('common.company')}}</a-select-option>
 <!--              <a-select-option value="0001">{{this.$t('common.guoliIndustry')}}</a-select-option>-->
 <!--              <a-select-option value="0002">{{this.$t('common.guoliFlyingWeaving')}}</a-select-option>-->

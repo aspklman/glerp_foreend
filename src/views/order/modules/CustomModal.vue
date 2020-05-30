@@ -17,7 +17,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="客户编号">
-              <a-input placeholder="请输入客户编号" v-decorator="['customNo', validatorRules.customNo ]" />
+              <a-input placeholder="请输入客户编号，大写英文字母和数字，最长6位！" v-decorator="['customNo', validatorRules.customNo ]" maxLength="6" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -25,7 +25,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="客户简称">
-              <a-input placeholder="请输入客户简称" v-decorator="['customFnm', validatorRules.customFnm ]" />
+              <a-input placeholder="请输入客户简称，最长6个汉字！" v-decorator="['customFnm', validatorRules.customFnm ]" maxLength="6" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -45,9 +45,9 @@
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
-              label="中文名称">
+              label="客户全称">
 <!--              <a-input placeholder="请输入中文名称" v-decorator="['customGnm', validatorRules.customGnm ]" />-->
-              <a-textarea placeholder="请输入中文名称" v-decorator="['customGnm', validatorRules.customGnm ]" :autosize="{ minRows: 2, maxRows: 6}"/>
+              <a-textarea placeholder="请输入客户全称，最长20个汉字！" v-decorator="['customGnm', validatorRules.customGnm ]" :autosize="{ minRows: 2, maxRows: 6}" maxLength="20" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -56,7 +56,7 @@
               :wrapperCol="wrapperCol"
               label="英文名称">
 <!--              <a-input placeholder="请输入客户英文名称" v-decorator="['customEnm', {}]" />-->
-              <a-textarea placeholder="请输入英文名称" v-decorator="['customEnm', {} ]" :autosize="{ minRows: 2, maxRows: 6}"/>
+              <a-textarea placeholder="请输入英文名称" v-decorator="['customEnm', {} ]" :autosize="{ minRows: 2, maxRows: 6}" maxLength="40" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -65,7 +65,7 @@
               :wrapperCol="wrapperCol"
               label="客户地址">
 <!--              <a-input placeholder="请输入客户地址" v-decorator="['customAddr', {}]" />-->
-              <a-textarea placeholder="请输入客户地址" v-decorator="['customAddr', {} ]" :autosize="{ minRows: 2, maxRows: 6}"/>
+              <a-textarea placeholder="请输入客户地址" v-decorator="['customAddr', {} ]" :autosize="{ minRows: 2, maxRows: 6}" maxLength="30" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -268,7 +268,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="折扣比率">
-              <a-input placeholder="请输入折扣比率" v-decorator="['discountRate', validatorRules.discountRate ]" suffix="%" />
+              <a-input placeholder="请输入折扣比率" v-decorator="['discountRate', validatorRules.discountRate ]" suffix="%"/>
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -360,7 +360,7 @@
               :wrapperCol="wrapperCol"
               label="设立登记日期">
 <!--              <a-input placeholder="请输入设立登记日期" v-decorator="['cusFounddate', {}]" />-->
-              <j-date placeholder="请选择设立登记日期" v-decorator="['cusFounddate', {} ]" />
+              <j-date placeholder="请选择设立登记日期" v-decorator="['cusFounddate', {} ]" dateFormat="YYYYMMDD"/>
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -490,8 +490,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="收款日期 ">
-<!--              <a-input placeholder="请输入收款日期 " v-decorator="['cusReceiptdate', {}]" />-->
-              <j-date placeholder="请选择收款日 " v-decorator="['cusReceiptdate', {} ]" />
+              <a-input placeholder="请输入收款日期 " v-decorator="['cusReceiptdate', {}]" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -499,8 +498,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="请款日">
-<!--              <a-input placeholder="请输入请款日" v-decorator="['cusReceiptday', {}]" />-->
-              <j-date placeholder="请选择请款日" v-decorator="['cusReceiptday', {} ]" />
+              <a-input placeholder="请输入请款日" v-decorator="['cusReceiptday', {}]" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -764,9 +762,9 @@
         form: this.$form.createForm(this),
         validatorRules:{
         factNo:{rules: [{ required: true, message: '请输入厂区编号!' }]},
-        customNo:{rules: [{ required: true, message: '请输入客户编号!' }]},
-        customGnm:{rules: [{ required: true, message: '请输入中文名称!' }]},
-        customFnm:{rules: [{ required: true, message: '请输入客户简称!' }]},
+        customNo:{rules: [{ required: true, message: '请输入客户编号，大写英文字母和数字，最长6位！' }]},
+        customFnm:{rules: [{ required: true, message: '请输入客户简称，最长6个汉字！' }]},
+        customGnm:{rules: [{ required: true, message: '请输入客户全称，最长20个汉字！' }]},
         customInvno:{rules: [{ required: true, message: '请输入工商备案号!' }]},
         discountRate:{rules: [{ required: true, message: '请输入折扣比率!' }], initialValue: '0' },
         blocRmk:{rules: [{ required: true, message: '请输入集团注记!' }], initialValue: '1' },

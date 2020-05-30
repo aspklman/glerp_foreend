@@ -58,10 +58,10 @@
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">{{$t('common.add')}}</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('增值表')">{{$t('common.export')}}</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
-                @change="handleImportExcel">
-        <a-button type="primary" icon="import">{{$t('common.import')}}</a-button>
-      </a-upload>
+<!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"-->
+<!--                @change="handleImportExcel">-->
+<!--        <a-button type="primary" icon="import">{{$t('common.import')}}</a-button>-->
+<!--      </a-upload>-->
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">

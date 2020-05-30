@@ -18,7 +18,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="供应商编号">
-              <a-input placeholder="请输入供应商编号" v-decorator="['vendNo', validatorRules.vendNo ]" />
+              <a-input placeholder="请输入供应商编号，大写英文字母和数字，最长5位！" v-decorator="['vendNo', validatorRules.vendNo ]" maxLength="5" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -48,16 +48,16 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="供应商简称">
-              <a-input placeholder="请输入供应商简称，最多输入5个汉字" v-decorator="['vendFnm', validatorRules.vendFnm ]" :maxLength="5" />
+              <a-input placeholder="请输入供应商简称，最长6个汉字！" v-decorator="['vendFnm', validatorRules.vendFnm ]" :maxLength="6" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
-              label="供应商全名">
+              label="供应商全称">
 <!--              <a-input placeholder="请输入供应商全名" v-decorator="['vendGnm', {}]" />-->
-              <a-textarea placeholder="请输入供应商全名" v-decorator="['vendGnm', {}]" :autosize="{ minRows: 2, maxRows: 6}"/>
+              <a-textarea placeholder="请输入供应商全称" v-decorator="['vendGnm', {}]" :autosize="{ minRows: 2, maxRows: 6}"/>
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -117,7 +117,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="付款类别">
-              <a-input placeholder="请输入付款类别" v-decorator="['payKind', {}]" />
+              <a-input placeholder="请输入付款类别" v-decorator="['payKind', {}]" maxLength="2" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -267,7 +267,14 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="税率">
-              <a-input placeholder="请输入税率" v-decorator="['taxRate', validatorRules.taxRate ]" suffix="%"/>
+<!--              <a-input placeholder="请输入税率" v-decorator="['taxRate', validatorRules.taxRate ]" suffix="%"/>-->
+              <a-input-number placeholder="请输入税率"
+                              v-decorator="['taxRate', validatorRules.taxRate ]"
+                              :default-value="0"
+                              :min="0"
+                              :max="100"
+                              :formatter="value => `${value}%`"
+                              :parser="value => value.replace('%', '')" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -275,7 +282,14 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="折扣比率">
-              <a-input placeholder="请输入折扣比率" v-decorator="['discountRate', validatorRules.discountRate ]" suffix="%"/>
+<!--              <a-input placeholder="请输入折扣比率" v-decorator="['discountRate', validatorRules.discountRate ]" suffix="%"/>-->
+              <a-input-number placeholder="请输入折扣比率"
+                              v-decorator="['discountRate', validatorRules.discountRate ]"
+                              :default-value="0"
+                              :min="0"
+                              :max="100"
+                              :formatter="value => `${value}%`"
+                              :parser="value => value.replace('%', '')" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -346,7 +360,7 @@
               :wrapperCol="wrapperCol"
               label="公司成立日期 ">
 <!--              <a-input placeholder="请输入公司成立日期 " v-decorator="['vendReviseddate', {}]" />-->
-              <j-date placeholder="请选择公司成立日期" v-decorator="['vendReviseddate', {} ]" />
+              <j-date placeholder="请选择公司成立日期" v-decorator="['vendReviseddate', {} ]" dateFormat="YYYYMMDD" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -355,7 +369,7 @@
               :wrapperCol="wrapperCol"
               label="填表日期">
 <!--              <a-input placeholder="请输入填表日期" v-decorator="['vendFilleddate', {}]" />-->
-              <j-date placeholder="请选择填表日期" v-decorator="['vendFilleddate', {} ]" />
+              <j-date placeholder="请选择填表日期" v-decorator="['vendFilleddate', {} ]" dateFormat="YYYYMMDD" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -610,9 +624,9 @@
         taxRate:{rules: [{ required: true, message: '请输入税率!' }], initialValue: 0 },
         discountRate:{rules: [{ required: true, message: '请输入折扣比率!' }], initialValue: 0 },
         factNo:{rules: [{ required: true, message: '请输入厂区编号!' }]},
-        vendNo:{rules: [{ required: true, message: '请输入供应商编号!' }]},
+        vendNo:{rules: [{ required: true, message: '请输入供应商编号，大写英文字母和数字，最长5位！' }]},
         vendKind:{rules: [{ required: true, message: '请输入供应商类别!' }], initialValue: '1' },
-        vendFnm:{rules: [{ required: true, message: '请输入供应商简称，最多输入5个汉字!' }]},
+        vendFnm:{rules: [{ required: true, message: '请输入供应商简称，最长6个汉字！' }]},
         vendInvno:{rules: [{ required: true, message: '请输入工商备案号!' }]},
         paymentKind:{rules: [{ required: true, message: '请输入付款方式!' }]},
         tradeCondition:{rules: [{ required: true, message: '请输入交易条件!' }]},

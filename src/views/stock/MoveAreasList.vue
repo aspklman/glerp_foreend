@@ -90,7 +90,7 @@
         @change="handleTableChange">
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">移库</a>
+          <a v-has="'s_stockm:move'" @click="handleEdit(record)">移库</a>
 
           <!--          <a-divider type="vertical"/>-->
           <!--          <a-dropdown>-->

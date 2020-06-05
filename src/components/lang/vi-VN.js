@@ -273,6 +273,20 @@ module.exports = {
     secName: 'nhóm tên',
   },
 
+  //组别(新)
+  depart: {
+    depart: 'Depart',
+    departNo: 'Depart No',
+    departName: 'Depart Name',
+  },
+
+  //库别
+  stkidm: {
+    stk: 'Stock',
+    stkNo: 'Stk No',
+    stkDesc: 'Stk Desc',
+  },
+
   Page: {
     Total: 'Tổng',
   },

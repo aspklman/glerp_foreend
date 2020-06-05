@@ -5,26 +5,43 @@
     :title="title"
     @ok="handleSubmit"
     @cancel="close"
-    cancelText="关闭"
+    :cancelText="$t('common.close')"
     style="margin-top: -70px"
     wrapClassName="ant-modal-cust-warp"
   >
     <a-row :gutter="10" style="background-color: #ececec; padding: 10px; margin: -10px">
       <a-card :bordered="false">
-<!--        <p>-->
-<!--          {{$t('stkidm.stk')}}:-->
-<!--          <j-select-stkidm v-model="queryParam.stkNo" style="width: 30%" />-->
-<!--        </p>-->
 
-        存放区域名称:
+        <p>
+          {{$t('profactm.proFact')}}:
+          <j-dict-select-tag v-if="this.$i18n.locale=='zh-CN'"
+                             v-model="queryParam.proFact"
+                             :change="filterProFact"
+                             :type="'radio'"
+                             dictCode="pro_fact_cn"/>
+          <j-dict-select-tag v-else-if="this.$i18n.locale=='en-US'"
+                             v-model="queryParam.proFact"
+                             :change="filterProFact"
+                             :type="'radio'"
+                             dictCode="pro_fact_en"/>
+          <j-dict-select-tag v-else-if="this.$i18n.locale=='vi-VN'"
+                             v-model="queryParam.proFact"
+                             :change="filterProFact"
+                             :type="'radio'"
+                             dictCode="pro_fact_vn"/>
+        </p>
+
+
+        {{$t('depart.departName')}}:
         <a-input-search
           :style="{width:'150px',marginBottom:'15px'}"
-          placeholder="请输入存放区域名称"
-          v-model="queryParam.locDesc"
-          @search="onSearch"
-        ></a-input-search>
-        <a-button @click="searchReset(1)" style="margin-left: 20px" icon="redo">重置</a-button>
-        <!--存放区域列表-->
+          :placeholder="$t('common.pleaseInput') + $t('depart.departName')"
+          v-model="queryParam.departNm"
+          @search="onSearch"/>
+        <a-button @click="searchReset(1)" style="margin-left: 20px" icon="redo">{{$t('common.reset')}}</a-button>
+
+
+        <!--组别列表-->
         <a-table
           ref="table"
           :scroll="scrollTrigger"
@@ -43,41 +60,44 @@
 
 <script>
   import { filterObj } from '@/utils/util'
-  import { getLocateList } from '@/api/api'
-  import JSelectStkidm from "../JSelectStkidm";
+  import { getDepartList } from '@/api/api'
+  import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'
 
   export default {
-    name: 'JSelectLocateModal',
-    components: {JSelectStkidm},
+    name: 'GSelectDepartModal',
+    components: {
+      JDictSelectTag
+    },
     props: ['modalWidth'],
     data() {
       return {
         queryParam: {
-          locNo: ''
+          proFact: '',
+          departNo: ''
         },
         columns: [
           {
-            title: '存放区域编号',
+            title: this.$t('depart.departNo'),
             align: 'center',
-            dataIndex: 'locNo'
+            dataIndex: 'departNo'
           },
           {
-            title: '存放区域名称',
+            title: this.$t('depart.departName'),
             align: 'center',
-            dataIndex: 'locDesc'
+            dataIndex: 'departNm'
           },
+          // {
+          //   title: this.$t('profactm.proFact'),
+          //   align: 'center',
+          //   dataIndex: 'proFact_dictText'
+          // },
           {
-            title: '库别编号',
-            align: 'center',
-            dataIndex: 'stkNo'
-          },
-          {
-            title: '创建时间',
+            title: this.$t('common.createTime'),
             align: 'center',
             dataIndex: 'createTime'
           },
           {
-            title: '修改时间',
+            title: this.$t('common.updateTime'),
             align: 'center',
             dataIndex: 'updateTime'
           }
@@ -85,21 +105,21 @@
         scrollTrigger: {},
         dataSource: [],
         selectedKeys: [],
-        locDescArr: [],
-        title: '选择存放区域',
+        departNmArr: [],
+        title: this.$t('common.select') + this.$t('depart.depart'),
         ipagination: {
           current: 1,
           pageSize: 10,
           pageSizeOptions: ['10', '20', '30'],
           showTotal: (total, range) => {
-            return range[0] + '-' + range[1] + ' 共' + total + '条'
+            return range[0] + '-' + range[1] + this.$t('common.total') + total + this.$t('common.item')
           },
           showQuickJumper: true,
           showSizeChanger: true,
           total: 0
         },
         isorter: {
-          column: 'locNo',
+          column: 'departNo',
           order: 'asc'
         },
         selectedRowKeys: [],
@@ -113,13 +133,20 @@
       this.resetScreenSize()
       this.loadData()
     },
+
+    computed: {
+      filterProFact() {
+        this.loadData()
+      }
+    },
+
     methods: {
       loadData(arg) {
         if (arg === 1) {
           this.ipagination.current = 1
         }
         let params = this.getQueryParams()//查询条件
-        getLocateList(params).then((res) => {
+        getDepartList(params).then((res) => {
           if (res.success) {
             this.dataSource = res.result.records
             this.ipagination.total = res.result.total
@@ -160,7 +187,7 @@
           that.loadData(1)
         }
         that.selectedRowKeys = []
-        that.locDescArr = []
+        that.departNmArr = []
         that.selectedKeys = []
       },
       close() {
@@ -179,17 +206,17 @@
       handleSubmit() {
         let that = this
         for (let i = 0, len = this.selectedRowKeys.length; i < len; i++) {
-          this.getLocateNos(this.selectedRowKeys[i])
+          this.getDepartNos(this.selectedRowKeys[i])
         }
-        that.$emit('ok', that.locDescArr.join(','))
+        that.$emit('ok', that.departNmArr.join(','))
         that.close()
       },
-      // 遍历匹配,获取【存放区域编号】
-      getLocateNos(rowId) {
+      // 遍历匹配,获取【组别编号】
+      getDepartNos(rowId) {
         let dataSource = this.dataSource
         for (let i = 0, len = dataSource.length; i < len; i++) {
           if (rowId === dataSource[i].id) {
-            this.locDescArr.push(dataSource[i].locNo)
+            this.departNmArr.push(dataSource[i].departNo)
           }
         }
       },
@@ -203,6 +230,7 @@
       modalFormOk() {
         this.loadData()
       }
+
     }
   }
 </script>
@@ -213,7 +241,7 @@
     padding-bottom: 10px;
   }
 
-  #components-layout-demo-locate-trigger .trigger {
+  #components-layout-demo-depart-trigger .trigger {
     font-size: 18px;
     line-height: 64px;
     padding: 0 24px;

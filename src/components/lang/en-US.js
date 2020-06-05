@@ -267,11 +267,25 @@ module.exports = {
     articNo: 'Artic No',
   },
 
-  //组别
+  //组别(旧)
   sec: {
     sec: 'Sec',
     secNo: 'Sec No',
     secName: 'Sec Name',
+  },
+
+  //组别(新)
+  depart: {
+    depart: 'Depart',
+    departNo: 'Depart No',
+    departName: 'Depart Name',
+  },
+
+  //库别
+  stkidm: {
+    stk: 'Stock',
+    stkNo: 'Stk No',
+    stkDesc: 'Stk Desc',
   },
 
   Page: {

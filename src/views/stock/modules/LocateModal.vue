@@ -34,13 +34,13 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="存放区编号">
-          <a-input placeholder="请输入存放区编号" v-decorator="['locNo', validatorRules.locNo ]" />
+          <a-input placeholder="请输入存放区编号" v-decorator="['locNo', validatorRules.locNo ]" maxLength="2" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="存放区说明">
-          <a-input placeholder="请输入存放区说明" v-decorator="['locDesc', validatorRules.locDesc ]" />
+          <a-input placeholder="请输入存放区说明" v-decorator="['locDesc', validatorRules.locDesc ]" maxLength="10" />
         </a-form-item>
 <!--        <a-form-item-->
 <!--          :labelCol="labelCol"-->

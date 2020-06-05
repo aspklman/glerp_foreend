@@ -276,6 +276,20 @@ module.exports = {
     secName: '组别名称',
   },
 
+  //组别(新)
+  depart: {
+    depart: '组别',
+    departNo: '组别编号',
+    departName: '组别名称',
+  },
+
+  //库别
+  stkidm: {
+    stk: '库别',
+    stkNo: '库别编号',
+    stkDesc: '库别名称',
+  },
+
   Page: {
     Total: '共',
   },

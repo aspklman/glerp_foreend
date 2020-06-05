@@ -28,7 +28,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="原因编号">
-          <a-input placeholder="请输入原因编号" v-decorator="['badNo', validatorRules.badNo ]" />
+          <a-input placeholder="请输入原因编号，大写英文字母，最长1位！" v-decorator="['badNo', validatorRules.badNo ]" maxLength="1" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -90,7 +90,7 @@
         validatorRules:{
         factNo:{rules: [{ required: true, message: '请输入厂区编号!' }]},
         badLevel:{rules: [{ required: true, message: '请输入不良等级!' }]},
-        badNo:{rules: [{ required: true, message: '请输入原因编号!' }]},
+        badNo:{rules: [{ required: true, message: '请输入原因编号，大写英文字母，最长1位！' }]},
         badCause:{rules: [{ required: true, message: '请输入中文原因说明!' }]},
         },
         url: {

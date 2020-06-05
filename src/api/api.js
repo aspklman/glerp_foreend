@@ -122,8 +122,11 @@ const getDeptmList = (params)=>getAction("/product/deptm/list",params);
 //产量阶段管理
 const getStgmList = (params)=>getAction("/product/stgm/list",params);
 
-//组别管理
+//组别管理(旧)
 const getSecList = (params)=>getAction("/product/sec/list",params);
+
+//组别管理(新)
+const getDepartList = (params)=>getAction("/product/depart/list",params);
 
 
 export {
@@ -183,7 +186,8 @@ export {
   getAreasList,       //存放地点
   getDeptmList,     //派工阶段
   getStgmList,      //产量阶段
-  getSecList,       //组别
+  getSecList,       //组别(旧)
+  getDepartList,       //组别(新)
 }
 
 

@@ -11,6 +11,25 @@
   >
     <a-row :gutter="10" style="background-color: #ececec; padding: 10px; margin: -10px">
       <a-card :bordered="false">
+        <p>
+          {{$t('profactm.proFact')}}:
+          <j-dict-select-tag v-if="this.$i18n.locale=='zh-CN'"
+                             v-model="queryParam.proFact"
+                             :change="filterProFact"
+                             :type="'radio'"
+                             dictCode="pro_fact_cn"/>
+          <j-dict-select-tag v-else-if="this.$i18n.locale=='en-US'"
+                             v-model="queryParam.proFact"
+                             :change="filterProFact"
+                             :type="'radio'"
+                             dictCode="pro_fact_en"/>
+          <j-dict-select-tag v-else-if="this.$i18n.locale=='vi-VN'"
+                             v-model="queryParam.proFact"
+                             :change="filterProFact"
+                             :type="'radio'"
+                             dictCode="pro_fact_vn"/>
+        </p>
+
         仓库名称:
         <a-input-search
           :style="{width:'150px',marginBottom:'15px'}"
@@ -110,6 +129,11 @@
       this.resetScreenSize()
       this.loadData()
     },
+      computed: {
+          filterProFact() {
+              this.loadData()
+          }
+      },
     methods: {
       loadData(arg) {
         if (arg === 1) {

@@ -21,13 +21,13 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="班别编号">
-          <a-input placeholder="请输入班别编号" v-decorator="['teamNo', validatorRules.teamNo ]" />
+          <a-input placeholder="大写英文字母和数字，最长6位！" v-decorator="['teamNo', validatorRules.teamNo ]" maxLength="6" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="班别名称">
-          <a-input placeholder="请输入班别名称" v-decorator="['teamNm', validatorRules.teamNm ]" />
+          <a-input placeholder="请输入班别名称，最长10个汉字！" v-decorator="['teamNm', validatorRules.teamNm ]" maxLength="10" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -54,7 +54,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="归属多个组别">
-          <a-input placeholder="请输入归属多个组别" v-decorator="['secNos', {}]" />
+          <a-input placeholder="请输入归属多个组别" v-decorator="['secNos', {}]" maxLength="66" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -79,7 +79,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="备注">
-          <a-input placeholder="请输入备注" v-decorator="['rmk', {}]" />
+          <a-input placeholder="请输入备注" v-decorator="['rmk', {}]" maxLength="66" />
         </a-form-item>
 		
       </a-form>
@@ -122,8 +122,8 @@
         form: this.$form.createForm(this),
         validatorRules:{
         factNo:{rules: [{ required: true, message: '请输入厂区编号!' }]},
-        teamNo:{rules: [{ required: true, message: '请输入班别编号!' }]},
-        teamNm:{rules: [{ required: true, message: '请输入班别名称!' }]},
+        teamNo:{rules: [{ required: true, message: '请输入班别编号，大写英文字母和数字，最长6位！' }]},
+        teamNm:{rules: [{ required: true, message: '请输入班别名称，最长10个汉字！' }]},
         lockRmk:{rules: [{ required: true, message: '请选择锁定注记!' }], initialValue: 'N'},
         },
         url: {

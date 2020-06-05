@@ -17,7 +17,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="组别编号">
-              <a-input placeholder="请输入组别编号" v-decorator="['secNo', validatorRules.secNo ]" />
+              <a-input placeholder="大写英文字母和数字，最长6位！" v-decorator="['secNo', validatorRules.secNo ]" maxLength="6" />
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="7">
@@ -25,7 +25,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="组别名称">
-              <a-input placeholder="请输入组别名称" v-decorator="['secNm', validatorRules.secNm ]" />
+              <a-input placeholder="最长10个汉字！" v-decorator="['secNm', validatorRules.secNm ]" maxLength="10" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -91,7 +91,7 @@
               :wrapperCol="wrapperCol"
               label="锁定日期">
 <!--              <a-input placeholder="请输入锁定日期" v-decorator="['lockDate', {}]" />-->
-              <j-date v-decorator="['lockDate', validatorRules.lockDate]" :triggerChange="true" disabled="true" />
+              <j-date v-decorator="['lockDate', validatorRules.lockDate]" dateFormat="YYYYMMDD" disabled="true" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -113,7 +113,7 @@
               :wrapperCol="wrapperCol"
               label="备注">
               <!--              <a-input placeholder="请输入备注" v-decorator="['secDesc', {}]" />-->
-              <a-textarea placeholder="请输入备注" v-decorator="['secDesc', {} ]" :autosize="{ minRows: 2, maxRows: 6}"/>
+              <a-textarea placeholder="请输入备注，最长13个汉字！" v-decorator="['secDesc', {} ]" :autosize="{ minRows: 2, maxRows: 6}" maxLength="13" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -163,8 +163,8 @@
         form: this.$form.createForm(this),
         validatorRules:{
         factNo:{rules: [{ required: true, message: '请输入厂区编号!' }]},
-        secNo:{rules: [{ required: true, message: '请输入组别编号!' }]},
-        secNm:{rules: [{ required: true, message: '请输入组别名称!' }]},
+        secNo:{rules: [{ required: true, message: '请输入组别编号，大写英文字母和数字，最长6位！' }]},
+        secNm:{rules: [{ required: true, message: '请输入组别名称，最长10个汉字！' }]},
         aimRate:{rules: [{ required: true, message: '请输入AIM_RATE!' }]},
         awardRmk:{rules: [{ required: true, message: '请输入AWARD_RMK!' }]},
         proFact:{rules: [{ required: true, message: '请输入生产厂别!' }]},

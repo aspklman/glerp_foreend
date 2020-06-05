@@ -36,13 +36,13 @@
           :wrapperCol="wrapperCol"
           label="生效年月">
 <!--          <a-input placeholder="请选择生效年月" v-decorator="['validDate', validatorRules.validDate ]" />-->
-          <j-date placeholder="请选择生效年月" v-decorator="['validDate', {} ]" dateFormat="YYYY-MM" />
+          <j-date placeholder="请选择生效年月" v-decorator="['validDate', {} ]" dateFormat="YYYYMM" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="汇率">
-          <a-input placeholder="请输入汇率" v-decorator="['exchRate', validatorRules.exchRate ]" type="number"/>
+          <a-input-number placeholder="请输入汇率" v-decorator="['exchRate', validatorRules.exchRate ]" min="0.0001" max="9.9999" step="0.0001"/>
         </a-form-item>
 <!--        <a-form-item-->
 <!--          :labelCol="labelCol"-->

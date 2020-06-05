@@ -27,7 +27,7 @@
               :wrapperCol="wrapperCol"
               label="生效日期">
               <!--              <a-input placeholder="请输入生效日期" v-decorator="['effectiveDate', validatorRules.effectiveDate ]" />-->
-              <j-date v-decorator="['effectiveDate', validatorRules.effectiveDate ]" />
+              <j-date v-decorator="['effectiveDate', validatorRules.effectiveDate ]" dateFormat="YYYYMMDD" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -39,8 +39,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="型体">
-<!--              <a-input placeholder="请输入型体" v-decorator="['style', validatorRules.style]" />-->
-              <j-select-stylem v-decorator="['style', validatorRules.style]"></j-select-stylem>
+              <a-input placeholder="请输入型体" v-decorator="['style', validatorRules.style]" />
+<!--              <j-select-stylem v-decorator="['style', validatorRules.style]"></j-select-stylem>-->
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="7">

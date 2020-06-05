@@ -22,13 +22,13 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="原因编号">
-          <a-input placeholder="请输入原因编号" v-decorator="['vouareasonNo', validatorRules.vouareasonNo ]" />
+          <a-input placeholder="请输入原因编号" v-decorator="['vouareasonNo', validatorRules.vouareasonNo ]" maxLength="3" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="原因名称">
-          <a-input placeholder="请输入原因名称" v-decorator="['vouareasonNm', validatorRules.vouareasonNm ]" />
+          <a-input placeholder="请输入原因名称" v-decorator="['vouareasonNm', validatorRules.vouareasonNm ]" maxLength="30" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"

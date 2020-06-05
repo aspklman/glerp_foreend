@@ -51,11 +51,11 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('仓库表')">导出</a-button>
+      <a-button v-has="'stkidm:add'" @click="handleAdd" type="primary" icon="plus">新增</a-button>
+      <a-button v-has="'stkidm:exportXls'" type="primary" icon="download" @click="handleExportXls('仓库表')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
                 @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
+        <a-button v-has="'stkidm:importExcel'" type="primary" icon="import">导入</a-button>
       </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
@@ -64,7 +64,7 @@
             删除
           </a-menu-item>
         </a-menu>
-        <a-button style="margin-left: 8px"> 批量操作
+        <a-button v-has="'stkidm:deleteBatch'" style="margin-left: 8px"> 批量操作
           <a-icon type="down"/>
         </a-button>
       </a-dropdown>
@@ -91,7 +91,7 @@
         @change="handleTableChange">
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+          <a v-has="'stkidm:edit'" @click="handleEdit(record)">编辑</a>
 
           <a-divider type="vertical"/>
           <a-dropdown>
@@ -99,7 +99,7 @@
             <a-menu slot="overlay">
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
+                  <a v-has="'stkidm:delete'">删除</a>
                 </a-popconfirm>
               </a-menu-item>
             </a-menu>

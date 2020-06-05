@@ -21,13 +21,13 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="退货原因编号">
-          <a-input placeholder="请输入退货原因编号" v-decorator="['retrsnNo', validatorRules.retrsnNo ]" />
+          <a-input placeholder="请输入退货原因编号" v-decorator="['retrsnNo', validatorRules.retrsnNo ]" maxLength="2" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="退货原因描述">
-          <a-input placeholder="请输入退货原因描述" v-decorator="['retrsnDesc', validatorRules.retrsnDesc ]" />
+          <a-input placeholder="请输入退货原因描述" v-decorator="['retrsnDesc', validatorRules.retrsnDesc ]" maxLength="16" />
         </a-form-item>
 		
       </a-form>

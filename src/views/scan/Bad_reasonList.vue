@@ -53,11 +53,11 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">{{$t('common.add')}}</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('不良原因(新材)表')">{{$t('common.export')}}</a-button>
+      <a-button v-has="'bad_reason:add'" @click="handleAdd" type="primary" icon="plus">{{$t('common.add')}}</a-button>
+      <a-button v-has="'bad_reason:exportXls'" type="primary" icon="download" @click="handleExportXls('不良原因(新材)表')">{{$t('common.export')}}</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
                 @change="handleImportExcel">
-        <a-button type="primary" icon="import">{{$t('common.import')}}</a-button>
+        <a-button v-has="'bad_reason:importExcel'" type="primary" icon="import">{{$t('common.import')}}</a-button>
       </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
@@ -66,7 +66,7 @@
             {{$t('common.delete')}}
           </a-menu-item>
         </a-menu>
-        <a-button style="margin-left: 8px"> {{$t('common.batchOperation')}}
+        <a-button v-has="'bad_reason:deleteBatch'" style="margin-left: 8px"> {{$t('common.batchOperation')}}
           <a-icon type="down"/>
         </a-button>
       </a-dropdown>
@@ -93,7 +93,7 @@
         @change="handleTableChange">
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">{{$t('common.edit')}}</a>
+          <a v-has="'bad_reason:edit'" @click="handleEdit(record)">{{$t('common.edit')}}</a>
 
           <a-divider type="vertical"/>
           <a-dropdown>
@@ -101,7 +101,7 @@
             <a-menu slot="overlay">
               <a-menu-item>
                 <a-popconfirm :title="$t('common.deleteConfirm')" @confirm="() => handleDelete(record.id)">
-                  <a>{{$t('common.delete')}}</a>
+                  <a  v-has="'bad_reason:delete'">{{$t('common.delete')}}</a>
                 </a-popconfirm>
               </a-menu-item>
             </a-menu>
@@ -153,17 +153,20 @@
           {
             title: this.$t('badReason.badLevel'),
             align: 'center',
-            dataIndex: 'badLevel'
+            dataIndex: 'badLevel',
+              sorter: true,
           },
           {
             title: this.$t('badReason.badNo'),
             align: 'center',
-            dataIndex: 'badNo'
+            dataIndex: 'badNo',
+              sorter: true,
           },
           {
             title: this.$t('badReason.badCause'),
             align: 'center',
-            dataIndex: 'badCause'
+            dataIndex: 'badCause',
+              sorter: true,
           },
           // {
           //      title: '异动人',
@@ -178,17 +181,20 @@
           {
             title: this.$t('badReason.badCauseEn'),
             align: 'center',
-            dataIndex: 'badCauseEn'
+            dataIndex: 'badCauseEn',
+              sorter: true,
           },
           {
             title: this.$t('common.createTime'),
             align: 'center',
-            dataIndex: 'createTime'
+            dataIndex: 'createTime',
+              sorter: true,
           },
           {
             title: this.$t('common.updateTime'),
             align: 'center',
-            dataIndex: 'updateTime'
+            dataIndex: 'updateTime',
+              sorter: true,
           },
           {
             title: this.$t('common.action'),

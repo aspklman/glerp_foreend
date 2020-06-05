@@ -21,7 +21,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="内盒规格编号">
-          <a-input placeholder="请输入内盒规格编号" v-decorator="['inboxNo', validatorRules.inboxNo ]" />
+          <a-input placeholder="请输入内盒规格编号" v-decorator="['inboxNo', validatorRules.inboxNo ]" maxLength="4" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"

@@ -21,13 +21,13 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="补料原因编号">
-          <a-input placeholder="请输入补料原因编号" v-decorator="['addreaNo', validatorRules.addreaNo ]" />
+          <a-input placeholder="请输入补料原因编号，最长2位数字！" v-decorator="['addreaNo', validatorRules.addreaNo ]" maxLength="2" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="补料原因说明">
-          <a-input placeholder="请输入补料原因说明" v-decorator="['addreaDesc', validatorRules.addreaDesc ]" />
+          <a-input placeholder="请输入补料原因说明，最长6个汉字！" v-decorator="['addreaDesc', validatorRules.addreaDesc ]" maxLength="6" />
         </a-form-item>
 <!--        <a-form-item-->
 <!--          :labelCol="labelCol"-->
@@ -72,8 +72,8 @@
         form: this.$form.createForm(this),
         validatorRules:{
         factNo:{rules: [{ required: true, message: '请输入厂区编号!' }]},
-        addreaNo:{rules: [{ required: true, message: '请输入补料原因编号!' }]},
-        addreaDesc:{rules: [{ required: true, message: '请输入补料原因说明!' }]},
+        addreaNo:{rules: [{ required: true, message: '请输入补料原因编号，最长2位数字！' }]},
+        addreaDesc:{rules: [{ required: true, message: '请输入补料原因说明，最长6个汉字！' }]},
         },
         url: {
           add: "/product/addreason/add",

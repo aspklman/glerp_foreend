@@ -21,13 +21,13 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="库别编号">
-          <a-input placeholder="请输入库别编号" v-decorator="['stkNo', validatorRules.stkNo ]" />
+          <a-input placeholder="请输入库别编号" v-decorator="['stkNo', validatorRules.stkNo ]" maxLength="2" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="库别说明">
-          <a-input placeholder="请输入库别说明" v-decorator="['stkDesc', validatorRules.stkDesc ]" />
+          <a-input placeholder="请输入库别说明" v-decorator="['stkDesc', validatorRules.stkDesc ]" maxLength="10" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -97,7 +97,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="仓库备注">
-          <a-textarea placeholder="请输入仓库备注" v-decorator="['remark', {}]" :autosize="{ minRows: 2, maxRows: 6 }"/>
+          <a-textarea placeholder="请输入仓库备注" v-decorator="['remark', {}]" :autosize="{ minRows: 2, maxRows: 6 }" maxLength="33" />
         </a-form-item>
 		
       </a-form>

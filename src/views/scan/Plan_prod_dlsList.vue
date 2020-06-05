@@ -13,7 +13,8 @@
 <!--          </a-col>-->
           <a-col :md="6" :sm="8">
             <a-form-item label="组别编号">
-              <a-input placeholder="请输入组别编号" v-model="queryParam.secNo"></a-input>
+              <j-select-sec v-model="queryParam.secNo"></j-select-sec>
+<!--              <a-input placeholder="请输入组别编号" v-model="queryParam.secNo"></a-input>-->
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="8">
@@ -51,16 +52,16 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('成型目标产量(大罗沙)表')">导出</a-button>
+      <a-button v-has="'plan_prod_dls:add'" @click="handleAdd" type="primary" icon="plus">新增</a-button>
+      <a-button v-has="'plan_prod_dls:exportXls'" type="primary" icon="download" @click="handleExportXls('成型目标产量(大罗沙)表')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
+        <a-button v-has="'plan_prod_dls:importExcel'" type="primary" icon="import">导入</a-button>
       </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
         </a-menu>
-        <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
+        <a-button v-has="'plan_prod_dls:deleteBatch'" style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
       </a-dropdown>
     </div>
 
@@ -84,7 +85,7 @@
         @change="handleTableChange">
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+          <a v-has="'plan_prod_dls:edit'" @click="handleEdit(record)">编辑</a>
 
           <a-divider type="vertical" />
           <a-dropdown>
@@ -92,7 +93,7 @@
             <a-menu slot="overlay">
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
+                  <a v-has="'plan_prod_dls:delete'">删除</a>
                 </a-popconfirm>
               </a-menu-item>
             </a-menu>
@@ -112,6 +113,7 @@
   import Plan_prod_dlsModal from './modules/Plan_prod_dlsModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import JDate from '@/components/jeecg/JDate'
+  import JSelectSec from '@/components/jeecgbiz/JSelectSec'
 
   export default {
     name: "Plan_prod_dlsList",
@@ -119,6 +121,7 @@
     components: {
       Plan_prod_dlsModal,
       JDate,
+        JSelectSec,
     },
     data () {
       return {
@@ -143,12 +146,14 @@
 		   {
             title: '组别编号',
             align:"center",
-            dataIndex: 'secNo'
+            dataIndex: 'secNo',
+           sorter: true,
            },
 		   {
             title: '生效日期',
             align:"center",
-            dataIndex: 'effectiveDate'
+            dataIndex: 'effectiveDate',
+           sorter: true,
            },
 		   // {
        //      title: '目标产量',
@@ -188,7 +193,8 @@
 		   {
             title: '型体',
             align:"center",
-            dataIndex: 'style'
+            dataIndex: 'style',
+           sorter: true,
            },
 		   // {
        //      title: '型体描述',
@@ -198,7 +204,8 @@
 		   {
             title: '鞋子类型',
             align:"center",
-            dataIndex: 'shoeCategory'
+            dataIndex: 'shoeCategory',
+           sorter: true,
            },
 		   // {
        //      title: '目标人均产量',
@@ -273,12 +280,14 @@
           {
             title: '创建时间',
             align:"center",
-            dataIndex: 'createTime'
+            dataIndex: 'createTime',
+              sorter: true,
           },
           {
             title: '修改时间',
             align:"center",
-            dataIndex: 'updateTime'
+            dataIndex: 'updateTime',
+              sorter: true,
           },
           {
             title: '操作',

@@ -21,26 +21,26 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="仓管员编号">
-          <a-input placeholder="请输入仓管员编号" v-decorator="['whmanNo', validatorRules.whmanNo ]" />
+          <a-input placeholder="请输入仓管员编号" v-decorator="['whmanNo', validatorRules.whmanNo ]" maxLength="4" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="仓管员名称">
-          <a-input placeholder="请输入仓管员名称" v-decorator="['whmanNm', validatorRules.whmanNm ]" />
+          <a-input placeholder="请输入仓管员名称" v-decorator="['whmanNm', validatorRules.whmanNm ]" maxLength="4" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="仓管员工号">
-          <a-input placeholder="请输入仓管员工号" v-decorator="['whmanGh', validatorRules.whmanGh ]" />
+          <a-input placeholder="请输入仓管员工号" v-decorator="['whmanGh', validatorRules.whmanGh ]" maxLength="6" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="进厂日期">
 <!--          <a-input placeholder="请输入进厂日期" v-decorator="['factInDate', validatorRules.factInDate ]" />-->
-          <j-date placeholder="请选择进厂日期" v-decorator="['factInDate', {} ]" />
+          <j-date placeholder="请选择进厂日期" v-decorator="['factInDate', {} ]" dateFormat="YYYYMMDD" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"

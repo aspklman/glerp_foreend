@@ -21,13 +21,13 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           :label="this.$t('vacode.vacodeNo')">
-          <a-input :placeholder="this.$t('common.pleaseInput') + this.$t('vacode.vacodeNo')" v-decorator="['vacodeNo', validatorRules.vacodeNo ]" />
+          <a-input :placeholder="this.$t('common.pleaseInput') + this.$t('vacode.vacodeNo')" v-decorator="['vacodeNo', validatorRules.vacodeNo ]" maxLength="2" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           :label="this.$t('vacode.vacodeNm')">
-          <a-input :placeholder="this.$t('common.pleaseInput') + this.$t('vacode.vacodeNm')" v-decorator="['vacodeNm', validatorRules.vacodeNm ]" />
+          <a-input :placeholder="this.$t('common.pleaseInput') + this.$t('vacode.vacodeNm')" v-decorator="['vacodeNm', validatorRules.vacodeNm ]" maxLength="106" />
         </a-form-item>
 <!--        <a-form-item-->
 <!--          :labelCol="labelCol"-->

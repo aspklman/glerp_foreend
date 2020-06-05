@@ -26,7 +26,7 @@
               :wrapperCol="wrapperCol"
               label="生效日期">
 <!--              <a-input placeholder="请输入生效日期" v-decorator="['effectiveDate', validatorRules.effectiveDate ]" />-->
-              <j-date v-decorator="['effectiveDate', validatorRules.effectiveDate ]" />
+              <j-date v-decorator="['effectiveDate', validatorRules.effectiveDate ]" dateFormat="YYYYMMDD" />
             </a-form-item>
           </a-col>
         </a-row>

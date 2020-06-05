@@ -49,11 +49,11 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('存放地点表')">导出</a-button>
+      <a-button v-has="'areas:add'" @click="handleAdd" type="primary" icon="plus">新增</a-button>
+      <a-button v-has="'areas:exportXls'" type="primary" icon="download" @click="handleExportXls('存放地点表')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
                 @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
+        <a-button v-has="'areas:importExcel'" type="primary" icon="import">导入</a-button>
       </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
@@ -62,7 +62,7 @@
             删除
           </a-menu-item>
         </a-menu>
-        <a-button style="margin-left: 8px"> 批量操作
+        <a-button v-has="'areas:deleteBatch'" style="margin-left: 8px"> 批量操作
           <a-icon type="down"/>
         </a-button>
       </a-dropdown>
@@ -89,7 +89,7 @@
         @change="handleTableChange">
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+          <a v-has="'areas:edit'" @click="handleEdit(record)">编辑</a>
 
           <a-divider type="vertical"/>
           <a-dropdown>
@@ -97,7 +97,7 @@
             <a-menu slot="overlay">
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
+                  <a v-has="'areas:delete'">删除</a>
                 </a-popconfirm>
               </a-menu-item>
             </a-menu>
@@ -114,114 +114,115 @@
 </template>
 
 <script>
-  import AreasModal from './modules/AreasModal'
-  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+    import AreasModal from './modules/AreasModal'
+    import {JeecgListMixin} from '@/mixins/JeecgListMixin'
 
-  export default {
-    name: 'AreasList',
-    mixins: [JeecgListMixin],
-    components: {
-      AreasModal
-    },
-    data() {
-      return {
-        description: '存放地点表管理页面',
-        // 表头
-        columns: [
-          {
-            title: '#',
-            dataIndex: '',
-            key: 'rowIndex',
-            width: 60,
-            align: 'center',
-            customRender: function(t, r, index) {
-              return parseInt(index) + 1
+    export default {
+        name: 'AreasList',
+        mixins: [JeecgListMixin],
+        components: {
+            AreasModal
+        },
+        data() {
+            return {
+                description: '存放地点表管理页面',
+                // 表头
+                columns: [
+                    {
+                        title: '#',
+                        dataIndex: '',
+                        key: 'rowIndex',
+                        width: 60,
+                        align: 'center',
+                        customRender: function (t, r, index) {
+                            return parseInt(index) + 1
+                        }
+                    },
+                    // {
+                    //      title: '生产厂别',
+                    //      align:"center",
+                    //      dataIndex: 'proFact_dictText'
+                    //     },
+                    // {
+                    //      title: '厂区编号',
+                    //      align:"center",
+                    //      dataIndex: 'factNo'
+                    //     },
+                    {
+                        title: '地点编号',
+                        align: 'center',
+                        dataIndex: 'locArea',
+                        sorter: true
+                    },
+                    {
+                        title: '仓库编号',
+                        align: 'center',
+                        dataIndex: 'stkNo',
+                        sorter: true
+                    },
+                    {
+                        title: '区域编号',
+                        align: 'center',
+                        dataIndex: 'locNo',
+                        sorter: true
+                    },
+                    // {
+                    //      title: '仓库栋别',
+                    //      align:"center",
+                    //      dataIndex: 'buildingNo'
+                    //     },
+                    // {
+                    //      title: '仓库楼层',
+                    //      align:"center",
+                    //      dataIndex: 'floorNo'
+                    //     },
+                    //
+                    // {
+                    //      title: '地点名称',
+                    //      align:"center",
+                    //      dataIndex: 'locAreaDesc'
+                    //     },
+                    // {
+                    //      title: '备注',
+                    //      align:"center",
+                    //      dataIndex: 'memo'
+                    //     },
+                    {
+                        title: '创建时间',
+                        align: 'center',
+                        dataIndex: 'createTime',
+                        sorter: true
+                    },
+                    {
+                        title: '修改时间',
+                        align: 'center',
+                        dataIndex: 'updateTime',
+                        sorter: true
+                    },
+                    {
+                        title: '操作',
+                        dataIndex: 'action',
+                        align: 'center',
+                        scopedSlots: {customRender: 'action'}
+                    }
+                ],
+                url: {
+                    list: '/stock/areas/list',
+                    delete: '/stock/areas/delete',
+                    deleteBatch: '/stock/areas/deleteBatch',
+                    exportXlsUrl: 'stock/areas/exportXls',
+                    importExcelUrl: 'stock/areas/importExcel'
+                }
             }
-          },
-          // {
-          //      title: '生产厂别',
-          //      align:"center",
-          //      dataIndex: 'proFact_dictText'
-          //     },
-          // {
-          //      title: '厂区编号',
-          //      align:"center",
-          //      dataIndex: 'factNo'
-          //     },
-          {
-            title: '地点编号',
-            align: 'center',
-            dataIndex: 'locArea',
-            sorter: true
-          },
-          {
-            title: '仓库编号',
-            align: 'center',
-            dataIndex: 'stkNo',
-            sorter: true
-          },
-          {
-            title: '区域编号',
-            align: 'center',
-            dataIndex: 'locNo',
-            sorter: true
-          },
-          // {
-          //      title: '仓库栋别',
-          //      align:"center",
-          //      dataIndex: 'buildingNo'
-          //     },
-          // {
-          //      title: '仓库楼层',
-          //      align:"center",
-          //      dataIndex: 'floorNo'
-          //     },
-          //
-          // {
-          //      title: '地点名称',
-          //      align:"center",
-          //      dataIndex: 'locAreaDesc'
-          //     },
-          // {
-          //      title: '备注',
-          //      align:"center",
-          //      dataIndex: 'memo'
-          //     },
-          {
-            title: '创建时间',
-            align: 'center',
-            dataIndex: 'createTime',
-            sorter: true
-          },
-          {
-            title: '修改时间',
-            align: 'center',
-            dataIndex: 'updateTime',
-            sorter: true
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            align: 'center',
-            scopedSlots: { customRender: 'action' }
-          }
-        ],
-        url: {
-          list: '/stock/areas/list',
-          delete: '/stock/areas/delete',
-          deleteBatch: '/stock/areas/deleteBatch',
-          exportXlsUrl: 'stock/areas/exportXls',
-          importExcelUrl: 'stock/areas/importExcel'
-        }
-      }
-    },
-    computed: {
-      importExcelUrl: function() {
-        return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
-      }
-    },
-    methods: {}
-  }
+        },
+        computed: {
+            importExcelUrl: function () {
+                return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
+            }
+        },
+        methods: {},
+        
+    }
 </script>
 <style scoped>
   @import '~@assets/less/common.less'

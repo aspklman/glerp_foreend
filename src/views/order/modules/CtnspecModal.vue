@@ -21,7 +21,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="外箱规格编号">
-          <a-input placeholder="请输入外箱规格编号" v-decorator="['ctnspecNo', validatorRules.ctnspecNo ]" />
+          <a-input placeholder="请输入外箱规格编号" v-decorator="['ctnspecNo', validatorRules.ctnspecNo ]" maxLength="5" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"

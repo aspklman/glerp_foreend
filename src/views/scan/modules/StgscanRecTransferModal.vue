@@ -11,54 +11,54 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
       
-<!--        <a-form-item-->
-<!--          :labelCol="labelCol"-->
-<!--          :wrapperCol="wrapperCol"-->
-<!--          label="厂区编号">-->
-<!--          <a-input placeholder="请输入厂区编号" v-decorator="['factNo', validatorRules.factNo]" />-->
-<!--        </a-form-item>-->
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="内盒规格编号">
-          <a-input placeholder="请输入内盒规格编号" v-decorator="['inboxNo', validatorRules.inboxNo]" maxLength="4" />
+          label="厂区编号">
+          <a-input placeholder="请输入厂区编号" v-decorator="['factNo', validatorRules.factNo ]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="规格mm(长)">
-          <a-input placeholder="请输入规格mm(长)" v-decorator="['specLen', validatorRules.specLen]" />
+          label="阶段编号">
+          <a-input placeholder="请输入阶段编号" v-decorator="['stgNo', validatorRules.stgNo ]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="规格mm(宽)">
-          <a-input placeholder="请输入规格mm(宽)" v-decorator="['specWid', validatorRules.specWid]" />
+          label="库别编号">
+          <a-input placeholder="请输入库别编号" v-decorator="['stkNo', validatorRules.stkNo ]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="规格mm(高)">
-          <a-input placeholder="请输入规格mm(高)" v-decorator="['specHig', validatorRules.specHig]" />
+          label="条码编号">
+          <a-input placeholder="请输入条码编号" v-decorator="['barNo', validatorRules.barNo ]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="重量(KG)">
-          <a-input placeholder="请输入重量(KG)" v-decorator="['inboxWgt', validatorRules.inboxWgt]" />
+          label="扫描时间">
+          <a-date-picker v-decorator="[ 'scanTime', validatorRules.scanTime ]" />
         </a-form-item>
-<!--        <a-form-item-->
-<!--          :labelCol="labelCol"-->
-<!--          :wrapperCol="wrapperCol"-->
-<!--          label="异动人">-->
-<!--          <a-input placeholder="请输入异动人" v-decorator="['userNo', {}]" />-->
-<!--        </a-form-item>-->
-<!--        <a-form-item-->
-<!--          :labelCol="labelCol"-->
-<!--          :wrapperCol="wrapperCol"-->
-<!--          label="异动时间">-->
-<!--          <a-input placeholder="请输入异动时间" v-decorator="['modifyDt', {}]" />-->
-<!--        </a-form-item>-->
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="存放区域">
+          <a-input placeholder="请输入存放区域" v-decorator="['locNo', {}]" />
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="存放地点">
+          <a-input placeholder="请输入存放地点" v-decorator="['locArea', {}]" />
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="更新标记">
+          <a-input placeholder="请输入更新标记" v-decorator="['updateRmk', {}]" />
+        </a-form-item>
 		
       </a-form>
     </a-spin>
@@ -71,7 +71,7 @@
   import moment from "moment"
 
   export default {
-    name: "InboxspecModal",
+    name: "StgscanRecTransferModal",
     data () {
       return {
         title:"操作",
@@ -90,15 +90,14 @@
         form: this.$form.createForm(this),
         validatorRules:{
         factNo:{rules: [{ required: true, message: '请输入厂区编号!' }]},
-        inboxNo:{rules: [{ required: true, message: '请输入内盒规格编号!' }]},
-        specLen:{rules: [{ required: true, message: '请输入规格mm(长)!' }]},
-        specWid:{rules: [{ required: true, message: '请输入规格mm(宽)!' }]},
-        specHig:{rules: [{ required: true, message: '请输入规格mm(高)!' }]},
-        inboxWgt:{rules: [{ required: true, message: '请输入重量(KG)!' }], initialValue: 0},
+        stgNo:{rules: [{ required: true, message: '请输入阶段编号!' }]},
+        stkNo:{rules: [{ required: true, message: '请输入库别编号!' }]},
+        barNo:{rules: [{ required: true, message: '请输入条码编号!' }]},
+        scanTime:{rules: [{ required: true, message: '请输入扫描时间!' }]},
         },
         url: {
-          add: "/order/inboxspec/add",
-          edit: "/order/inboxspec/edit",
+          add: "/scan/stgscanRecTransfer/add",
+          edit: "/scan/stgscanRecTransfer/edit",
         },
       }
     },
@@ -113,8 +112,9 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'factNo','inboxNo','specLen','specWid','specHig','inboxWgt','userNo','modifyDt'))
+          this.form.setFieldsValue(pick(this.model,'factNo','stgNo','stkNo','barNo','locNo','locArea','updateRmk'))
 		  //时间格式化
+          this.form.setFieldsValue({scanTime:this.model.scanTime?moment(this.model.scanTime):null})
         });
 
       },
@@ -139,6 +139,7 @@
             }
             let formData = Object.assign(this.model, values);
             //时间格式化
+            formData.scanTime = formData.scanTime?formData.scanTime.format():null;
             
             console.log(formData)
             httpAction(httpurl,formData,method).then((res)=>{

@@ -66,6 +66,7 @@ export const JeecgListMixin = {
         this.ipagination.current = 1;
       }
       var params = this.getQueryParams();//查询条件
+      console.log(`查询参数：${params}`)
       this.loading = true;
       getAction(this.url.list, params).then((res) => {
         if (res.success) {

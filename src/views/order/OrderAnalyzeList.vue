@@ -212,6 +212,7 @@
                         if (this.selectedTab == 1) {
                             this.custOdrQty = this.odrQty;
                             this.custOdrQtyPercent = this.odrQtyPercent;
+                            console.log(`订单数：${this.custOdrQty}`);
                         } else if (this.selectedTab == 2) {
                             this.brandOdrQty = this.odrQty;
                             this.brandOdrQtyPercent = this.odrQtyPercent;

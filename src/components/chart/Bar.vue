@@ -33,7 +33,7 @@
             }
         },
         data() {
-            return {padding: ['60', '60', '60', '60']}
+            return {padding: ['20', '60', '20', '60']}
         },
         computed: {
             scale() {

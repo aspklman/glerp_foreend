@@ -290,6 +290,13 @@ module.exports = {
     stkDesc: '库别名称',
   },
 
+  sampleInspectReportM: {
+    custOdrNo: '客户订单',
+    paceCode: 'Pace编码',
+    modelColour: '模具名称和颜色',
+    orderType: '订单类型',
+  },
+
   Page: {
     Total: '共',
   },

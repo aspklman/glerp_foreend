@@ -20,26 +20,26 @@
             </a-form-item>
 <!--          </a-col>-->
         </a-row>
-        <a-row>
-<!--        <a-col :span="12" :gutter="8">-->
-          <a-form-item
-            :labelCol="labelCol"
-            :wrapperCol="wrapperCol"
-            label="Pace编码">
-            <a-input placeholder="请输入Pace编码" v-decorator="['paceCode', validatorRules.paceCode]"/>
-          </a-form-item>
-<!--        </a-col>-->
-        </a-row>
-        <a-row>
-<!--          <a-col :span="12" :gutter="8">-->
-            <a-form-item
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-              label="模具名称和颜色">
-              <a-input placeholder="请输入模具名称和颜色" v-decorator="['modelColour', validatorRules.modelColour]"/>
-            </a-form-item>
-<!--          </a-col>-->
-        </a-row>
+<!--        <a-row>-->
+<!--&lt;!&ndash;        <a-col :span="12" :gutter="8">&ndash;&gt;-->
+<!--          <a-form-item-->
+<!--            :labelCol="labelCol"-->
+<!--            :wrapperCol="wrapperCol"-->
+<!--            label="Pace编码">-->
+<!--            <a-input placeholder="请输入Pace编码" v-decorator="['paceCode', validatorRules.paceCode]"/>-->
+<!--          </a-form-item>-->
+<!--&lt;!&ndash;        </a-col>&ndash;&gt;-->
+<!--        </a-row>-->
+<!--        <a-row>-->
+<!--&lt;!&ndash;          <a-col :span="12" :gutter="8">&ndash;&gt;-->
+<!--            <a-form-item-->
+<!--              :labelCol="labelCol"-->
+<!--              :wrapperCol="wrapperCol"-->
+<!--              label="模具名称和颜色">-->
+<!--              <a-input placeholder="请输入模具名称和颜色" v-decorator="['modelColour', validatorRules.modelColour]"/>-->
+<!--            </a-form-item>-->
+<!--&lt;!&ndash;          </a-col>&ndash;&gt;-->
+<!--        </a-row>-->
         <a-row>
 <!--          <a-col :span="12" :gutter="8">-->
             <a-form-item
@@ -179,16 +179,16 @@
           //   align:"center",
           //   dataIndex: 'styleShorten'
           // },
-          {
-            title: 'Pace编码',
-            align:"center",
-            dataIndex: 'paceCode'
-          },
-          {
-            title: '模具名称和颜色',
-            align:"center",
-            dataIndex: 'modelColour'
-          },
+          // {
+          //   title: 'Pace编码',
+          //   align:"center",
+          //   dataIndex: 'paceCode'
+          // },
+          // {
+          //   title: '模具名称和颜色',
+          //   align:"center",
+          //   dataIndex: 'modelColour'
+          // },
           {
             title: '订单类型',
             align:"center",
@@ -324,8 +324,8 @@
         // },
         validatorRules: {
           custOdrNo: { rules: [{ required: true, message: this.$t('common.pleaseInput') + this.$t('sampleInspectReportM.custOdrNo') }] },
-          paceCode: { rules: [{ required: true, message: this.$t('common.pleaseInput') + this.$t('sampleInspectReportM.paceCode') }] },
-          modelColour: { rules: [{ required: true, message: this.$t('common.pleaseInput') + this.$t('sampleInspectReportM.modelColour') }] },
+          // paceCode: { rules: [{ required: true, message: this.$t('common.pleaseInput') + this.$t('sampleInspectReportM.paceCode') }] },
+          // modelColour: { rules: [{ required: true, message: this.$t('common.pleaseInput') + this.$t('sampleInspectReportM.modelColour') }] },
           orderType: { rules: [{ required: true }], initialValue: '1' },
         },
         url: {
@@ -371,25 +371,26 @@
               // }
               // let formData = Object.assign(this.model, values);
               let custOdrNo = this.form.getFieldValue('custOdrNo')
-              let paceCode = this.form.getFieldValue('paceCode')
-              let modelColour = this.form.getFieldValue('modelColour')
+              // let paceCode = this.form.getFieldValue('paceCode')
+              // let modelColour = this.form.getFieldValue('modelColour')
               let orderType = this.form.getFieldValue('orderType')
-              this.queryCustOdrNo(custOdrNo, paceCode, modelColour, orderType)
+              // this.queryCustOdrNo(custOdrNo.trim(), paceCode, modelColour, orderType)
+              this.queryCustOdrNo(custOdrNo.trim(), orderType)
             }
           })
         },
 
-      queryCustOdrNo(custOdrNo, paceCode, modelColour, orderType) {
+      queryCustOdrNo(custOdrNo, orderType) {
         const that = this;
         that.confirmLoading = true;
         getAction(this.url.queryCustOdrNo, {pssr: custOdrNo}).then((res)=>{
           if(res.success){
             console.log(`客户订单1：${res.result}`)
             if (res.result == 1) {
-              that.insertReportM(custOdrNo, '1', paceCode, modelColour, orderType)
+              that.insertReportM(custOdrNo, '1', orderType)
               that.insertReportD(custOdrNo, '1')
-              that.$message.success('增加成功！');
-              that.$emit('ok');
+              // that.$message.success('增加成功！');
+              // that.$emit('ok');
               that.close();
             } else {
               that.$message.warning(`客户订单不存在！`);
@@ -403,23 +404,25 @@
         })
       },
 
-      insertReportM(custOdrNo, versionNo, paceCode, modelColour, orderType) {
+      insertReportM(custOdrNo, versionNo, orderType) {
         const that = this;
         that.confirmLoading = true;
         let pp = new Array(4)
         pp[0] = custOdrNo
         pp[1] = versionNo
-        pp[2] = paceCode
-        pp[3] = modelColour
+        // pp[2] = paceCode
+        // pp[3] = modelColour
         pp[4] = orderType
         let pssr = pp.toString()
         getAction(this.url.insertReportM, {pssr: pssr}).then((res)=>{
           if(res.success){
+            // that.insertReportD(custOdrNo, versionNo)
+            that.$message.success(res.message);
             console.log(`增加主档成功!`)
           }
-          // else{
-          //   that.$message.warning(res.message);
-          // }
+          else{
+            that.$message.warning(res.message);
+          }
         }).finally(() => {
           that.confirmLoading = false;
         })

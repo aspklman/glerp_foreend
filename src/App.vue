@@ -10,9 +10,9 @@
   </a-locale-provider>
 </template>
 <script>
-  import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+  // import enUS from 'ant-design-vue/lib/locale-provider/en_US'
   import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
-  import viVN from 'ant-design-vue/lib/locale-provider/vi_VN'
+  // import viVN from 'ant-design-vue/lib/locale-provider/vi_VN'
   // import vi_VN from 'ant-design-vue/dist/antd-with-locales.js'
   // import moment from 'moment';
   // import 'moment/locale/en-gb';

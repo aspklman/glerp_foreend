@@ -1,766 +1,998 @@
 <template>
   <a-modal
-    title="报告"
+    :title="$t('sampleInspectReportM.inspectionReport')"
     footer=""
     :width="1200"
     :visible="visible"
     @cancel="handleCancel">
 
-    <a-card :bordered="false" :body-style="{padding: '0'}">
-      <div class="salesCard">
-        <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-          <a-tab-pane tab="订单信息" key="1">
-            <a-row>
-              <a-col :span="24">
-                <a-row>
-                  <a-col :span="5">
-                    <head-info title="客户订单" :content="reportMain[0]"></head-info>
-                  </a-col>
-                  <a-col :span="5">
-                    <head-info title="型体编号" :content="reportMain[1]"></head-info>
-                  </a-col>
-                  <a-col :span="5">
-                    <head-info title="验货日期" :content="reportMain[2]"></head-info>
-                  </a-col>
-                  <a-col :span="5">
-                    <head-info title="验货次数" :content="reportMain[3].toString()"></head-info>
-                  </a-col>
-                  <a-col :span="4">
-                    <head-info
-                      class="decision"
-                      title="验货结果">
-                    </head-info>
-                    <div align="center">
-                      <img v-if="reportMain[57]=='0'" src="@/assets/accepted.png">
-                      <img v-else-if="reportMain[57]=='1'" src="@/assets/rejected.png">
-                      <img v-else src="">
-                    </div>
-                    <h2 :style="{ textAlign: 'center', color: reportMain[57]=='0'?'green':reportMain[57]=='1'?'red':'white' }">{{reportMain[57]=='0'?'接受':reportMain[57]=='1'?'拒绝':''}}</h2>
-                  </a-col>
-                </a-row>
-                <a-row :style="{ marginTop: '24px' }">
-                  <a-col :span="5">
-                    <head-info title="订单数量" :content="reportMain[4].toString()"></head-info>
-                  </a-col>
-                  <a-col :span="5">
-                    <head-info title="Pace编码" :content="reportMain[5]"></head-info>
-                  </a-col>
-                  <a-col :span="5">
-                    <head-info title="模具名称和颜色" :content="reportMain[6]"></head-info>
-                  </a-col>
-                  <a-col :span="5">
-                    <head-info title="订单类型" :content="reportMain[7]=='1'?'Mass Production':reportMain[7]=='2'?'Implantation order':''"></head-info>
-                  </a-col>
-                </a-row>
-              </a-col>
-            </a-row>
-          </a-tab-pane>
-        </a-tabs>
-      </div>
-    </a-card>
 
-    <a-card :bordered="false" :body-style="{padding: '0'}" :style="{ marginTop: '18px' }">
-      <div class="salesCard">
-        <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-          <a-tab-pane tab="目视化/指南" key="1">
-            <a-row>
-              <a-col :xl="6" :lg="12" :md="12" :sm="24" :xs="24">
-                <head-info title="取样数量" :content="reportMain[8].sampleQtyAqlTtl.toString()"></head-info>
-              </a-col>
-              <a-col :xl="9" :lg="12" :md="12" :sm="24" :xs="24">
+    <div class="no-print" style="text-align: left">
+      <a-button v-print="'#printContent'" ghost type="primary">
+        {{ $t('sampleInspectReportM.print') }}
+      </a-button>
+    </div>
 
-              </a-col>
-              <a-col :xl="9" :lg="12" :md="12" :sm="24" :xs="24">
-                <pre>
-                  <a-table
-                    :columns="defectColumns"
-                    :data-source="reportMain[20]"
-                    bordered
-                    :pagination="false">
-                </a-table>
-                </pre>
-              </a-col>
-            </a-row>
+    <section ref="print" id="printContent" class="wholeReport">
 
-            <a-row>
-              <a-card title="通用" type="inner">
-                <pre>
-                  <a-table
-                    :columns="columns"
-                    :data-source="reportMain[9]"
-                    bordered
-                    :pagination="false">
-                      <a-button-group slot="action1" slot-scope="text, record, index">
-                        <span>{{ reportMain[9][index].minor }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 9)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 9)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action2" slot-scope="text, record, index">
-                      <span>{{ reportMain[9][index].major }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 9)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 9)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action3" slot-scope="text, record, index">
-                      <span>{{ reportMain[9][index].critical }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 9)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 9)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                  </a-table>
-                </pre>
-              </a-card>
-            </a-row>
+      <a-row :span="24" :style="{ marginTop: '20px' }">
+        <a-col :span="3">
+          <img src="@/assets/inspectReportLogo.png" width="96" height="48">
+        </a-col>
 
-            <a-row :style="{ marginTop: '12px' }">
-              <a-card title="附件功能符合性" type="inner">
-                <pre>
-                  <a-table
-                    :columns="columns"
-                    :data-source="reportMain[10]"
-                    bordered
-                    :pagination="false">
-                      <a-button-group slot="action1" slot-scope="text, record, index">
-                        <span>{{ reportMain[10][index].minor }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 10)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 10)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action2" slot-scope="text, record, index">
-                      <span>{{ reportMain[10][index].major }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 10)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 10)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action3" slot-scope="text, record, index">
-                      <span>{{ reportMain[10][index].critical }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 10)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 10)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                  </a-table>
-                </pre>
-              </a-card>
-            </a-row>
+        <div>
+          <a-col :span="10" align="center" style="border:1px solid #8B0000">
+            {{ $t('sampleInspectReportM.oxylaneQcSheetReport') }}
+          </a-col>
+        </div>
+        <a-col :span="3" align="center">
+          <a-row style="border:1px solid #8B0000">{{ $t('sampleInspectReportM.owner') }}</a-row>
+          <a-row style="border:1px solid #8B0000">E.Couturier</a-row>
+        </a-col>
+        <a-col :span="3" align="center">
+          <a-row style="border:1px solid #8B0000">{{ $t('sampleInspectReportM.lastUpdate') }}</a-row>
+          <a-row style="border:1px solid #8B0000">2013/11/22</a-row>
+        </a-col>
+        <a-col :span="5" align="center">
+          <a-row style="border:1px solid #8B0000">{{ $t('sampleInspectReportM.versionTitle') }}</a-row>
+          <a-row style="border:1px solid #8B0000">{{ $t('sampleInspectReportM.versionContent') }}</a-row>
+        </a-col>
+      </a-row>
 
-            <a-row :style="{ marginTop: '12px' }">
-              <a-card title="工艺" type="inner">
-                <pre>
-                  <a-table
-                    :columns="columns"
-                    :data-source="reportMain[11]"
-                    bordered
-                    :pagination="false">
-                      <a-button-group slot="action1" slot-scope="text, record, index">
-                        <span>{{ reportMain[11][index].minor }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 11)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 11)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action2" slot-scope="text, record, index">
-                      <span>{{ reportMain[11][index].major }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 11)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 11)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action3" slot-scope="text, record, index">
-                      <span>{{ reportMain[11][index].critical }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 11)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 11)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                  </a-table>
-                </pre>
-              </a-card>
-            </a-row>
+      <a-row :span="24" :style="{ marginTop: '6px' }">
+        <a-col :span="3">
+          {{ $t('sampleInspectReportM.supplierName') }}
+        </a-col>
+        <a-col :span="4" align="center" style="border:1px solid #8B0000; background-color: #FFD700">
+          Victory
+        </a-col>
+        <a-col :span="5" align="center">
+          {{ $t('sampleInspectReportM.inspectDate') }}
+        </a-col>
+        <a-col :span="4" align="center" style="border:1px solid #8B0000; background-color: #FFD700">
+          {{ reportMain[2] }}
+        </a-col>
+        <a-col :span="4" align="center">
+          {{ $t('sampleInspectReportM.inspectName') }}
+        </a-col>
+        <a-col :span="4" align="center" style="border:1px solid #8B0000; color:#FFD700 ; background-color:#FFD700">
+          <pre><h4></h4></pre>
+        </a-col>
+      </a-row>
 
-            <a-row :style="{ marginTop: '12px' }">
-              <a-card title="另外特殊的主题（针对PL和PE）" type="inner">
-                <pre>
-                  <a-table
-                    :columns="columns"
-                    :data-source="reportMain[12]"
-                    bordered
-                    :pagination="false">
-                      <a-button-group slot="action1" slot-scope="text, record, index">
-                        <span>{{ reportMain[12][index].minor }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 12)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 12)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action2" slot-scope="text, record, index">
-                      <span>{{ reportMain[12][index].major }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 12)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 12)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action3" slot-scope="text, record, index">
-                      <span>{{ reportMain[12][index].critical }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 12)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 12)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                  </a-table>
-                </pre>
-              </a-card>
-            </a-row>
+      <a-row :style="{ marginTop: '6px' }">
+        <div align="center" style="border:1px solid #8B0000; color: #FFFFFF; background-color: #8B0000">ORDER DETAILS
+        </div>
+      </a-row>
 
-          </a-tab-pane>
+      <a-row :span="24" :style="{ marginTop: '6px' }">
+        <a-col :span="21">
+          <a-row :span="24">
+            <a-col :span="3">
+              {{ $t('sampleInspectReportM.orderNumber') }}
+            </a-col>
+            <a-col :span="3" align="center"
+                   style="border:1px solid #8B0000; background-color: #FFD700; margin-right: 15px">{{ reportMain[0] }}
+            </a-col>
+            <a-col :span="3">
+              {{ $t('sampleInspectReportM.paceCode') }}
+            </a-col>
+            <a-col :span="4" align="center"
+                   style="border:1px solid #8B0000; background-color: #FFD700; margin-right: 15px">{{ reportMain[5] }}
+            </a-col>
+            <a-col :span="4">
+              {{ $t('sampleInspectReportM.modelColour') }}
+            </a-col>
+            <a-col :span="5" align="center"
+                   style="border:1px solid #8B0000; background-color: #FFD700; margin-right: 15px">{{ reportMain[6] }}
+            </a-col>
+          </a-row>
+          <a-row :style="{ marginTop: '6px' }">
+            <a-col :span="3">
+              {{ $t('sampleInspectReportM.process') }}
+            </a-col>
+            <a-col :span="3" align="center"
+                   style="border:1px solid #8B0000; background-color: #FFD700; margin-right: 15px">SHOE
+            </a-col>
+            <a-col :span="3">
+              {{ $t('sampleInspectReportM.orderQty') }}
+            </a-col>
+            <a-col :span="4" align="center"
+                   style="border:1px solid #8B0000; background-color: #FFD700; margin-right: 15px">{{
+              reportMain[4].toString() }}
+            </a-col>
+            <a-col :span="4">
+              {{ $t('sampleInspectReportM.orderType') }}
+            </a-col>
+            <a-col :span="5" align="center"
+                   style="border:1px solid #8B0000; background-color: #FFD700; margin-right: 15px">{{
+              reportMain[7]=='1'?'Mass Production':reportMain[7]=='2'?'Implantation order':'' }}
+            </a-col>
+          </a-row>
+        </a-col>
+        <a-col :span="3">
+          {{ $t('sampleInspectReportM.filledBefore') }}
+        </a-col>
+      </a-row>
 
-          <a-tab-pane tab="无功能性破坏" key="2">
-            <a-row>
-              <a-col :xl="6" :lg="12" :md="12" :sm="24" :xs="24">
-                <head-info title="取样数量" :content="reportMain[8].funcQtyAqlTtl.toString()"></head-info>
-              </a-col>
-              <a-col :xl="9" :lg="12" :md="12" :sm="24" :xs="24">
+      <a-row :span="24" :style="{ marginTop: '6px' }">
+        <a-col :span="14">
+          <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #8B0000">
+            <div align="center">
+              {{ $t('sampleInspectReportM.conclusion') }}
+            </div>
+          </a-row>
+          <a-row>
+            <a-col :span="6" align="center" style="border:1px solid #8B0000">
+              {{ $t('sampleInspectReportM.commentsOfActions') }}
+              <pre v-if="this.$i18n.locale=='zh-CN'"><h4></h4></pre>
+            </a-col>
+            <a-col :span="18" style="border:1px solid #8B0000; color: #FFD700; background-color: #FFD700">
+              <pre><h4></h4></pre>
+              <pre><h4></h4></pre>
+            </a-col>
+          </a-row>
+        </a-col>
+        <a-col :span="1">
 
-              </a-col>
-              <a-col :xl="9" :lg="12" :md="12" :sm="24" :xs="24">
-                <pre>
-                  <a-table
-                    :columns="defectColumns"
-                    :data-source="reportMain[21]"
-                    bordered
-                    :pagination="false">
-                </a-table>
-                </pre>
-              </a-col>
-            </a-row>
+        </a-col>
+        <a-col :span="9">
+          <a-row>
+            <a-col :span="10" align="center">
+              {{ $t('sampleInspectReportM.traceabilityCode') }}
+            </a-col>
+            <a-col :span="14" style="border:1px solid #8B0000; color: #FFD700; background-color: #FFD700">
+              <pre><h4></h4></pre>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="8" align="center" style="border:1px solid #8B0000">
+              {{ $t('sampleInspectReportM.withLaptop') }}
+            </a-col>
+            <a-col :span="8" align="center" style="border:1px solid #8B0000">
+              {{ $t('sampleInspectReportM.calculatedResult') }}
+            </a-col>
+            <a-col :span="8" align="center" style="border:1px solid #8B0000">
+              {{ $t('sampleInspectReportM.inspectorDecision') }}
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="8" align="center" style="border:1px solid #8B0000">Yes</a-col>
+            <a-col :span="8"style="border:1px solid #8B0000; color: #FFD700; background-color: #FFD700">
+              <pre><h4></h4></pre>
+            </a-col>
+            <a-col :span="8" align="center" style="border:1px solid #8B0000; background-color: #FFD700">
+              {{reportMain[90]=='0'?'ACCEPTED':reportMain[90]=='1'?'REJECTED':''}}
+            </a-col>
+          </a-row>
+        </a-col>
+      </a-row>
 
-            <a-row>
-              <a-card title="包装" type="inner">
-                <pre>
-                  <a-table
-                    :columns="columns"
-                    :data-source="reportMain[13]"
-                    bordered
-                    :pagination="false">
-                      <a-button-group slot="action1" slot-scope="text, record, index">
-                        <span>{{ reportMain[13][index].minor }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 13)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 13)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action2" slot-scope="text, record, index">
-                      <span>{{ reportMain[13][index].major }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 13)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 13)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action3" slot-scope="text, record, index">
-                      <span>{{ reportMain[13][index].critical }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 13)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 13)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                  </a-table>
-                </pre>
-              </a-card>
-            </a-row>
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #8B0000; marginTop: 12px">
+        <div align="center">
+          {{ $t('sampleInspectReportM.visualManual') }}
+        </div>
+      </a-row>
 
-            <a-row :style="{ marginTop: '12px' }">
-              <a-card title="通用" type="inner">
-                <pre>
-                  <a-table
-                    :columns="columns"
-                    :data-source="reportMain[14]"
-                    bordered
-                    :pagination="false">
-                      <a-button-group slot="action1" slot-scope="text, record, index">
-                        <span>{{ reportMain[14][index].minor }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 14)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 14)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action2" slot-scope="text, record, index">
-                      <span>{{ reportMain[14][index].major }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 14)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 14)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action3" slot-scope="text, record, index">
-                      <span>{{ reportMain[14][index].critical }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 14)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 14)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                  </a-table>
-                </pre>
-              </a-card>
-            </a-row>
+      <a-row :style="{ marginTop: '6px'}">
+        <a-col :span="4">
+          {{ $t('sampleInspectReportM.samplingQty') }}
+        </a-col>
+        <a-col :span="2">{{ reportMain[8].sampleQtyAqlTtl.toString() }}</a-col>
+        <a-col :span="18"></a-col>
+        <!--          <a-col :span="4" align="center" style="border:1px solid #8B0000">Nb of defect found</a-col>-->
+      </a-row>
 
-            <a-row :style="{ marginTop: '12px' }">
-              <a-card title="附件功能符合性" type="inner">
-                <pre>
-                  <a-table
-                    :columns="columns"
-                    :data-source="reportMain[15]"
-                    bordered
-                    :pagination="false">
-                      <a-button-group slot="action1" slot-scope="text, record, index">
-                        <span>{{ reportMain[15][index].minor }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 15)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 15)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action2" slot-scope="text, record, index">
-                      <span>{{ reportMain[15][index].major }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 15)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 15)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action3" slot-scope="text, record, index">
-                      <span>{{ reportMain[15][index].critical }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 15)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 15)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                  </a-table>
-                </pre>
-              </a-card>
-            </a-row>
+      <sample-inspect-report-m-rpt-title></sample-inspect-report-m-rpt-title>
+<!--      <a-row :style="{marginTop: '6px'}">-->
+<!--        <a-col :span="4" align="center" style="border:1px solid #8B0000">-->
+<!--          {{ $t('sampleInspectReportM.checkPoints') }}-->
+<!--        </a-col>-->
+<!--        <a-col :span="13" align="center" style="border:1px solid #8B0000">-->
+<!--          {{ $t('sampleInspectReportM.testMethod') }}-->
+<!--        </a-col>-->
+<!--        <a-col :span="4" align="center" style="border:1px solid #8B0000">-->
+<!--          {{ $t('sampleInspectReportM.findingQuestions') }}-->
+<!--        </a-col>-->
+<!--&lt;!&ndash;        <a-col :span="2" align="center" style="border:1px solid #8B0000">Finding details</a-col>&ndash;&gt;-->
+<!--&lt;!&ndash;        <a-col :span="2" align="center" style="border:1px solid #8B0000">Pictures</a-col>&ndash;&gt;-->
+<!--        <a-col :span="1" align="center" style="border:1px solid #8B0000">-->
+<!--          {{ $t('sampleInspectReportM.minor') }}-->
+<!--        </a-col>-->
+<!--        <a-col :span="1" align="center" style="border:1px solid #8B0000">-->
+<!--          {{ $t('sampleInspectReportM.major') }}-->
+<!--        </a-col>-->
+<!--        <a-col :span="1" align="center" style="border:1px solid #8B0000">-->
+<!--          {{ $t('sampleInspectReportM.critical') }}-->
+<!--        </a-col>-->
+<!--      </a-row>-->
 
-          </a-tab-pane>
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.general') }}
+      </a-row>
 
-          <a-tab-pane tab="功能性破坏" key="3">
-            <a-row>
-              <a-col :xl="6" :lg="12" :md="12" :sm="24" :xs="24">
-                <head-info title="取样数量" :content="reportMain[8].strQtyAql.toString()"></head-info>
-              </a-col>
-              <a-col :xl="9" :lg="12" :md="12" :sm="24" :xs="24">
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+          :columns="columns"
+          :data-source="reportMain[9]"
+          bordered
+          :showHeader="false"
+          :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[9][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[9][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+          :columns="columns"
+          :data-source="reportMain[9]"
+          bordered
+          :showHeader="false"
+          :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[9][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[9][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
 
-              </a-col>
-              <a-col :xl="9" :lg="12" :md="12" :sm="24" :xs="24">
-                <pre>
-                  <a-table
-                    :columns="defectColumns"
-                    :data-source="reportMain[22]"
-                    bordered
-                    :pagination="false">
-                </a-table>
-                </pre>
-              </a-col>
-            </a-row>
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.accessoriesFunctional') }}
+      </a-row>
 
-            <a-row>
-              <a-card title="通用" type="inner">
-                <pre>
-                  <a-table
-                    :columns="columns"
-                    :data-source="reportMain[16]"
-                    bordered
-                    :pagination="false">
-                      <a-button-group slot="action1" slot-scope="text, record, index">
-                        <span>{{ reportMain[16][index].minor }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 16)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 16)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action2" slot-scope="text, record, index">
-                      <span>{{ reportMain[16][index].major }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 16)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 16)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action3" slot-scope="text, record, index">
-                      <span>{{ reportMain[16][index].critical }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 16)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 16)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                  </a-table>
-                </pre>
-              </a-card>
-            </a-row>
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+                 :columns="columns"
+                 :data-source="reportMain[10]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[10][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[10][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+                 :columns="columns"
+                 :data-source="reportMain[10]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[10][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[10][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
 
-            <a-row :style="{ marginTop: '12px' }">
-              <a-card title="附件功能符合性" type="inner">
-                <pre>
-                  <a-table
-                    :columns="columns"
-                    :data-source="reportMain[17]"
-                    bordered
-                    :pagination="false">
-                      <a-button-group slot="action1" slot-scope="text, record, index">
-                        <span>{{ reportMain[17][index].minor }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 17)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 17)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action2" slot-scope="text, record, index">
-                      <span>{{ reportMain[17][index].major }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 17)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 17)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action3" slot-scope="text, record, index">
-                      <span>{{ reportMain[17][index].critical }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 17)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 17)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                  </a-table>
-                </pre>
-              </a-card>
-            </a-row>
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.workmanship') }}
+      </a-row>
 
-            <a-row :style="{ marginTop: '12px' }">
-              <a-card title="实验室测试" type="inner">
-                <pre>
-                  <a-table
-                    :columns="columns"
-                    :data-source="reportMain[18]"
-                    bordered
-                    :pagination="false">
-                      <a-button-group slot="action1" slot-scope="text, record, index">
-                        <span>{{ reportMain[18][index].minor }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 18)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 18)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action2" slot-scope="text, record, index">
-                      <span>{{ reportMain[18][index].major }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 18)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 18)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action3" slot-scope="text, record, index">
-                      <span>{{ reportMain[18][index].critical }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 18)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 18)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                  </a-table>
-                </pre>
-              </a-card>
-            </a-row>
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+                 :columns="columns"
+                 :data-source="reportMain[11]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[11][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[11][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+                 :columns="columns"
+                 :data-source="reportMain[11]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[11][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[11][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
 
-            <a-row :style="{ marginTop: '12px' }">
-              <a-card title="另外特殊的主题（针对PL和PE）" type="inner">
-                <pre>
-                  <a-table
-                    :columns="columns"
-                    :data-source="reportMain[19]"
-                    bordered
-                    :pagination="false">
-                      <a-button-group slot="action1" slot-scope="text, record, index">
-                        <span>{{ reportMain[19][index].minor }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 19)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 19)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action2" slot-scope="text, record, index">
-                      <span>{{ reportMain[19][index].major }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 19)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 19)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                    <a-button-group slot="action3" slot-scope="text, record, index">
-                      <span>{{ reportMain[19][index].critical }}</span>
-                        <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary"
-                                  @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 19)">
-                          <a-icon type="plus-circle"/>
-                        </a-button>
-                        <a-button type="primary"
-                                  @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 19)">
-                          <a-icon type="minus-circle"/>
-                        </a-button>
-                      </a-button-group>
-                  </a-table>
-                </pre>
-              </a-card>
-            </a-row>
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.otherSpecificTopic') }}
+      </a-row>
 
-          </a-tab-pane>
-        </a-tabs>
-      </div>
-    </a-card>
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+                 :columns="columns"
+                 :data-source="reportMain[12]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[12][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[12][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+                 :columns="columns"
+                 :data-source="reportMain[12]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[12][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[12][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
 
-    <a-row :style="{ marginTop: '24px' }"/>
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #8B0000; marginTop: 12px">
+        <div align="center">
+          {{ $t('sampleInspectReportM.funcNonDestructive') }}
+        </div>
+      </a-row>
+
+      <a-row :style="{marginTop: '6px'}">
+        <a-col :span="4">
+          {{ $t('sampleInspectReportM.samplingQty') }}
+        </a-col>
+        <a-col :span="2">{{ reportMain[8].funcQtyAqlTtl.toString() }}</a-col>
+        <a-col :span="18"></a-col>
+        <!--          <a-col :span="4" align="center" style="border:1px solid #8B0000">Nb of defect found</a-col>-->
+      </a-row>
+
+      <sample-inspect-report-m-rpt-title></sample-inspect-report-m-rpt-title>
+<!--      <a-row :style="{marginTop: '6px'}">-->
+<!--        <a-col :span="4" align="center" style="border:1px solid #8B0000">Check Points</a-col>-->
+<!--        <a-col :span="13" align="center" style="border:1px solid #8B0000">Test Method/Requirements</a-col>-->
+<!--        <a-col :span="4" align="center" style="border:1px solid #8B0000">Finding Questions</a-col>-->
+<!--&lt;!&ndash;        <a-col :span="2" align="center" style="border:1px solid #8B0000">Finding details</a-col>&ndash;&gt;-->
+<!--&lt;!&ndash;        <a-col :span="2" align="center" style="border:1px solid #8B0000">Pictures</a-col>&ndash;&gt;-->
+<!--        <a-col :span="1" align="center" style="border:1px solid #8B0000">Minor</a-col>-->
+<!--        <a-col :span="1" align="center" style="border:1px solid #8B0000">Major</a-col>-->
+<!--        <a-col :span="1" align="center" style="border:1px solid #8B0000">Critical</a-col>-->
+<!--      </a-row>-->
+
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.packaging') }}
+      </a-row>
+
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+                 :columns="columns"
+                 :data-source="reportMain[13]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[13][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[13][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+                 :columns="columns"
+                 :data-source="reportMain[13]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[13][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[13][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
+
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.general') }}
+      </a-row>
+
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+                 :columns="columns"
+                 :data-source="reportMain[14]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[14][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[14][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+                 :columns="columns"
+                 :data-source="reportMain[14]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[14][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[14][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
+
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.accessoriesFunctional') }}
+      </a-row>
+
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+                 :columns="columns"
+                 :data-source="reportMain[15]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[15][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[15][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+                 :columns="columns"
+                 :data-source="reportMain[15]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[15][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[15][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
+
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.otherSpecificTopic') }}
+      </a-row>
+
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+                 :columns="columns"
+                 :data-source="reportMain[16]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[16][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[16][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+                 :columns="columns"
+                 :data-source="reportMain[16]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[16][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[16][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
+
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #8B0000; marginTop: 12px">
+        <div align="center">
+          {{ $t('sampleInspectReportM.funcDestructive') }}
+        </div>
+      </a-row>
+
+      <a-row :style="{ marginTop: '6px'}">
+        <a-col :span="4">
+          {{ $t('sampleInspectReportM.samplingQty') }}
+        </a-col>
+        <a-col :span="2">{{ reportMain[8].strQtyAql.toString() }}</a-col>
+        <a-col :span="18"></a-col>
+        <!--          <a-col :span="4" align="center" style="border:1px solid #8B0000">Nb of defect found</a-col>-->
+      </a-row>
+
+      <sample-inspect-report-m-rpt-title></sample-inspect-report-m-rpt-title>
+<!--      <a-row :style="{marginTop: '6px'}">-->
+<!--        <a-col :span="4" align="center" style="border:1px solid #8B0000">Check Points</a-col>-->
+<!--        <a-col :span="13" align="center" style="border:1px solid #8B0000">Test Method/Requirements</a-col>-->
+<!--        <a-col :span="4" align="center" style="border:1px solid #8B0000">Finding Questions</a-col>-->
+<!--&lt;!&ndash;        <a-col :span="2" align="center" style="border:1px solid #8B0000">Finding details</a-col>&ndash;&gt;-->
+<!--&lt;!&ndash;        <a-col :span="2" align="center" style="border:1px solid #8B0000">Pictures</a-col>&ndash;&gt;-->
+<!--        <a-col :span="1" align="center" style="border:1px solid #8B0000">Minor</a-col>-->
+<!--        <a-col :span="1" align="center" style="border:1px solid #8B0000">Major</a-col>-->
+<!--        <a-col :span="1" align="center" style="border:1px solid #8B0000">Critical</a-col>-->
+<!--      </a-row>-->
+
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.general') }}
+      </a-row>
+
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+                 :columns="columns"
+                 :data-source="reportMain[17]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[17][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[17][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+                 :columns="columns"
+                 :data-source="reportMain[17]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[17][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[17][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
+
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.accessoriesFunctional') }}
+      </a-row>
+
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+                 :columns="columns"
+                 :data-source="reportMain[18]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[18][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[18][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+                 :columns="columns"
+                 :data-source="reportMain[18]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[18][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[18][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
+
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.workmanship') }}
+      </a-row>
+
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+                 :columns="columns"
+                 :data-source="reportMain[19]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[19][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[19][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+                 :columns="columns"
+                 :data-source="reportMain[19]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[19][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[19][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
+
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.laboratoryTest') }}
+      </a-row>
+
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+                 :columns="columns"
+                 :data-source="reportMain[20]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[20][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[20][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+                 :columns="columns"
+                 :data-source="reportMain[20]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[20][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[20][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
+
+      <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #A9A9A9">
+        {{ $t('sampleInspectReportM.otherSpecificTopic') }}
+      </a-row>
+
+      <a-row>
+        <a-table v-if="this.$i18n.locale=='zh-CN'"
+                 :columns="columns"
+                 :data-source="reportMain[21]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[21][index].checkPointsCn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[21][index].testMethodReqsCn }}
+          </span>
+        </a-table>
+        <a-table v-if="this.$i18n.locale=='en-US'"
+                 :columns="columns"
+                 :data-source="reportMain[21]"
+                 bordered
+                 :showHeader="false"
+                 :pagination="false">
+          <span slot="actionCheckPoints" slot-scope="text, record, index">
+            {{ reportMain[21][index].checkPointsEn }}
+          </span>
+          <span slot="actionTestMethodReqs" slot-scope="text, record, index">
+            {{ reportMain[21][index].testMethodReqsEn }}
+          </span>
+        </a-table>
+      </a-row>
+
+
+      <a-row :style="{marginTop: '12px'}">
+        <a-col :span="15" style="border:1px solid #8B0000">
+          <a-row>
+            Commentaires / Others :
+          </a-row>
+          <a-row style="color:#FFFFFF ; background-color:#FFFFFF">
+            <pre><h4></h4></pre>
+            <pre><h4></h4></pre>
+            <pre><h4></h4></pre>
+            <pre><h4></h4></pre>
+            <pre><h4></h4></pre>
+            <pre><h4></h4></pre>
+            <pre><h4></h4></pre>
+            <pre><h4></h4></pre>
+            <pre><h4></h4></pre>
+            <pre><h4></h4></pre>
+            <pre><h4></h4></pre>
+          </a-row>
+        </a-col>
+        <a-col :span="1"></a-col>
+        <a-col :span="8">
+          <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #8B0000">
+            <div align="center">
+              {{ $t('sampleInspectReportM.visualManual') }}
+            </div>
+          </a-row>
+          <a-row>
+            <a-table
+              :columns="defectColumns"
+              :data-source="reportMain[51]"
+              bordered
+              rowKey="actionType"
+              :showHeader="false"
+              :pagination="false">
+              <span slot="actionType" slot-scope="text, record, index">
+                {{ index == 0 ? totalDefectFound : maxDefectAccept}}
+              </span>
+            </a-table>
+          </a-row>
+
+          <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #8B0000; marginTop: 12px">
+            <div align="center">
+              {{ $t('sampleInspectReportM.funcNonDestructive') }}
+            </div>
+          </a-row>
+          <a-row>
+            <a-table
+              :columns="defectColumns"
+              :data-source="reportMain[52]"
+              bordered
+              rowKey="actionType"
+              :showHeader="false"
+              :pagination="false">
+              <span slot="actionType" slot-scope="text, record, index">
+                {{ index == 0 ? totalDefectFound : maxDefectAccept}}
+              </span>
+            </a-table>
+          </a-row>
+
+        </a-col>
+      </a-row>
+
+      <a-row>
+        <a-col :span="6" style="border:1px solid #8B0000; marginTop: 12px">
+          <h4 align="center">
+            <a-row>SUPPLIER</a-row>
+          </h4>
+          <a-row>
+            <a-col :span="6">NAME :</a-col>
+            <a-col :span="10"></a-col>
+            <a-col :span="8">SIGNATURE :</a-col>
+          </a-row>
+          <a-row style="color:#FFFFFF ; background-color:#FFFFFF">
+            <pre><h4></h4></pre>
+          </a-row>
+          <a-row>
+            <a-col>DATE :</a-col>
+            <a-col></a-col>
+            <a-col></a-col>
+          </a-row>
+          <a-row style="color:#FFFFFF ; background-color:#FFFFFF">
+            <pre><h4></h4></pre>
+          </a-row>
+        </a-col>
+        <a-col :span="1"></a-col>
+        <a-col :span="8" style="border:1px solid #8B0000; marginTop: 12px">
+          <h4 align="center">
+            <a-row>OXYLANE</a-row>
+          </h4>
+          <a-row>
+            <a-col :span="8">NAME :</a-col>
+            <a-col :span="8"></a-col>
+            <a-col :span="8">SIGNATURE :</a-col>
+          </a-row>
+          <a-row style="color:#FFFFFF ; background-color:#FFFFFF">
+            <pre><h4></h4></pre>
+          </a-row>
+          <a-row>
+            <a-col>DATE :</a-col>
+            <a-col></a-col>
+            <a-col></a-col>
+          </a-row>
+          <a-row style="color:#FFFFFF ; background-color:#FFFFFF">
+            <pre><h4></h4></pre>
+          </a-row>
+<!--          <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #8B0000; marginTop: 12px">-->
+<!--            <div align="center">-->
+<!--              Fonctionnal Non Destructive-->
+<!--            </div>-->
+<!--          </a-row>-->
+<!--          <a-row>-->
+<!--            <a-table-->
+<!--              :columns="defectColumns"-->
+<!--              :data-source="reportMain[21]"-->
+<!--              bordered-->
+<!--              :showHeader="false"-->
+<!--              :pagination="false">-->
+<!--            </a-table>-->
+<!--          </a-row>-->
+        </a-col>
+        <a-col :span="1"></a-col>
+        <a-col :span="8">
+          <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #8B0000; marginTop: 12px">
+            <div align="center">
+              {{ $t('sampleInspectReportM.funcDestructive') }}
+            </div>
+          </a-row>
+          <a-row>
+            <a-table
+              :columns="defectColumns"
+              :data-source="reportMain[53]"
+              bordered
+              rowKey="actionType"
+              :showHeader="false"
+              :pagination="false">
+              <span slot="actionType" slot-scope="text, record, index">
+                {{ index == 0 ? totalDefectFound : maxDefectAccept}}
+              </span>
+            </a-table>
+          </a-row>
+        </a-col>
+      </a-row>
+
+<!--      <a-row>-->
+<!--        <a-col :span="11" style="border:1px solid #8B0000; marginTop: 12px">-->
+<!--          <h4 align="center">-->
+<!--            <a-row>OXYLANE</a-row>-->
+<!--          </h4>-->
+<!--          <a-row>-->
+<!--            <a-col :span="8">NAME :</a-col>-->
+<!--            <a-col :span="8"></a-col>-->
+<!--            <a-col :span="8">SIGNATURE :</a-col>-->
+<!--          </a-row>-->
+<!--          <a-row style="color:#FFFFFF ; background-color:#FFFFFF">-->
+<!--            <pre><h4></h4></pre>-->
+<!--          </a-row>-->
+<!--          <a-row>-->
+<!--            <a-col>DATE :</a-col>-->
+<!--            <a-col></a-col>-->
+<!--            <a-col></a-col>-->
+<!--          </a-row>-->
+<!--          <a-row style="color:#FFFFFF ; background-color:#FFFFFF">-->
+<!--            <pre><h4></h4></pre>-->
+<!--          </a-row>-->
+<!--        </a-col>-->
+<!--        <a-col :span="1"></a-col>-->
+<!--        <a-col :span="12">-->
+<!--          <a-row style="border:1px solid #8B0000; color: #FFFFFF; background-color: #8B0000; marginTop: 12px">-->
+<!--            <div align="center">-->
+<!--              Fonctionnal Destructive-->
+<!--            </div>-->
+<!--          </a-row>-->
+<!--          <a-row>-->
+<!--            <a-table-->
+<!--              :columns="defectColumns"-->
+<!--              :data-source="reportMain[22]"-->
+<!--              bordered-->
+<!--              :showHeader="false"-->
+<!--              :pagination="false">-->
+<!--            </a-table>-->
+<!--          </a-row>-->
+<!--        </a-col>-->
+<!--      </a-row>-->
+
+    </section>
 
   </a-modal>
 </template>
 
 <script>
-  import { httpAction } from '@/api/manage'
-  import pick from 'lodash.pick'
-  // import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import HeadInfo from '@/components/tools/HeadInfo.vue'
   import BarMultid from '../../../components/chart/BarMultid'
-  import { getAction } from '@/api/manage'
-  // import JTreeTable from '@/components/jeecg/JTreeTable'
+  import SampleInspectReportMRptTitle from './SampleInspectReportMRptTitle'
 
   const columns = [
-      {
-        title: '检查点',
-        dataIndex: 'checkPointsCn',
-        // width: 100,
-        // fixed: true,
-      },
-      {
-        title: '测试方法/要求',
-        dataIndex: 'testMethodReqsCn',
-        // width: 350,
-        // fixed: true,
-        // customRender:function (t,r,index) {
-        //   return t.replace(/\n/g,'<br>');
-        // }
-      },
-      // {
-      //   title: '次要',
-      //   dataIndex: 'minor',
-      //   align: 'center',
-      //   // width: 250,
-      //   // fixed: true,
-      // },
-      // {
-      //   title: '主要',
-      //   dataIndex: 'major',
-      //   align: 'center',
-      //   // width: 250,
-      //   // fixed: true,
-      // },
-      // {
-      //   title: '重要',
-      //   dataIndex: 'critical',
-      //   align: 'center',
-      //   // width: 250,
-      //   // fixed: true,
-      // },
-      {
-        title: '次要',
-        dataIndex: 'action1',
-        align: 'center',
-        scopedSlots: { customRender: 'action1' },
-      },
-      {
-        title: '主要',
-        dataIndex: 'action2',
-        align: 'center',
-        scopedSlots: { customRender: 'action2' },
-      },
-      {
-        title: '重要',
-        dataIndex: 'action3',
-        align: 'center',
-        scopedSlots: { customRender: 'action3' },
-      },
-    ]
+    {
+      title: 'Check Points',
+      dataIndex: 'actionCheckPoints',
+      width: 200,
+      fixed: true,
+      scopedSlots: { customRender: 'actionCheckPoints' },
+    },
+    {
+      title: 'Test Method/Requirements',
+      dataIndex: 'actionTestMethodReqs',
+      width: 650,
+      fixed: true,
+      scopedSlots: { customRender: 'actionTestMethodReqs' },
+    },
+    // {
+    //   title: 'Check Points',
+    //   dataIndex: 'checkPointsEn',
+    //   width: 200,
+    //   fixed: true
+    // },
+    // {
+    //   title: 'Test Method/Requirements',
+    //   dataIndex: 'testMethodReqsEn',
+    //   width: 650,
+    //   fixed: true
+    // },
+    {
+      title: 'Finding Questions',
+      dataIndex: 'findQuestion',
+      align: 'center',
+      width: 200,
+      fixed: true
+    },
+    // {
+    //   title: 'Finding details',
+    //   dataIndex: 'findingDetails',
+    //   width: 100,
+    //   fixed: true
+    // },
+    // {
+    //   title: 'Pictures',
+    //   dataIndex: 'pictures',
+    //   width: 100,
+    //   fixed: true
+    // },
+    {
+      title: 'Minor',
+      dataIndex: 'minor',
+      align: 'center',
+      width: 50,
+      fixed: true
+    },
+    {
+      title: 'Major',
+      dataIndex: 'major',
+      align: 'center',
+      width: 50,
+      fixed: true
+    },
+    {
+      title: 'Critical',
+      dataIndex: 'critical',
+      align: 'center',
+      width: 50,
+      fixed: true
+    }
+    // {
+    //   title: '次要',
+    //   dataIndex: 'action1',
+    //   align: 'center',
+    //   scopedSlots: { customRender: 'action1' },
+    // },
+    // {
+    //   title: '主要',
+    //   dataIndex: 'action2',
+    //   align: 'center',
+    //   scopedSlots: { customRender: 'action2' },
+    // },
+    // {
+    //   title: '重要',
+    //   dataIndex: 'action3',
+    //   align: 'center',
+    //   scopedSlots: { customRender: 'action3' },
+    // },
+  ]
 
   const defectColumns = [
     {
-      title: '项目',
-      dataIndex: 'type',
+      title: 'Type',
+      dataIndex: 'actionType',
+      scopedSlots: { customRender: 'actionType' },
     },
     {
-      title: '次要',
+      title: 'Minor',
       dataIndex: 'minor',
-      align: 'center',
+      align: 'center'
     },
     {
-      title: '主要',
+      title: 'Major',
       dataIndex: 'major',
-      align: 'center',
+      align: 'center'
     },
     {
-      title: '重要',
+      title: 'Critical',
       dataIndex: 'critical',
-      align: 'center',
-    },
+      align: 'center'
+    }
     // {
     //   title: '次要',
     //   dataIndex: 'actionA',
@@ -782,58 +1014,26 @@
   ]
 
   export default {
-    name: "WholeProcessReportModal",
+    name: 'WholeProcessReportModal',
     props: ['reportMain'],
-    // mixins: [JeecgListMixin],
     components: {
-      // JTreeTable,
+      SampleInspectReportMRptTitle,
       BarMultid,
-      HeadInfo,
+      HeadInfo
     },
-    data () {
+    data() {
       return {
         columns,
         defectColumns,
-        // inspectStatusA: true,
-        // inspectStatusB: true,
-        // inspectStatusC: true,
-        // inspectorDecision: '',    // '0':ACCEPTED; '1':REJECTED
-        selectedRowKeys: [],
-        // dataSource: [
-        //   {id: 1, parentId: 0, name: '张三'},
-        //   {id: 2, parentId: 0, name: '李四'}
-        // ],
-
-        // title:"操作",
         visible: false,
-        // model: {},
-        // labelCol: {
-        //   xs: { span: 24 },
-        //   sm: { span: 5 },
-        // },
-        // wrapperCol: {
-        //   xs: { span: 24 },
-        //   sm: { span: 16 },
-        // },
         loading: true,
         confirmLoading: false,
-        // pssr: 'GD1912-034'
-        // form: this.$form.createForm(this),
-        // validatorRules:{
-        // },
-        //
-        url: {
-        //   list: "/order/wholeProcessReport/list",
-          add: "/order/wholeProcessReportM/add",
-        //   edit: "/order/wholeProcessReport/edit",
-        //   getInspectDetail: '/quality/sampleInspectStd/getInspectDetail',
-          addMinor: "quality/sampleInspectReportM/addMinor",
-          subtractMinor: "quality/sampleInspectReportM/subtractMinor",
-          updateInspectorDecision: "quality/sampleInspectReportM/updateInspectorDecision",
-        },
+        totalDefectFound: this.$t('sampleInspectReportM.totalDefectFound'),
+        maxDefectAccept: this.$t('sampleInspectReportM.maxDefectAccept'),
       }
     },
-    created () {
+
+    created() {
     },
 
     computed: {
@@ -853,327 +1053,18 @@
 
     methods: {
 
-      // // 点击增加按钮
-      // addMinor(custOdrNo, versionNo, styleShorten, itemMainNo, itemMediumNo, checkPointsNo, checkPointsCn, defectType, updateField, index, items) {
-      //   let pp = new Array(7)
-      //   pp[0] = custOdrNo
-      //   pp[1] = versionNo
-      //   pp[2] = styleShorten
-      //   pp[3] = itemMainNo
-      //   pp[4] = itemMediumNo
-      //   pp[5] = checkPointsNo
-      //   pp[6] = updateField
-      //   let pssr = pp.toString()
-      //   if (updateField == 'minor') {
-      //     this.$message.info(`${checkPointsCn} | ${defectType} +1`)
-      //     if (this.reportMain[20][0].minor + (updateField=='minor'&&itemMainNo==2?1:0) > this.reportMain[20][1].minor ||
-      //       this.reportMain[20][0].major + (updateField=='major'&&itemMainNo==2?1:0) > this.reportMain[20][1].major ||
-      //       this.reportMain[20][0].critical + (updateField=='critical'&&itemMainNo==2?1:0) > this.reportMain[20][1].critical ||
-      //       this.reportMain[21][0].minor + (updateField=='minor'&&itemMainNo==4?1:0) > this.reportMain[21][1].minor ||
-      //       this.reportMain[21][0].major + (updateField=='major'&&itemMainNo==4?1:0) > this.reportMain[21][1].major ||
-      //       this.reportMain[21][0].critical + (updateField=='critical'&&itemMainNo==4?1:0) > this.reportMain[21][1].critical ||
-      //       this.reportMain[22][0].minor + (updateField=='minor'&&itemMainNo==6?1:0) > this.reportMain[22][1].minor ||
-      //       this.reportMain[22][0].major + (updateField=='major'&&itemMainNo==6?1:0) > this.reportMain[22][1].major ||
-      //       this.reportMain[22][0].critical + (updateField=='critical'&&itemMainNo==6?1:0) > this.reportMain[22][1].critical) {
-      //       if (this.reportMain[57] == '1') {
-      //         //Do nothing
-      //       } else {
-      //         this.reportMain[57] = '1'
-      //         this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[57])
-      //       }
-      //       this.$message.warn(`验货结果：拒绝`)
-      //     } else {
-      //       // this.$message.info(`${checkPointsCn} | ${defectType} +1`)
-      //       if (this.reportMain[57] == '0') {
-      //         //Do nothing
-      //       } else {
-      //         this.reportMain[57] = '0'
-      //         this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[57])
-      //       }
-      //     }
-      //     this.reportMain[items][index].minor ++
-      //     this.reportMain[itemMainNo / 2 + 19][0].minor ++
-      //   } else if (updateField == 'major') {
-      //     this.$message.info(`${checkPointsCn} | ${defectType} +1`)
-      //     if (this.reportMain[20][0].minor + (updateField=='minor'&&itemMainNo==2?1:0) > this.reportMain[20][1].minor ||
-      //       this.reportMain[20][0].major + (updateField=='major'&&itemMainNo==2?1:0) > this.reportMain[20][1].major ||
-      //       this.reportMain[20][0].critical + (updateField=='critical'&&itemMainNo==2?1:0) > this.reportMain[20][1].critical ||
-      //       this.reportMain[21][0].minor + (updateField=='minor'&&itemMainNo==4?1:0) > this.reportMain[21][1].minor ||
-      //       this.reportMain[21][0].major + (updateField=='major'&&itemMainNo==4?1:0) > this.reportMain[21][1].major ||
-      //       this.reportMain[21][0].critical + (updateField=='critical'&&itemMainNo==4?1:0) > this.reportMain[21][1].critical ||
-      //       this.reportMain[22][0].minor + (updateField=='minor'&&itemMainNo==6?1:0) > this.reportMain[22][1].minor ||
-      //       this.reportMain[22][0].major + (updateField=='major'&&itemMainNo==6?1:0) > this.reportMain[22][1].major ||
-      //       this.reportMain[22][0].critical + (updateField=='critical'&&itemMainNo==6?1:0) > this.reportMain[22][1].critical) {
-      //       if (this.reportMain[57] == '1') {
-      //         //Do nothing
-      //       } else {
-      //         this.reportMain[57] = '1'
-      //         this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[57])
-      //       }
-      //       this.$message.warn(`验货结果：拒绝`)
-      //     } else {
-      //       // this.$message.info(`${checkPointsCn} | ${defectType} +1`)
-      //       if (this.reportMain[57] == '0') {
-      //         //Do nothing
-      //       } else {
-      //         this.reportMain[57] = '0'
-      //         this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[57])
-      //       }
-      //     }
-      //     this.reportMain[items][index].major ++
-      //     this.reportMain[itemMainNo / 2 + 19][0].major ++
-      //   } else if (updateField == 'critical') {
-      //     this.$message.info(`${checkPointsCn} | ${defectType} +1`)
-      //     if (this.reportMain[20][0].minor + (updateField=='minor'&&itemMainNo==2?1:0) > this.reportMain[20][1].minor ||
-      //       this.reportMain[20][0].major + (updateField=='major'&&itemMainNo==2?1:0) > this.reportMain[20][1].major ||
-      //       this.reportMain[20][0].critical + (updateField=='critical'&&itemMainNo==2?1:0) > this.reportMain[20][1].critical ||
-      //       this.reportMain[21][0].minor + (updateField=='minor'&&itemMainNo==4?1:0) > this.reportMain[21][1].minor ||
-      //       this.reportMain[21][0].major + (updateField=='major'&&itemMainNo==4?1:0) > this.reportMain[21][1].major ||
-      //       this.reportMain[21][0].critical + (updateField=='critical'&&itemMainNo==4?1:0) > this.reportMain[21][1].critical ||
-      //       this.reportMain[22][0].minor + (updateField=='minor'&&itemMainNo==6?1:0) > this.reportMain[22][1].minor ||
-      //       this.reportMain[22][0].major + (updateField=='major'&&itemMainNo==6?1:0) > this.reportMain[22][1].major ||
-      //       this.reportMain[22][0].critical + (updateField=='critical'&&itemMainNo==6?1:0) > this.reportMain[22][1].critical) {
-      //       if (this.reportMain[57] == '1') {
-      //         //Do nothing
-      //       } else {
-      //         this.reportMain[57] = '1'
-      //         this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[57])
-      //       }
-      //       this.$message.warn(`验货结果：拒绝`)
-      //     } else {
-      //       // this.$message.info(`${checkPointsCn} | ${defectType} +1`)
-      //       if (this.reportMain[57] == '0') {
-      //         //Do nothing
-      //       } else {
-      //         this.reportMain[57] = '0'
-      //         this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[57])
-      //       }
-      //     }
-      //     this.reportMain[items][index].critical ++
-      //     this.reportMain[itemMainNo / 2 + 19][0].critical ++
-      //   }
-      //   getAction(this.url.addMinor, {pssr: pssr}).then((res) => {
-      //     if (res.success) {
-      //       console.log(`增加成功!`)
-      //     }
-      //     if (res.code === 510) {
-      //       this.$message.warning(res.message)
-      //     }
-      //   })
-      //   this.$forceUpdate()
-      // },
-
-      // // 点击减少按钮
-      // subtractMinor(custOdrNo, versionNo, styleShorten, itemMainNo, itemMediumNo, checkPointsNo, checkPointsCn, defectType, updateField, index, items) {
-      //   let pp = new Array(7)
-      //   pp[0] = custOdrNo
-      //   pp[1] = versionNo
-      //   pp[2] = styleShorten
-      //   pp[3] = itemMainNo
-      //   pp[4] = itemMediumNo
-      //   pp[5] = checkPointsNo
-      //   pp[6] = updateField
-      //   let pssr = pp.toString()
-      //   if (updateField == 'minor') {
-      //     // 提示“数量不能为负数”
-      //     if (this.reportMain[items][index].minor - 1 < 0) {
-      //       this.$message.warn(this.$t('stgscanMolding.noMinus') + '!')
-      //       return
-      //     }
-      //     this.$message.info(`${checkPointsCn} | ${defectType} -1`)
-      //     // 更新验货结果
-      //     if (this.reportMain[20][0].minor - (updateField=='minor'&&itemMainNo==2?1:0) <= this.reportMain[20][1].minor &&
-      //       this.reportMain[20][0].major - (updateField=='major'&&itemMainNo==2?1:0) <= this.reportMain[20][1].major &&
-      //       this.reportMain[20][0].critical - (updateField=='critical'&&itemMainNo==2?1:0) <= this.reportMain[20][1].critical &&
-      //       this.reportMain[21][0].minor - (updateField=='minor'&&itemMainNo==4?1:0) <= this.reportMain[21][1].minor &&
-      //       this.reportMain[21][0].major - (updateField=='major'&&itemMainNo==4?1:0) <= this.reportMain[21][1].major &&
-      //       this.reportMain[21][0].critical - (updateField=='critical'&&itemMainNo==4?1:0) <= this.reportMain[21][1].critical &&
-      //       this.reportMain[22][0].minor - (updateField=='minor'&&itemMainNo==6?1:0) <= this.reportMain[22][1].minor &&
-      //       this.reportMain[22][0].major - (updateField=='major'&&itemMainNo==6?1:0) <= this.reportMain[22][1].major &&
-      //       this.reportMain[22][0].critical - (updateField=='critical'&&itemMainNo==6?1:0) <= this.reportMain[22][1].critical) {
-      //       if (this.reportMain[57] == '0') {
-      //         //Do nothing
-      //       } else {
-      //         this.reportMain[57] = '0'
-      //         this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[57])
-      //       }
-      //       this.$message.success(`验货结果：接受`)
-      //     } else {
-      //       if (this.reportMain[57] == '1') {
-      //         //Do nothing
-      //       } else {
-      //         this.reportMain[57] = '1'
-      //         this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[57])
-      //       }
-      //     }
-      //     this.reportMain[items][index].minor --
-      //     this.reportMain[itemMainNo / 2 + 19][0].minor --
-      //   } else if (updateField == 'major') {
-      //     // 提示“数量不能为负数”
-      //     if (this.reportMain[items][index].major - 1 < 0) {
-      //       this.$message.warn(this.$t('stgscanMolding.noMinus') + '!')
-      //       return
-      //     }
-      //     this.$message.info(`${checkPointsCn} | ${defectType} -1`)
-      //     // 更新验货结果
-      //     if (this.reportMain[20][0].minor - (updateField=='minor'&&itemMainNo==2?1:0) <= this.reportMain[20][1].minor &&
-      //       this.reportMain[20][0].major - (updateField=='major'&&itemMainNo==2?1:0) <= this.reportMain[20][1].major &&
-      //       this.reportMain[20][0].critical - (updateField=='critical'&&itemMainNo==2?1:0) <= this.reportMain[20][1].critical &&
-      //       this.reportMain[21][0].minor - (updateField=='minor'&&itemMainNo==4?1:0) <= this.reportMain[21][1].minor &&
-      //       this.reportMain[21][0].major - (updateField=='major'&&itemMainNo==4?1:0) <= this.reportMain[21][1].major &&
-      //       this.reportMain[21][0].critical - (updateField=='critical'&&itemMainNo==4?1:0) <= this.reportMain[21][1].critical &&
-      //       this.reportMain[22][0].minor - (updateField=='minor'&&itemMainNo==6?1:0) <= this.reportMain[22][1].minor &&
-      //       this.reportMain[22][0].major - (updateField=='major'&&itemMainNo==6?1:0) <= this.reportMain[22][1].major &&
-      //       this.reportMain[22][0].critical - (updateField=='critical'&&itemMainNo==6?1:0) <= this.reportMain[22][1].critical) {
-      //       if (this.reportMain[57] == '0') {
-      //         //Do nothing
-      //       } else {
-      //         this.reportMain[57] = '0'
-      //         this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[57])
-      //       }
-      //       this.$message.success(`验货结果：接受`)
-      //     } else {
-      //       if (this.reportMain[57] == '1') {
-      //         //Do nothing
-      //       } else {
-      //         this.reportMain[57] = '1'
-      //         this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[57])
-      //       }
-      //     }
-      //     this.reportMain[items][index].major --
-      //     this.reportMain[itemMainNo / 2 + 19][0].major --
-      //   } else if (updateField == 'critical') {
-      //     // 提示“数量不能为负数”
-      //     if (this.reportMain[items][index].critical - 1 < 0) {
-      //       this.$message.warn(this.$t('stgscanMolding.noMinus') + '!')
-      //       return
-      //     }
-      //     this.$message.info(`${checkPointsCn} | ${defectType} -1`)
-      //     // 更新验货结果
-      //     if (this.reportMain[20][0].minor - (updateField=='minor'&&itemMainNo==2?1:0) <= this.reportMain[20][1].minor &&
-      //       this.reportMain[20][0].major - (updateField=='major'&&itemMainNo==2?1:0) <= this.reportMain[20][1].major &&
-      //       this.reportMain[20][0].critical - (updateField=='critical'&&itemMainNo==2?1:0) <= this.reportMain[20][1].critical &&
-      //       this.reportMain[21][0].minor - (updateField=='minor'&&itemMainNo==4?1:0) <= this.reportMain[21][1].minor &&
-      //       this.reportMain[21][0].major - (updateField=='major'&&itemMainNo==4?1:0) <= this.reportMain[21][1].major &&
-      //       this.reportMain[21][0].critical - (updateField=='critical'&&itemMainNo==4?1:0) <= this.reportMain[21][1].critical &&
-      //       this.reportMain[22][0].minor - (updateField=='minor'&&itemMainNo==6?1:0) <= this.reportMain[22][1].minor &&
-      //       this.reportMain[22][0].major - (updateField=='major'&&itemMainNo==6?1:0) <= this.reportMain[22][1].major &&
-      //       this.reportMain[22][0].critical - (updateField=='critical'&&itemMainNo==6?1:0) <= this.reportMain[22][1].critical) {
-      //       if (this.reportMain[57] == '0') {
-      //         //Do nothing
-      //       } else {
-      //         this.reportMain[57] = '0'
-      //         this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[57])
-      //       }
-      //       this.$message.success(`验货结果：接受`)
-      //     } else {
-      //       if (this.reportMain[57] == '1') {
-      //         //Do nothing
-      //       } else {
-      //         this.reportMain[57] = '1'
-      //         this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[57])
-      //       }
-      //     }
-      //     this.reportMain[items][index].critical --
-      //     this.reportMain[itemMainNo / 2 + 19][0].critical --
-      //   }
-      //   getAction(this.url.subtractMinor, {pssr: pssr}).then((res) => {
-      //     if (res.success) {
-      //       console.log(`减少成功!`)
-      //     }
-      //     if (res.code === 510) {
-      //       this.$message.warning(res.message)
-      //     }
-      //   })
-      //   this.$forceUpdate()
-      // },
-
-      // // 更新验货状态
-      // updateInspectorDecision(custOdrNo, versionNo, styleShorten, inspectorDecision) {
-      //   let pp = new Array(4)
-      //   pp[0] = custOdrNo
-      //   pp[1] = versionNo
-      //   pp[2] = styleShorten
-      //   pp[3] = inspectorDecision
-      //   let pssr = pp.toString()
-      //   getAction(this.url.updateInspectorDecision, {pssr: pssr}).then((res) => {
-      //     if (res.success) {
-      //       console.log(`更新成功!`)
-      //     }
-      //     if (res.code === 510) {
-      //       this.$message.warning(res.message)
-      //     }
-      //   })
-      //   this.$forceUpdate()
-      // },
-
-      // getInspectDetail(pssr) {
-      //   getAction(this.url.getInspectDetail, {pssr: pssr}).then((res) => {
-      //     if (res.success) {
-      //       this.reportMain[10] = res.result;
-      //     }
-      //     if (res.code === 510) {
-      //       this.$message.warning(res.message)
-      //     }
-      //   })
-      // },
-
-      // add () {
-      //   this.edit({});
-      // },
-      edit (record) {
-        // this.form.resetFields();
-        // this.model = Object.assign({}, record);
-        this.visible = true;
-        // this.$nextTick(() => {
-        //   this.form.setFieldsValue(pick(this.model,'factNo','proDept','customNo','接单日期','订单交期','抵扣工厂订单','工厂订单','客户订单','型体编号','型体名称','颜色','目的地','订单数'))
-        //   //时间格式化
-        // });
+      edit(record) {
+        this.visible = true
       },
-      close () {
-        this.$emit('close');
-        this.visible = false;
+
+      close() {
+        this.$emit('close')
+        this.visible = false
       },
-    //   handleOk () {
-    //     const that = this;
-    //     // 触发表单验证
-    //     this.form.validateFields((err, values) => {
-    //       if (!err) {
-    //         that.confirmLoading = true;
-    //         let httpurl = '';
-    //         let method = '';
-    //         if(!this.model.id){
-    //           httpurl+=this.url.add;
-    //           method = 'post';
-    //         }else{
-    //           httpurl+=this.url.edit;
-    //           method = 'put';
-    //         }
-    //         let formData = Object.assign(this.model, values);
-    //         //时间格式化
-    //
-    //         console.log(formData)
-    //         httpAction(httpurl,formData,method).then((res)=>{
-    //           if(res.success){
-    //             that.$message.success(res.message);
-    //             that.$emit('ok');
-    //           }else{
-    //             that.$message.warning(res.message);
-    //           }
-    //         }).finally(() => {
-    //           that.confirmLoading = false;
-    //           that.close();
-    //         })
-    //
-    //
-    //
-    //       }
-    //     })
-    //   },
-      handleCancel () {
+
+      handleCancel() {
         this.close()
-      },
-
+      }
 
     }
   }

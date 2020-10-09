@@ -66,11 +66,17 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange, type: 'radio', columnTitle: '选择行'}"
         @change="handleTableChange">
 
+        <span slot="actionInspectDate" slot-scope="text, record, index">
+          {{ record.inspectDate.toString().slice(0,10) }}
+        </span>
+
+        <span :style="{color: record.inspectorDecision=='0'?'green':record.inspectorDecision=='1'?'red':''}"
+              slot="actionInspectorDecision" slot-scope="text, record, index">
+          {{ record.inspectorDecision=='0'?'接受':record.inspectorDecision=='1'?'拒绝':'' }}
+        </span>
+
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">验货</a>
-<!--          <a-divider type="vertical" />-->
-<!--          <a @click="handleReportMRpt(record)">报告</a>-->
-
           <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
@@ -118,12 +124,7 @@
   import SampleInspectReportMRptModal from './modules/SampleInspectReportMRptModal'
   import SampleInspectReportMReworkModal from './modules/SampleInspectReportMReworkModal'
   import { getAction } from '../../api/manage'
-  import moment from 'moment'
 
-  const formatDate = (val) => {
-    // return val ? moment(val).format('YYYY-MM-DD') : ''
-    return val ? val.slice(0, 10) : ''
-  }
 
   export default {
     name: "SampleInspectReportMList",
@@ -142,19 +143,10 @@
         // 表头
         columns: [
           // {
-          //   title: '#',
-          //   dataIndex: '',
-          //   key: 'rowIndex',
-          //   width: 60,
-          //   align: "center",
-          //   customRender:function (t, r, index) {
-          //     return parseInt(index)+1;
-          //   }
-          // },
-          // {
-          //   title: '厂区编号',
+          //   title: '工厂订单',
           //   align:"center",
-          //   dataIndex: 'factNo'
+          //   dataIndex: 'factOdrNo',
+          //   sorter: true,
           // },
           {
             title: '客户订单',
@@ -169,20 +161,20 @@
             sorter: true,
           },
           {
-            title: '型体编号',
+            title: '工厂型体编号',
             align:"center",
             dataIndex: 'styleShorten'
           },
           {
-            title: 'Pace编码',
+            title: '客户型体编号',
             align:"center",
             dataIndex: 'paceCode'
           },
-          {
-            title: '模具名称和颜色',
-            align:"center",
-            dataIndex: 'modelColour'
-          },
+          // {
+          //   title: '客户型体名称',
+          //   align:"center",
+          //   dataIndex: 'modelColour'
+          // },
           {
             title: '订单类型',
             align:"center",
@@ -197,12 +189,13 @@
             title: '验货日期',
             align:"center",
             dataIndex: 'inspectDate',
-            render: formatDate()
+            scopedSlots: { customRender: 'actionInspectDate' },
           },
           {
             title: '验货结果',
             align:"center",
-            dataIndex: 'inspectorDecision_dictText'
+            dataIndex: 'actionInspectorDecision',
+            scopedSlots: { customRender: 'actionInspectorDecision' },
           },
           {
             title: '操作',
@@ -213,14 +206,14 @@
         ],
         // 请求参数
         url: {
-                list: "/quality/sampleInspectReportM/list",
-                delete: "/quality/sampleInspectReportM/delete",
-                deleteBatch: "/quality/sampleInspectReportM/deleteBatch",
-                exportXlsUrl: "quality/sampleInspectReportM/exportXls",
-                importExcelUrl: "quality/sampleInspectReportM/importExcel",
-                getSampleQty: "quality/sampleInspectReportM/getSampleQty",
-                getDefectQty: "quality/sampleInspectReportM/getDefectQty",
-                getCheckPoints: "quality/sampleInspectReportM/getCheckPoints",
+          list: "/quality/sampleInspectReportM/list",
+          delete: "/quality/sampleInspectReportM/delete",
+          deleteBatch: "/quality/sampleInspectReportM/deleteBatch",
+          exportXlsUrl: "quality/sampleInspectReportM/exportXls",
+          importExcelUrl: "quality/sampleInspectReportM/importExcel",
+          getSampleQty: "quality/sampleInspectReportM/getSampleQty",
+          getDefectQty: "quality/sampleInspectReportM/getDefectQty",
+          getCheckPoints: "quality/sampleInspectReportM/getCheckPoints",
           insertReportM: "/quality/sampleInspectReportM/insertReportM",
           insertReportD: "/quality/sampleInspectReportM/insertReportD",
         },
@@ -244,7 +237,13 @@
       },
 
       handleReportMRework(record) {
-        this.$refs.reportMReworkModal.edit(record);
+        let inspectorDecision = record.inspectorDecision
+        if (inspectorDecision == '1') {
+          this.$refs.reportMReworkModal.edit(record);
+        } else {
+          this.$message.warning(`验货结果被拒绝时，才允许翻箱操作！`)
+          return
+        }
       },
 
       reportMAddOk() {
@@ -264,6 +263,8 @@
               keys.push(record.id)
               this.selectedRowKeys = keys
               // 验货报告主表数据
+              console.log(`工厂订单：${record.factOdrNo}`)
+              this.reportMain[100] = record.factOdrNo.trim()
               this.reportMain[0] = record.custOdrNo
               this.reportMain[1] = record.styleShorten
               this.reportMain[2] = record.inspectDate.slice(0,10)
@@ -272,35 +273,33 @@
               this.reportMain[5] = record.paceCode
               this.reportMain[6] = record.modelColour
               this.reportMain[7] = record.orderType
-              this.reportMain[57] = record.inspectorDecision
+              this.reportMain[90] = record.inspectorDecision
               let itemMainNo
               let itemMediumNo
               // 验货报告--取样数量
-              this.getSampleQty(this.reportMain[0])
+              this.getSampleQty(this.reportMain[100])
               // 验货报告--缺陷数量
-              let items_defect_qty = 19
+              let items_defect_qty = 50
               for (let i=1; i<=3; i++) {
                 itemMainNo = i * 2
                 items_defect_qty = items_defect_qty + 1
-                this.getDefectQty(this.reportMain[0], itemMainNo, items_defect_qty)
+                this.getDefectQty(this.reportMain[100], itemMainNo, items_defect_qty, this.reportMain[3])
               }
               // 验货报告--检查点
               let items_check_points = 8
               for (let i=1; i<=3; i++) {
-                if (i == 1 || i == 3) {
+                if (i == 1 || i == 2) {
                   for (let j=1; j<=4; j++) {
                     itemMainNo = i * 2
                     itemMediumNo = j * 2
                     items_check_points = items_check_points + 1
-                    // console.log(`参数_1_：${record.custOdrNo}|${record.versionNo}|${record.styleShorten}|${itemMainNo.toString()}|${itemMediumNo.toString()}|${items_check_points}`)
                     this.getCheckPoints(record.custOdrNo, record.versionNo, record.styleShorten, itemMainNo.toString(), itemMediumNo.toString(), items_check_points)
                   }
-                } else if (i == 2) {
-                  for (let j=1; j<=3; j++) {
+                } else if (i == 3) {
+                  for (let j=1; j<=5; j++) {
                     itemMainNo = i * 2
                     itemMediumNo = j * 2
                     items_check_points = items_check_points + 1
-                    // console.log(`参数_1_：${record.custOdrNo}|${record.versionNo}|${record.styleShorten}|${itemMainNo.toString()}|${itemMediumNo.toString()}|${items_check_points}`)
                     this.getCheckPoints(record.custOdrNo, record.versionNo, record.styleShorten, itemMainNo.toString(), itemMediumNo.toString(), items_check_points)
                   }
                 }
@@ -314,7 +313,6 @@
         getAction(this.url.getSampleQty, {pssr: pssr}).then((res) => {
           if (res.success) {
             this.reportMain[8] = res.result;
-            // console.log(`取样数量：${this.reportMain[8]}`)
           }
           if (res.code === 510) {
             this.$message.warning(res.message)
@@ -322,14 +320,14 @@
         })
       },
 
-      getDefectQty(custOdrNo, itemMainNo, items_defect_qty) {
-        let pp = new Array(2)
-        pp[0] = custOdrNo
+      getDefectQty(factOdrNo, itemMainNo, items_defect_qty, versionNo) {
+        let pp = new Array(3)
+        pp[0] = factOdrNo
         pp[1] = itemMainNo
+        pp[2] = versionNo
         let pssr = pp.toString()
         getAction(this.url.getDefectQty, { pssr: pssr }).then((res) => {
           if (res.success) {
-            console.log(`缺陷数量：${res.result}`)
             this.reportMain[items_defect_qty] = res.result;
           }
           if (res.code === 510) {
@@ -345,7 +343,6 @@
         pp[2] = styleShorten
         pp[3] = itemMainNo
         pp[4] = itemMediumNo
-        // console.log(`参数:${pp[0]}|${pp[1]}|${pp[2]}|${pp[3]}|${pp[4]}`)
         let pssr = pp.toString()
         getAction(this.url.getCheckPoints, { pssr: pssr }).then((res) => {
           if (res.success) {

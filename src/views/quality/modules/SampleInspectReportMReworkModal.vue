@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    title="新增"
+    title="翻箱"
     :width="550"
     :visible="visible"
     :maskClosable="false"
@@ -16,37 +16,37 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="客户订单">
-              <a-input placeholder="请输入客户订单" v-decorator="['custOdrNo', validatorRules.custOdrNo]"/>
+              <a-input placeholder="请输入客户订单" v-decorator="['custOdrNo', validatorRules.custOdrNo]" disabled/>
             </a-form-item>
 <!--          </a-col>-->
         </a-row>
-        <a-row>
-<!--        <a-col :span="12" :gutter="8">-->
-          <a-form-item
-            :labelCol="labelCol"
-            :wrapperCol="wrapperCol"
-            label="Pace编码">
-            <a-input placeholder="请输入Pace编码" v-decorator="['paceCode', validatorRules.paceCode]"/>
-          </a-form-item>
-<!--        </a-col>-->
-        </a-row>
-        <a-row>
-<!--          <a-col :span="12" :gutter="8">-->
-            <a-form-item
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-              label="模具名称和颜色">
-              <a-input placeholder="请输入模具名称和颜色" v-decorator="['modelColour', validatorRules.modelColour]"/>
-            </a-form-item>
-<!--          </a-col>-->
-        </a-row>
+<!--        <a-row>-->
+<!--&lt;!&ndash;        <a-col :span="12" :gutter="8">&ndash;&gt;-->
+<!--          <a-form-item-->
+<!--            :labelCol="labelCol"-->
+<!--            :wrapperCol="wrapperCol"-->
+<!--            label="Pace编码">-->
+<!--            <a-input placeholder="请输入Pace编码" v-decorator="['paceCode', validatorRules.paceCode]" disabled/>-->
+<!--          </a-form-item>-->
+<!--&lt;!&ndash;        </a-col>&ndash;&gt;-->
+<!--        </a-row>-->
+<!--        <a-row>-->
+<!--&lt;!&ndash;          <a-col :span="12" :gutter="8">&ndash;&gt;-->
+<!--            <a-form-item-->
+<!--              :labelCol="labelCol"-->
+<!--              :wrapperCol="wrapperCol"-->
+<!--              label="模具名称和颜色">-->
+<!--              <a-input placeholder="请输入模具名称和颜色" v-decorator="['modelColour', validatorRules.modelColour]" disabled/>-->
+<!--            </a-form-item>-->
+<!--&lt;!&ndash;          </a-col>&ndash;&gt;-->
+<!--        </a-row>-->
         <a-row>
 <!--          <a-col :span="12" :gutter="8">-->
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="订单类型">
-              <j-dict-select-tag v-decorator="['orderType', validatorRules.orderType]" :type="'radio'" :triggerChange="true" dictCode="odr_type_inspect"/>
+              <j-dict-select-tag v-decorator="['orderType', validatorRules.orderType]" :type="'radio'" :triggerChange="true" dictCode="odr_type_inspect" disabled/>
             </a-form-item>
 <!--          </a-col>-->
         </a-row>
@@ -61,17 +61,17 @@
 <!--            </a-form-item>-->
 <!--          </a-col>-->
 
-
+<!--          <a-col :span="24" :gutter="8">-->
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="验货次数">
+              <a-input v-decorator="['versionNo', validatorRules.versionNo]" disabled/>
+            </a-form-item>
+<!--          </a-col>-->
         </a-row>
 <!--        <a-row>-->
-<!--          <a-col :span="12" :gutter="8">-->
-<!--            <a-form-item-->
-<!--              :labelCol="labelCol"-->
-<!--              :wrapperCol="wrapperCol"-->
-<!--              label="版本编号">-->
-<!--              <a-input placeholder="请输入版本编号" v-decorator="['versionNo', {}]"/>-->
-<!--            </a-form-item>-->
-<!--          </a-col>-->
+
 <!--          <a-col :span="12" :gutter="8">-->
 <!--            <a-form-item-->
 <!--              :labelCol="labelCol"-->
@@ -138,6 +138,8 @@
   import { JEditableTableMixin } from '@/mixins/JEditableTableMixin'
   import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'
   import { getAction } from '@/api/manage'
+  // import { AxiosStatic as axios } from 'axios'
+  import { axios } from '@/utils/request'
 
   export default {
     name: 'SampleInspectReportMModal',
@@ -324,6 +326,7 @@
         // },
         validatorRules: {
           custOdrNo: { rules: [{ required: true, message: this.$t('common.pleaseInput') + this.$t('sampleInspectReportM.custOdrNo') }] },
+          versionNo: { rules: [{ required: true, message: this.$t('common.pleaseInput') + this.$t('sampleInspectReportM.versionNo') }] },
           paceCode: { rules: [{ required: true, message: this.$t('common.pleaseInput') + this.$t('sampleInspectReportM.paceCode') }] },
           modelColour: { rules: [{ required: true, message: this.$t('common.pleaseInput') + this.$t('sampleInspectReportM.modelColour') }] },
           orderType: { rules: [{ required: true }], initialValue: '1' },
@@ -342,22 +345,12 @@
       }
     },
 
-    // mounted() {
-    //   // console.log(`执行：${this.executeModule[0]}`)
-    //   if (this.executeModule[0] == 'rework') {
-    //     this.form.setFieldsValue({'custOdrNo': this.executeModule[1]})
-    //     this.form.setFieldsValue({'paceCode': this.executeModule[2]})
-    //     this.form.setFieldsValue({'modelColour': this.executeModule[3]})
-    //     this.form.setFieldsValue({'orderType': this.executeModule[4]})
-    //   }
-    // },
-
     methods: {
 
         handleOk () {
           const that = this;
           // 触发表单验证
-          this.form.validateFields((err, values) => {
+          that.form.validateFields((err, values) => {
             if (!err) {
               // that.confirmLoading = true;
               // let httpurl = '';
@@ -369,29 +362,55 @@
               //   httpurl+=this.url.edit;
               //   method = 'put';
               // }
-              // let formData = Object.assign(this.model, values);
-              let custOdrNo = this.form.getFieldValue('custOdrNo')
-              let versionNo = this.form.getFieldValue('versionNo') + 1
-              let paceCode = this.form.getFieldValue('paceCode')
-              let modelColour = this.form.getFieldValue('modelColour')
-              let orderType = this.form.getFieldValue('orderType')
-              console.log(`参数：${custOdrNo}/${versionNo.toString()}/${paceCode}/${modelColour}/${orderType}`)
-              this.queryCustOdrNo(custOdrNo, versionNo.toString(), paceCode, modelColour, orderType)
+              let formData = Object.assign(this.model, values);
+              let custOdrNo = that.form.getFieldValue('custOdrNo')
+
+              // let aa = that.form.getFieldValue('versionNo')
+              // console.log(`版本号：${aa}`)
+              let versionNoTemp = parseInt(that.form.getFieldValue('versionNo')) + 1
+
+              let versionNo = versionNoTemp.toString()
+              // let paceCode = that.form.getFieldValue('paceCode')
+              // let modelColour = that.form.getFieldValue('modelColour')
+              let orderType = that.form.getFieldValue('orderType')
+              // console.log(`参数：${custOdrNo}/${versionNo}/${paceCode}/${modelColour}/${orderType}`)
+              console.log(`参数：${custOdrNo}/${versionNo}/${orderType}`)
+              // this.queryCustOdrNo(custOdrNo, versionNo, paceCode, modelColour, orderType)
+              this.queryCustOdrNo(custOdrNo, versionNo, orderType)
             }
           })
         },
 
-      queryCustOdrNo(custOdrNo, versionNo, paceCode, modelColour, orderType) {
+      queryCustOdrNo(custOdrNo, versionNo, orderType) {
         const that = this;
         that.confirmLoading = true;
         getAction(this.url.queryCustOdrNo, {pssr: custOdrNo}).then((res)=>{
           if(res.success){
             console.log(`客户订单1：${res.result}`)
             if (res.result == 1) {
-              that.insertReportM(custOdrNo, versionNo, paceCode, modelColour, orderType)
-              that.insertReportD(custOdrNo, versionNo, )
-              that.$message.success('增加成功！');
-              that.$emit('ok');
+
+              // let objectReportM = new Object()
+              // objectReportM.custOdrNo = custOdrNo
+              // objectReportM.versionNo = versionNo
+              // objectReportM.paceCode = paceCode
+              // objectReportM.modelColour = modelColour
+              // objectReportM.orderType = orderType
+              // let objectReportD = new Object()
+              // objectReportD.custOdrNo = custOdrNo
+              // objectReportD.versionNo = versionNo
+              // that.axios.all([
+              //   that.axios(this.url.insertReportM, {paramReportM: objectReportM}),
+              //   that.axios(this.url.insertReportD, {paramReportD: objectReportD})
+              // ])
+              //   .then(that.axios.spread(function (resReportM,resReportD) {
+              //     console.log('insertReportM', resReportM.data);
+              //     console.log('insertReportD', resReportD.data);
+              //   }));
+
+              that.insertReportM(custOdrNo, versionNo, orderType)
+              that.insertReportD(custOdrNo, versionNo)
+              // that.$message.success('增加成功！');
+              // that.$emit('ok');
               that.close();
             } else {
               that.$message.warning(`客户订单不存在！`);
@@ -405,23 +424,29 @@
         })
       },
 
-      insertReportM(custOdrNo, versionNo, paceCode, modelColour, orderType) {
+      insertReportM(custOdrNo, versionNo, orderType) {
         const that = this;
         that.confirmLoading = true;
+        // let paramReportM = new Object()
+        // paramReportM.custOdrNo = custOdrNo
+        // paramReportM.versionNo = versionNo
+        // paramReportM.paceCode = paceCode
+        // paramReportM.modelColour = modelColour
+        // paramReportM.orderType = orderType
         let pp = new Array(4)
         pp[0] = custOdrNo
         pp[1] = versionNo
-        pp[2] = paceCode
-        pp[3] = modelColour
+        // pp[2] = paceCode
+        // pp[3] = modelColour
         pp[4] = orderType
         let pssr = pp.toString()
         getAction(this.url.insertReportM, {pssr: pssr}).then((res)=>{
           if(res.success){
+            that.$message.success(res.message);
             console.log(`增加主档成功!`)
+          } else{
+            that.$message.warning(res.message);
           }
-          // else{
-          //   that.$message.warning(res.message);
-          // }
         }).finally(() => {
           that.confirmLoading = false;
         })
@@ -430,6 +455,9 @@
       insertReportD(custOdrNo, versionNo) {
         const that = this;
         that.confirmLoading = true;
+        // let paramReportD = new Object()
+        // paramReportD.custOdrNo = custOdrNo
+        // paramReportD.versionNo = versionNo
         let pp = new Array(1)
         pp[0] = custOdrNo
         pp[1] = versionNo

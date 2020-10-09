@@ -106,6 +106,72 @@
         :customRow="onClickRow"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange, type: 'radio', columnTitle: '选择行'}"
         @change="handleTableChange">
+        <span
+          :style="{color: dataSource[index].inspectorDecision=='0'?'green':dataSource[index].inspectorDecision=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
+          slot="actionRevOdrDate"
+          slot-scope="text, record, index">
+          {{dataSource[index].接单日期 }}
+        </span>
+        <span
+          :style="{color: dataSource[index].inspectorDecision=='0'?'green':dataSource[index].inspectorDecision=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
+          slot="actionCustReqDate"
+          slot-scope="text, record, index">
+          {{dataSource[index].订单交期 }}
+        </span>
+        <span
+          :style="{color: dataSource[index].inspectorDecision=='0'?'green':dataSource[index].inspectorDecision=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
+          slot="actionFactOdrNoOut"
+          slot-scope="text, record, index">
+          {{dataSource[index].抵扣工厂订单 }}
+        </span>
+        <span
+          :style="{color: dataSource[index].inspectorDecision=='0'?'green':dataSource[index].inspectorDecision=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
+          slot="actionFactOdrNoIn"
+          slot-scope="text, record, index">
+          {{dataSource[index].工厂订单 }}
+        </span>
+        <span
+          :style="{color: dataSource[index].inspectorDecision=='0'?'green':dataSource[index].inspectorDecision=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
+          slot="actionCustOdrNo"
+          slot-scope="text, record, index">
+          {{dataSource[index].客户订单 }}
+        </span>
+        <span
+          :style="{color: dataSource[index].inspectorDecision=='0'?'green':dataSource[index].inspectorDecision=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
+          slot="actionArticNo"
+          slot-scope="text, record, index">
+          {{dataSource[index].型体编号 }}
+        </span>
+        <span
+          :style="{color: dataSource[index].inspectorDecision=='0'?'green':dataSource[index].inspectorDecision=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
+          slot="actionStyleNm"
+          slot-scope="text, record, index">
+          {{dataSource[index].型体名称 }}
+        </span>
+        <span
+          :style="{color: dataSource[index].inspectorDecision=='0'?'green':dataSource[index].inspectorDecision=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
+          slot="actionStyleColor"
+          slot-scope="text, record, index">
+          {{dataSource[index].颜色 }}
+        </span>
+        <span
+          :style="{color: dataSource[index].inspectorDecision=='0'?'green':dataSource[index].inspectorDecision=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
+          slot="actionOdrKind"
+          slot-scope="text, record, index">
+          {{dataSource[index].订单类别 }}
+        </span>
+        <span
+          :style="{color: dataSource[index].inspectorDecision=='0'?'green':dataSource[index].inspectorDecision=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
+          slot="actionCountry"
+          slot-scope="text, record, index">
+          {{dataSource[index].目的地 }}
+        </span>
+        <span
+          :style="{color: dataSource[index].inspectorDecision=='0'?'green':dataSource[index].inspectorDecision=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
+          slot="actionSizeQty"
+          slot-scope="text, record, index">
+          {{dataSource[index].订单数 }}
+        </span>
 <!--                <span slot="action" slot-scope="text, record">-->
 <!--                  <a @click="handleEdit(record)">编辑</a>-->
 
@@ -237,7 +303,7 @@
           <a-card :loading="loading" :bordered="false" title="仓库与验货" :style="{ marginTop: '24px' }">
             <a-row>
               <a-col :span="6">
-                <head-info title="入库欠数" :content="stockData.owe_qty"></head-info>
+                <head-info title="入库欠数" :content="stockData==null ? '' : stockData.owe_qty"></head-info>
               </a-col>
               <!--              <a-col :span="2">-->
               <!--                <a-spin class='circle-cust'>-->
@@ -245,7 +311,7 @@
               <!--                </a-spin>-->
               <!--              </a-col>-->
               <a-col :span="6">
-                <head-info title="满箱入库时间" :content="stockData.in_date"></head-info>
+                <head-info title="满箱入库时间" :content="stockData==null ? null : stockData.in_date"></head-info>
               </a-col>
               <!--              <a-col :span="2">-->
               <!--                <a-spin class='circle-cust'>-->
@@ -253,7 +319,7 @@
               <!--                </a-spin>-->
               <!--              </a-col>-->
               <a-col :span="6">
-                <head-info title="可验货时间" :content="stockData.in_date"></head-info>
+                <head-info title="可验货时间" :content="stockData==null ? null : stockData.in_date"></head-info>
               </a-col>
               <!--              <a-col :span="2">-->
               <!--                <a-spin class='circle-cust'>-->
@@ -261,7 +327,7 @@
               <!--                </a-spin>-->
               <!--              </a-col>-->
               <a-col :span="6">
-                <head-info title="验货报告" content=""></head-info>
+                <head-info title="验货报告" :content="inspectReport"></head-info>
               </a-col>
               <!--              <a-col :span="2">-->
               <!--                <a-spin class='circle-cust'>-->
@@ -271,7 +337,13 @@
             </a-row>
             <a-row :style="{ marginTop: '24px' }">
               <a-col :span="6">
-                <head-info title="验货结果" content=""></head-info>
+                <head-info title="验货结果"></head-info>
+                <div align="center">
+                  <img v-if="inspectData.inspector_decision=='0'" src="@/assets/accepted.png">
+                  <img v-else-if="inspectData.inspector_decision=='1'" src="@/assets/rejected.png">
+                  <img v-else src="">
+                </div>
+                <h2 :style="{ textAlign: 'center', color: inspectData.inspector_decision=='0'?'green':inspectData.inspector_decision=='1'?'red':'white' }">{{inspectData.inspector_decision=='0'?'接受':inspectData.inspector_decision=='1'?'拒绝':''}}</h2>
               </a-col>
               <!--              <a-col :span="2">-->
               <!--                <a-spin class='circle-cust'>-->
@@ -279,7 +351,7 @@
               <!--                </a-spin>-->
               <!--              </a-col>-->
               <a-col :span="6">
-                <head-info title="翻箱次数" content=""></head-info>
+                <head-info title="翻箱次数" :content="inspectData == null ? '' : inspectData.rework_count >= '0' ? inspectData.rework_count : ''"></head-info>
               </a-col>
               <!--              <a-col :span="2">-->
               <!--                <a-spin class='circle-cust'>-->
@@ -287,7 +359,7 @@
               <!--                </a-spin>-->
               <!--              </a-col>-->
               <a-col :span="6">
-                <head-info title="出货状态" :content="stockData.shp_status=='Y'?'已出货':'未出货'"></head-info>
+                <head-info title="出货状态" :content="stockData==null ? null : stockData.shp_status=='Y'?'已出货':'未出货'"></head-info>
               </a-col>
               <!--              <a-col :span="2">-->
               <!--                <a-spin class='circle-cust'>-->
@@ -408,6 +480,8 @@
         height: 180,
         odrQty: [],
         stockData: [],
+        inspectReport: '',
+        inspectData: [],
         factOdrNo: '',
         // 表头
         columns: [
@@ -439,57 +513,79 @@
           {
             title: '接单日期',
             align: 'center',
-            dataIndex: '接单日期'
+            dataIndex: '接单日期',
+            dataIndex: 'actionRevOdrDate',
+            scopedSlots: { customRender: 'actionRevOdrDate' },
           },
           {
             title: '订单交期',
             align: 'center',
-            dataIndex: '订单交期'
+            // dataIndex: '订单交期',
+            dataIndex: 'actionCustReqDate',
+            scopedSlots: { customRender: 'actionCustReqDate' },
           },
           {
             title: '抵扣工厂订单',
             align: 'center',
-            dataIndex: '抵扣工厂订单'
+            // dataIndex: '抵扣工厂订单',
+            dataIndex: 'actionFactOdrNoOut',
+            scopedSlots: { customRender: 'actionFactOdrNoOut' },
           },
           {
             title: '工厂订单',
             align: 'center',
-            dataIndex: '工厂订单'
+            // dataIndex: '工厂订单',
+            dataIndex: 'actionFactOdrNoIn',
+            scopedSlots: { customRender: 'actionFactOdrNoIn' },
           },
           {
             title: '客户订单',
             align: 'center',
-            dataIndex: '客户订单'
+            // dataIndex: '客户订单',
+            dataIndex: 'actionCustOdrNo',
+            scopedSlots: { customRender: 'actionCustOdrNo' },
           },
           {
             title: '型体编号',
             align: 'center',
-            dataIndex: '型体编号'
+            // dataIndex: '型体编号',
+            dataIndex: 'actionArticNo',
+            scopedSlots: { customRender: 'actionArticNo' },
           },
           {
             title: '型体名称',
             align: 'center',
-            dataIndex: '型体名称'
+            // dataIndex: '型体名称',
+            dataIndex: 'actionStyleNm',
+            scopedSlots: { customRender: 'actionStyleNm' },
           },
           {
             title: '颜色',
             align: 'center',
-            dataIndex: '颜色'
+            // dataIndex: '颜色',
+            dataIndex: 'actionStyleColor',
+            scopedSlots: { customRender: 'actionStyleColor' },
           },
           {
             title: '订单类别',
             align: 'center',
-            dataIndex: '订单类别'
+            // dataIndex: '订单类别',
+            dataIndex: 'actionOdrKind',
+            scopedSlots: { customRender: 'actionOdrKind' },
           },
           {
             title: '目的地',
             align: 'center',
-            dataIndex: '目的地'
+            // dataIndex: '目的地',
+            dataIndex: 'actionCountry',
+            scopedSlots: { customRender: 'actionCountry' },
           },
           {
             title: '订单数',
             align: 'center',
-            dataIndex: '订单数'
+            // dataIndex: '订单数',
+            dataIndex: 'actionSizeQty',
+            scopedSlots: { customRender: 'actionSizeQty' },
           }
           // {
           //   title: '操作',
@@ -506,6 +602,7 @@
           importExcelUrl: 'order/wholeProcessReport/importExcel',
           getSizeQty: '/order/wholeProcessReport/getSizeQty',
           getStockData: '/order/wholeProcessReport/getStockData',
+          getInspectReport: '/order/wholeProcessReport/getInspectReport',
         }
       }
     },
@@ -526,6 +623,7 @@
               this.selectedRowKeys = keys;
               this.getSizeQty(this.selectedRowKeys);
               this.getStockData(this.selectedRowKeys);
+              this.getInspectReport(record.客户订单);
             }
           }
         }
@@ -535,7 +633,6 @@
         let pssr = currentKey.toString().trim();
         getAction(this.url.getSizeQty, {pssr: pssr}).then((res) => {
           if (res.success) {
-
             this.odrQty = JSON.parse(JSON.stringify(res.result).replace(/size_no/g, "x").replace(/odr_qty/g, "y"));
             // console.log(`工厂订单：${this.odrQty}`)
           }
@@ -546,12 +643,12 @@
           this.loading = false
         })
       },
+
       // 将【工厂订单】传给后端，获取【入库欠数】、【满箱入库时间】/【可验货时间】、【出货状态】
       getStockData(currentKey) {
         let pssr = currentKey.toString().trim();
         getAction(this.url.getStockData, {pssr: pssr}).then((res) => {
           if (res.success) {
-
             // this.stockData = JSON.parse(JSON.stringify(res.result));
             this.stockData = res.result;
             console.log(`入库欠数：${this.stockData.owe_qty}`)
@@ -565,6 +662,32 @@
           this.loading = false
         })
       },
+
+      // 将【工厂订单】传给后端，获取【验货报告】、【验货结果】、【翻箱次数】
+      getInspectReport(currentKey) {
+        let pssr = currentKey.toString().trim();
+        getAction(this.url.getInspectReport, {pssr: pssr}).then((res) => {
+          if (res.success) {
+            console.log(`验货报告：${res.result}`)
+            if (res.result == null) {
+              this.inspectReport = '无'
+              this.inspectData = []
+            } else {
+              this.inspectReport = '有'
+              this.inspectData = res.result;
+              console.log(`验货结果：${this.inspectData.inspector_decision}`)
+              console.log(`翻箱次数：${this.inspectData.rework_count}`)
+            }
+          }
+          if (res.code === 510) {
+            this.$message.warning(res.message)
+          }
+          // this.loadData()
+          this.loading = false
+        })
+        this.$forceUpdate();
+      },
+
     }
   }
 </script>

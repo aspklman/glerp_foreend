@@ -8,7 +8,7 @@ import { deleteAction, getAction,downFile } from '@/api/manage'
 import Vue from 'vue'
 import { ACCESS_TOKEN } from "@/store/mutation-types"
 
-export const JeecgListMixin = {
+export const GuoliListMixin = {
   data(){
     return {
       //token header
@@ -51,7 +51,7 @@ export const JeecgListMixin = {
     }
   },
   created() {
-    this.loadData();
+    // this.loadData();
     //初始化字典配置 在自己页面定义
     this.initDictConfig();
   },

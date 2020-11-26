@@ -11,14 +11,14 @@
 <!--            </a-form-item>-->
 <!--          </a-col>-->
           <a-col :span="6">
-            <a-form-item label="客户订单">
-              <a-input placeholder="请输入客户订单" v-model="queryParam.custOdrNo"></a-input>
+            <a-form-item :label="$t('odrm.custOdrNo')" >
+              <a-input :placeholder="$t('common.pleaseInput') + $t('odrm.custOdrNo')" v-model="queryParam.custOdrNo"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="8" >
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
-              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+              <a-button type="primary" @click="searchQuery" icon="search">{{ $t('common.query') }}</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">{{ $t('common.reset') }}</a-button>
             </span>
           </a-col>
 
@@ -28,7 +28,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleReportMAdd" type="primary" icon="plus">新增</a-button>
+      <a-button @click="handleReportMAdd" type="primary" icon="plus">{{ $t('common.add') }}</a-button>
 <!--      <a-button type="primary" icon="download" @click="handleExportXls('验货报告主表')">导出</a-button>-->
 <!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">-->
 <!--        <a-button type="primary" icon="import">导入</a-button>-->
@@ -63,7 +63,7 @@
         :pagination="ipagination"
         :loading="loading"
         :customRow="onClickRow"
-        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange, type: 'radio', columnTitle: '选择行'}"
+        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange, type: 'radio', columnTitle: $t('common.select') + $t('common.row')}"
         @change="handleTableChange">
 
         <span slot="actionInspectDate" slot-scope="text, record, index">
@@ -72,24 +72,25 @@
 
         <span :style="{color: record.inspectorDecision=='0'?'green':record.inspectorDecision=='1'?'red':''}"
               slot="actionInspectorDecision" slot-scope="text, record, index">
-          {{ record.inspectorDecision=='0'?'接受':record.inspectorDecision=='1'?'拒绝':'' }}
+          {{ record.inspectorDecision=='0'?$t('sampleInspectReportM.accepted'):record.inspectorDecision=='1'?$t('sampleInspectReportM.rejected'):'' }}
         </span>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">验货</a>
+<!--          <a @click="handleEdit(record)">验货</a>-->
+          <a @click="handleEdit(record)">{{recordId==record.id?$t('sampleInspectReportM.inspect'):''}}</a>
           <a-divider type="vertical" />
           <a-dropdown>
-            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
+            <a class="ant-dropdown-link">{{ $t('common.more') }}<a-icon type="down" /></a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a @click="handleReportMRework(record)">翻箱</a>
+                <a @click="handleReportMRework(record)">{{ $t('sampleInspectReportM.rework') }}</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="handleReportMRpt(record)">验货报告</a>
+                <a @click="handleReportMRpt(record)">{{ $t('sampleInspectReportM.inspectionReport') }}</a>
               </a-menu-item>
               <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
+                <a-popconfirm :title="$t('common.deleteConfirm')" @confirm="() => handleDelete(record.id)">
+                  <a>{{ $t('common.delete') }}</a>
                 </a-popconfirm>
               </a-menu-item>
 
@@ -101,8 +102,8 @@
     </div>
     <!-- table区域-end -->
 
-    <!-- 表单区域 -->
-    <sampleInspectReportM-modal ref="modalForm" @ok="modalFormOk" :reportMain="reportMain" />
+    <!-- 验货 -->
+    <sampleInspectReportM-modal ref="modalForm" @freshPage="freshPage" :reportMain="reportMain" />
 
     <!-- 新增 -->
     <sampleInspectReportMAdd-modal ref="reportMAddModal" @ok="reportMAddOk" />
@@ -135,11 +136,14 @@
       SampleInspectReportMRptModal,
       SampleInspectReportMReworkModal,
     },
+    // props: ['custOdrNo'],
     data () {
       return {
         description: '验货报告主表管理页面',
         reportMain: [],
         reworkParams: [],
+        recordId: '',
+        routeParam: '',
         // 表头
         columns: [
           // {
@@ -149,24 +153,24 @@
           //   sorter: true,
           // },
           {
-            title: '客户订单',
+            title: this.$t('odrm.custOdrNo'),
             align:"center",
             dataIndex: 'custOdrNo',
             sorter: true,
           },
           {
-            title: '验货次数',
+            title: this.$t('sampleInspectReportM.inspectTimes'),
             align:"center",
             dataIndex: 'versionNo',
             sorter: true,
           },
           {
-            title: '工厂型体编号',
+            title: this.$t('sampleInspectReportM.factStyleNo'),
             align:"center",
             dataIndex: 'styleShorten'
           },
           {
-            title: '客户型体编号',
+            title: this.$t('sampleInspectReportM.custStyleNo'),
             align:"center",
             dataIndex: 'paceCode'
           },
@@ -176,29 +180,29 @@
           //   dataIndex: 'modelColour'
           // },
           {
-            title: '订单类型',
+            title: this.$t('sampleInspectReportM.orderType'),
             align:"center",
             dataIndex: 'orderType_dictText'
           },
           {
-            title: '订单数量',
+            title: this.$t('sampleInspectReportM.orderQty'),
             align:"center",
             dataIndex: 'odrQty'
           },
           {
-            title: '验货日期',
+            title: this.$t('sampleInspectReportM.inspectDate'),
             align:"center",
             dataIndex: 'inspectDate',
             scopedSlots: { customRender: 'actionInspectDate' },
           },
           {
-            title: '验货结果',
+            title: this.$t('sampleInspectReportM.inspectorDecision'),
             align:"center",
             dataIndex: 'actionInspectorDecision',
             scopedSlots: { customRender: 'actionInspectorDecision' },
           },
           {
-            title: '操作',
+            title: this.$t('common.action'),
             dataIndex: 'action',
             align:"center",
             scopedSlots: { customRender: 'action' },
@@ -219,6 +223,7 @@
         },
       }
     },
+
     computed: {
       importExcelUrl: function(){
         return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
@@ -227,6 +232,10 @@
 
 
     methods: {
+
+      freshPage() {
+        this.loadData();
+      },
 
       handleReportMAdd: function() {
         this.$refs.reportMAddModal.add();
@@ -262,9 +271,14 @@
               let keys = []
               keys.push(record.id)
               this.selectedRowKeys = keys
+              this.recordId = record.id
               // 验货报告主表数据
-              console.log(`工厂订单：${record.factOdrNo}`)
               this.reportMain[100] = record.factOdrNo.trim()
+              if (record.traceabilityCode == null) {
+                this.reportMain[200] = ''
+              } else {
+                this.reportMain[200] = record.traceabilityCode.trim()
+              }
               this.reportMain[0] = record.custOdrNo
               this.reportMain[1] = record.styleShorten
               this.reportMain[2] = record.inspectDate.slice(0,10)
@@ -354,10 +368,24 @@
         })
       },
 
+      queryOrder(custOdrNo) {
+        this.queryParam.custOdrNo = custOdrNo;
+        this.searchQuery();
+      },
+
       initDictConfig() {
       }
 
-    }
+    },
+
+    created() {
+      console.log(`客户订单`)
+      this.routeParam = this.$route.params.custOdrNo;
+      console.log(`客户订单2：${this.routeParam}`)
+      this.queryOrder(this.routeParam)
+      this.loadData()
+    },
+
   }
 </script>
 <style scoped>

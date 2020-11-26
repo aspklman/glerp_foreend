@@ -47,7 +47,7 @@
           Victory
         </a-col>
         <a-col :span="5" align="center">
-          {{ $t('sampleInspectReportM.inspectDate') }}
+          {{ $t('sampleInspectReportM.inspectDate') + $t('common.colon') }}
         </a-col>
         <a-col :span="4" align="center" style="border:1px solid #8B0000; background-color: #FFD700">
           {{ reportMain[2] }}
@@ -95,14 +95,14 @@
                    style="border:1px solid #8B0000; background-color: #FFD700; margin-right: 15px">SHOE
             </a-col>
             <a-col :span="3">
-              {{ $t('sampleInspectReportM.orderQty') }}
+              {{ $t('sampleInspectReportM.orderQty') + $t('common.colon') }}
             </a-col>
             <a-col :span="4" align="center"
                    style="border:1px solid #8B0000; background-color: #FFD700; margin-right: 15px">{{
               reportMain[4].toString() }}
             </a-col>
             <a-col :span="4">
-              {{ $t('sampleInspectReportM.orderType') }}
+              {{ $t('sampleInspectReportM.orderType') + $t('common.colon') }}
             </a-col>
             <a-col :span="5" align="center"
                    style="border:1px solid #8B0000; background-color: #FFD700; margin-right: 15px">{{
@@ -139,9 +139,12 @@
         <a-col :span="9">
           <a-row>
             <a-col :span="10" align="center">
-              {{ $t('sampleInspectReportM.traceabilityCode') }}
+              {{ $t('sampleInspectReportM.traceabilityCode') + $t('common.colon') }}
             </a-col>
-            <a-col :span="14" style="border:1px solid #8B0000; color: #FFD700; background-color: #FFD700">
+            <a-col align="center" v-if="this.reportMain[200].length>0" :span="14" style="border:1px solid #8B0000; color: #8B0000; background-color: #FFD700">
+              {{ this.reportMain[200] }}
+            </a-col>
+            <a-col v-else :span="14" style="border:1px solid #8B0000; color: #8B0000; background-color: #FFD700">
               <pre><h4></h4></pre>
             </a-col>
           </a-row>
@@ -161,9 +164,17 @@
             <a-col :span="8"style="border:1px solid #8B0000; color: #FFD700; background-color: #FFD700">
               <pre><h4></h4></pre>
             </a-col>
-            <a-col :span="8" align="center" style="border:1px solid #8B0000; background-color: #FFD700">
-              {{reportMain[90]=='0'?'ACCEPTED':reportMain[90]=='1'?'REJECTED':''}}
+
+<!--            <a-col :span="8" align="center" style="border:1px solid #8B0000; background-color: #FFD700">-->
+<!--              {{reportMain[90]=='0'?'ACCEPTED':reportMain[90]=='1'?'REJECTED':''}}-->
+<!--            </a-col>-->
+            <a-col v-if="this.reportMain[90]==undefined" :span="8" style="border:1px solid #8B0000; color: #8B0000; background-color: #FFD700">
+              <pre><h4></h4></pre>
             </a-col>
+            <a-col align="center" v-else :span="8" style="border:1px solid #8B0000; color: #8B0000; background-color: #FFD700">
+              {{reportMain[90]=='0'?$t('sampleInspectReportM.accepted'):reportMain[90]=='1'?$t('sampleInspectReportM.rejected'):''}}
+            </a-col>
+
           </a-row>
         </a-col>
       </a-row>

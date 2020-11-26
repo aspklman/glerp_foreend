@@ -16,7 +16,8 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="客户订单">
-              <a-input placeholder="请输入客户订单" v-decorator="['custOdrNo', validatorRules.custOdrNo]" disabled/>
+              {{ this.custOdrNo }}
+<!--              <a-input placeholder="请输入客户订单" v-decorator="['custOdrNo', validatorRules.custOdrNo]" disabled/>-->
             </a-form-item>
 <!--          </a-col>-->
         </a-row>
@@ -141,12 +142,13 @@
   import { axios } from '@/utils/request'
 
   export default {
-    name: 'SampleInspectReportMModal',
+    name: 'SampleInspectReportMRework1Modal',
     mixins: [JEditableTableMixin],
     components: {
       JDictSelectTag,
     },
-    props: ['executeModule'],
+    // props: ['executeModule'],
+    props: ['custOdrNo'],
     data() {
       return {
         columns: [
@@ -361,8 +363,9 @@
               //   httpurl+=this.url.edit;
               //   method = 'put';
               // }
-              let formData = Object.assign(this.model, values);
-              let custOdrNo = that.form.getFieldValue('custOdrNo')
+              // let formData = Object.assign(this.model, values);
+              // let custOdrNo = that.form.getFieldValue('custOdrNo')
+              let custOdrNo = this.custOdrNo
 
               // let aa = that.form.getFieldValue('versionNo')
               // console.log(`版本号：${aa}`)
@@ -379,6 +382,7 @@
               // this.queryCustOdrNo(custOdrNo, versionNo, orderType)
             }
           })
+          this.$emit('refreshPage')
         },
 
       queryCustOdrNo(custOdrNo, orderType) {

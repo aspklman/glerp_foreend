@@ -83,7 +83,7 @@
 
         <span slot="action" slot-scope="text, record">
 <!--          <a @click="handleEdit(record)">编辑</a>-->
-          <a @click="handleEdit(record)">详情</a>
+          <a @click="handleEdit(record)">{{inspectMain[0]==record.工厂订单?'详情':''}}</a>
 
 <!--          <a-divider type="vertical"/>-->
 <!--          <a-dropdown>-->
@@ -252,6 +252,7 @@
           }
         }
       },
+
       getInspectDetail(pssr) {
         getAction(this.url.getInspectDetail, {pssr: pssr}).then((res) => {
           if (res.success) {
@@ -262,6 +263,10 @@
           }
         })
       },
+
+      // handleEdit(record) {
+      //
+      // },
 
 
     }

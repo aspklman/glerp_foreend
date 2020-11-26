@@ -145,7 +145,7 @@
     components: {
       JDictSelectTag,
     },
-    props: ['executeModule'],
+    // props: ['executeModule'],
     data() {
       return {
         columns: [

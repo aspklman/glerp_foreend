@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    title="验货"
+    :title="$t('sampleInspectReportM.inspect')"
     footer=""
     :width="1200"
     :visible="visible"
@@ -8,48 +8,80 @@
 
     <a-card :bordered="false" :body-style="{padding: '0'}">
       <div class="salesCard">
+        <a-row>
+          <a-col :span="20">
+
+          </a-col>
+          <a-col :style="{ textAlign: 'center'}">
+            <a-button type="primary"
+                      size="large"
+                      icon="check-square"
+                      @click="updateInspectorDecision(reportMain[0], reportMain[3], reportMain[1], reportMain[90])">
+              {{ $t('common.confirm') }}
+            </a-button>
+          </a-col>
+        </a-row>
         <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-          <a-tab-pane tab="订单信息" key="1">
+          <a-tab-pane :tab="$t('sampleInspectReportM.orderDetail')" key="1">
             <a-row>
               <a-col :span="24">
                 <a-row>
                   <a-col :span="5">
-                    <head-info title="客户订单" :content="reportMain[0]"></head-info>
+                    <head-info :title="$t('odrm.custOdrNo')" :content="reportMain[0]"></head-info>
                   </a-col>
                   <a-col :span="5">
-                    <head-info title="工厂型体编号" :content="reportMain[1]"></head-info>
+                    <head-info :title="$t('sampleInspectReportM.factStyleNo')" :content="reportMain[1]"></head-info>
                   </a-col>
                   <a-col :span="5">
-                    <head-info title="验货日期" :content="reportMain[2]"></head-info>
+                    <head-info :title="$t('sampleInspectReportM.inspectDate')" :content="reportMain[2]"></head-info>
                   </a-col>
                   <a-col :span="5">
-                    <head-info title="验货次数" :content="reportMain[3].toString()"></head-info>
+                    <head-info :title="$t('sampleInspectReportM.inspectTimes')" :content="reportMain[3]"></head-info>
                   </a-col>
                   <a-col :span="4">
                     <head-info
                       class="decision"
-                      title="验货结果">
+                      :title="$t('sampleInspectReportM.inspectorDecision')">
                     </head-info>
                     <div align="center">
                       <img v-if="reportMain[90]=='0'" src="@/assets/accepted.png">
                       <img v-else-if="reportMain[90]=='1'" src="@/assets/rejected.png">
                       <img v-else src="">
                     </div>
-                    <h2 :style="{ textAlign: 'center', color: reportMain[90]=='0'?'green':reportMain[90]=='1'?'red':'white' }">{{reportMain[90]=='0'?'接受':reportMain[90]=='1'?'拒绝':''}}</h2>
+                    <h2 :style="{ textAlign: 'center', color: reportMain[90]=='0'?'green':reportMain[90]=='1'?'red':'white' }">{{reportMain[90]=='0'?$t('sampleInspectReportM.accepted'):reportMain[90]=='1'?$t('sampleInspectReportM.rejected'):''}}</h2>
                   </a-col>
                 </a-row>
                 <a-row :style="{ marginTop: '24px' }">
                   <a-col :span="5">
-                    <head-info title="订单数量" :content="reportMain[4].toString()"></head-info>
+                    <head-info :title="$t('sampleInspectReportM.orderQty')" :content="reportMain[4].toString()"></head-info>
                   </a-col>
                   <a-col :span="5">
-                    <head-info title="客户型体编号" :content="reportMain[5]"></head-info>
+                    <head-info :title="$t('sampleInspectReportM.custStyleNo')" :content="reportMain[5]"></head-info>
                   </a-col>
                   <a-col :span="5">
-                    <head-info title="客户型体名称" :content="reportMain[6]"></head-info>
+                    <head-info :title="$t('sampleInspectReportM.custStyleNm')" :content="reportMain[6]"></head-info>
                   </a-col>
                   <a-col :span="5">
-                    <head-info title="订单类型" :content="reportMain[7]=='1'?'Mass Production':reportMain[7]=='2'?'Implantation order':''"></head-info>
+                    <head-info :title="$t('sampleInspectReportM.orderType')" :content="reportMain[7]=='1'?'Mass Production':reportMain[7]=='2'?'Implantation order':''"></head-info>
+                  </a-col>
+                  <a-col :span="4">
+                    <head-info :title="$t('sampleInspectReportM.traceabilityCode')"></head-info>
+                    <a-row :style="{ color: 'red', textAlign: 'center'}">{{ this.reportMain[200] }}</a-row>
+                    <a-row :style="{ marginTop: '6px' }" />
+                    <a-input @change="handleTraceabilityCode"></a-input>
+                    <a-row :style="{ marginTop: '6px' }" />
+                    <a-row :style="{ color: 'red', textAlign: 'center'}">
+                      <a-button-group>
+                        <a-button type="primary"
+                                  @click="addTraceabilityCode(reportMain[0], reportMain[3], traceabilityCode)">
+                          {{ $t('common.submit') }}
+                        </a-button>
+                        <a-button type="primary"
+                                  @click="subtractTraceabilityCode(reportMain[0], reportMain[3])">
+                          {{ $t('common.delete') }}
+                        </a-button>
+                      </a-button-group>
+                    </a-row>
                   </a-col>
                 </a-row>
               </a-col>
@@ -62,33 +94,23 @@
     <a-card :bordered="false" :body-style="{padding: '0'}" :style="{ marginTop: '18px' }">
       <div class="salesCard">
         <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-          <a-tab-pane tab="目视化/指南" key="1">
+          <a-tab-pane :tab="$t('sampleInspectReportM.visualManual')" key="1">
             <a-row>
               <a-col :xl="6" :lg="12" :md="12" :sm="24" :xs="24">
-                <head-info title="取样数量" :content="reportMain[8].sampleQtyAqlTtl"></head-info>
+                <head-info :title="$t('sampleInspectReportM.samplingQty')" :content="reportMain[8].sampleQtyAqlTtl"></head-info>
               </a-col>
-              <a-col :xl="9" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
 
               </a-col>
-              <a-col :xl="9" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="10" :lg="12" :md="12" :sm="24" :xs="24">
                 <pre>
                   <a-table
                     rowKey="type"
-                    :columns="defectColumns"
+                    :columns="this.$i18n.locale=='zh-CN'?defectColumns:this.$i18n.locale=='en-US'?defectColumnsEn:defectColumns"
                     :data-source="reportMain[51]"
                     bordered
                     :pagination="false">
-<!--                  <span slot="actionA" slot-scope="text, record, index">-->
-                    <!--                    <span>{{ // this.tabA[index].minor }}</span>-->
-                    <!--                    <span>{{ reportMain[20][index].minor }}</span>-->
-                    <!--                  </span>-->
-                    <!--                  <span slot="actionB" slot-scope="text, record, index">-->
-                    <!--                    <span>{{ reportMain[20][index].major }}</span>-->
-                    <!--                  </span>-->
-                    <!--                  <span slot="actionC" slot-scope="text, record, index">-->
-                    <!--                    <span>{{ reportMain[20][index].critical }}</span>-->
-                    <!--                  </span>-->
-                </a-table>
+                  </a-table>
                 </pre>
 
                 <!--                <bar-multid-->
@@ -97,11 +119,11 @@
             </a-row>
 
             <a-row>
-              <a-card title="通用" type="inner">
+              <a-card :title="$t('sampleInspectReportM.general')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[9]"
                     bordered
                     :pagination="false">
@@ -112,11 +134,11 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 9, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 9, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                     <a-button-group slot="action1" slot-scope="text, record, index">
@@ -161,11 +183,11 @@
             </a-row>
 
             <a-row :style="{ marginTop: '12px' }">
-              <a-card title="附件功能符合性" type="inner">
+              <a-card :title="$t('sampleInspectReportM.accessoriesFunctional')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[10]"
                     bordered
                     :pagination="false">
@@ -176,21 +198,21 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 10, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 10, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                       <a-button-group slot="action1" slot-scope="text, record, index">
                         <span>{{ reportMain[10][index].minor }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[10][index].minorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 10)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[10][index].minorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 10)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -198,11 +220,11 @@
                     <a-button-group slot="action2" slot-scope="text, record, index">
                       <span>{{ reportMain[10][index].major }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[10][index].majorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 10)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[10][index].majorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 10)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -210,11 +232,11 @@
                     <a-button-group slot="action3" slot-scope="text, record, index">
                       <span>{{ reportMain[10][index].critical }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[10][index].criticalEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 10)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[10][index].criticalEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 10)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -225,11 +247,11 @@
             </a-row>
 
             <a-row :style="{ marginTop: '12px' }">
-              <a-card title="工艺" type="inner">
+              <a-card :title="$t('sampleInspectReportM.workmanship')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[11]"
                     bordered
                     :pagination="false">
@@ -240,21 +262,21 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 11, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 11, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                       <a-button-group slot="action1" slot-scope="text, record, index">
                         <span>{{ reportMain[11][index].minor }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[11][index].minorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 11)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[11][index].minorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 11)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -262,11 +284,11 @@
                     <a-button-group slot="action2" slot-scope="text, record, index">
                       <span>{{ reportMain[11][index].major }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[11][index].majorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 11)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[11][index].majorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 11)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -274,11 +296,11 @@
                     <a-button-group slot="action3" slot-scope="text, record, index">
                       <span>{{ reportMain[11][index].critical }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[11][index].criticalEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 11)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[11][index].criticalEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 11)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -289,11 +311,11 @@
             </a-row>
 
             <a-row :style="{ marginTop: '12px' }">
-              <a-card title="另外特殊的主题（针对PL和PE）" type="inner">
+              <a-card :title="$t('sampleInspectReportM.otherSpecificTopic')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[12]"
                     bordered
                     :pagination="false">
@@ -304,21 +326,21 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 12, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 12, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                       <a-button-group slot="action1" slot-scope="text, record, index">
                         <span>{{ reportMain[12][index].minor }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[12][index].minorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 12)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[12][index].minorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 12)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -326,11 +348,11 @@
                     <a-button-group slot="action2" slot-scope="text, record, index">
                       <span>{{ reportMain[12][index].major }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[12][index].majorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 12)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[12][index].majorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 12)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -338,11 +360,11 @@
                     <a-button-group slot="action3" slot-scope="text, record, index">
                       <span>{{ reportMain[12][index].critical }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[12][index].criticalEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 12)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[12][index].criticalEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 12)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -354,42 +376,33 @@
 
           </a-tab-pane>
 
-          <a-tab-pane tab="无功能性破坏" key="2">
+          <a-tab-pane :tab="$t('sampleInspectReportM.funcNonDestructive')" key="2">
             <a-row>
               <a-col :xl="6" :lg="12" :md="12" :sm="24" :xs="24">
-                <head-info title="取样数量" :content="reportMain[8].funcQtyAqlTtl"></head-info>
+                <head-info :title="$t('sampleInspectReportM.samplingQty')" :content="reportMain[8].funcQtyAqlTtl"></head-info>
               </a-col>
-              <a-col :xl="9" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
 
               </a-col>
-              <a-col :xl="9" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="10" :lg="12" :md="12" :sm="24" :xs="24">
                 <pre>
                   <a-table
-                    rowKey="type"
-                    :columns="defectColumns"
-                    :data-source="reportMain[52]"
-                    bordered
-                    :pagination="false">
-<!--                  <span slot="actionA" slot-scope="text, record, index">-->
-                    <!--                    <span>{{ reportMain[21][index].minor }}</span>-->
-                    <!--                  </span>-->
-                    <!--                  <span slot="actionB" slot-scope="text, record, index">-->
-                    <!--                    <span>{{ reportMain[21][index].major }}</span>-->
-                    <!--                  </span>-->
-                    <!--                  <span slot="actionC" slot-scope="text, record, index">-->
-                    <!--                    <span>{{ reportMain[21][index].critical }}</span>-->
-                    <!--                  </span>-->
-                </a-table>
+                     rowKey="type"
+                     :columns="this.$i18n.locale=='zh-CN'?defectColumns:this.$i18n.locale=='en-US'?defectColumnsEn:defectColumns"
+                     :data-source="reportMain[52]"
+                     bordered
+                     :pagination="false">
+                  </a-table>
                 </pre>
               </a-col>
             </a-row>
 
             <a-row>
-              <a-card title="包装" type="inner">
+              <a-card :title="$t('sampleInspectReportM.packaging')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[13]"
                     bordered
                     :pagination="false">
@@ -400,21 +413,21 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 13, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 13, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                       <a-button-group slot="action1" slot-scope="text, record, index">
                         <span>{{ reportMain[13][index].minor }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[13][index].minorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 13)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[13][index].minorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 13)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -422,11 +435,11 @@
                     <a-button-group slot="action2" slot-scope="text, record, index">
                       <span>{{ reportMain[13][index].major }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[13][index].majorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 13)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[13][index].majorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 13)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -434,11 +447,11 @@
                     <a-button-group slot="action3" slot-scope="text, record, index">
                       <span>{{ reportMain[13][index].critical }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[13][index].criticalEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 13)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[13][index].criticalEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 13)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -449,11 +462,11 @@
             </a-row>
 
             <a-row :style="{ marginTop: '12px' }">
-              <a-card title="通用" type="inner">
+              <a-card :title="$t('sampleInspectReportM.general')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[14]"
                     bordered
                     :pagination="false">
@@ -464,21 +477,21 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 14, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 14, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                       <a-button-group slot="action1" slot-scope="text, record, index">
                         <span>{{ reportMain[14][index].minor }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[14][index].minorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 14)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[14][index].minorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 14)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -486,11 +499,11 @@
                     <a-button-group slot="action2" slot-scope="text, record, index">
                       <span>{{ reportMain[14][index].major }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[14][index].majorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 14)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[14][index].majorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 14)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -498,11 +511,11 @@
                     <a-button-group slot="action3" slot-scope="text, record, index">
                       <span>{{ reportMain[14][index].critical }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[14][index].criticalEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 14)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[14][index].criticalEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 14)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -513,11 +526,11 @@
             </a-row>
 
             <a-row :style="{ marginTop: '12px' }">
-              <a-card title="附件功能符合性" type="inner">
+              <a-card :title="$t('sampleInspectReportM.accessoriesFunctional')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[15]"
                     bordered
                     :pagination="false">
@@ -528,21 +541,21 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 15, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 15, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                       <a-button-group slot="action1" slot-scope="text, record, index">
                         <span>{{ reportMain[15][index].minor }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[15][index].minorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 15)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[15][index].minorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 15)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -550,11 +563,11 @@
                     <a-button-group slot="action2" slot-scope="text, record, index">
                       <span>{{ reportMain[15][index].major }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[15][index].majorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 15)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[15][index].majorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 15)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -562,11 +575,11 @@
                     <a-button-group slot="action3" slot-scope="text, record, index">
                       <span>{{ reportMain[15][index].critical }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[15][index].criticalEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 15)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[15][index].criticalEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 15)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -577,11 +590,11 @@
             </a-row>
 
             <a-row :style="{ marginTop: '12px' }">
-              <a-card title="另外特殊的主题（针对PL和PE）" type="inner">
+              <a-card :title="$t('sampleInspectReportM.otherSpecificTopic')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[16]"
                     bordered
                     :pagination="false">
@@ -592,21 +605,21 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 16, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 16, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                       <a-button-group slot="action1" slot-scope="text, record, index">
                         <span>{{ reportMain[16][index].minor }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[16][index].minorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 16)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[16][index].minorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 16)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -614,11 +627,11 @@
                     <a-button-group slot="action2" slot-scope="text, record, index">
                       <span>{{ reportMain[16][index].major }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[16][index].majorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 16)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[16][index].majorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 16)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -626,11 +639,11 @@
                     <a-button-group slot="action3" slot-scope="text, record, index">
                       <span>{{ reportMain[16][index].critical }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[16][index].criticalEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 16)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[16][index].criticalEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 16)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -642,42 +655,32 @@
 
           </a-tab-pane>
 
-          <a-tab-pane tab="功能性破坏" key="3">
+          <a-tab-pane :tab="$t('sampleInspectReportM.funcDestructive')" key="3">
             <a-row>
               <a-col :xl="6" :lg="12" :md="12" :sm="24" :xs="24">
-                <head-info title="取样数量" :content="reportMain[8].strQtyAql"></head-info>
+                <head-info :title="$t('sampleInspectReportM.samplingQty')" :content="reportMain[8].strQtyAql"></head-info>
               </a-col>
-              <a-col :xl="9" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
 
               </a-col>
-              <a-col :xl="9" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="10" :lg="12" :md="12" :sm="24" :xs="24">
                 <pre>
-                  <a-table
-                    rowKey="type"
-                    :columns="defectColumns"
-                    :data-source="reportMain[53]"
-                    bordered
-                    :pagination="false">
-<!--                  <span slot="actionA" slot-scope="text, record, index">-->
-                    <!--                    <span>{{ reportMain[22][index].minor }}</span>-->
-                    <!--                  </span>-->
-                    <!--                  <span slot="actionB" slot-scope="text, record, index">-->
-                    <!--                    <span>{{ reportMain[22][index].major }}</span>-->
-                    <!--                  </span>-->
-                    <!--                  <span slot="actionC" slot-scope="text, record, index">-->
-                    <!--                    <span>{{ reportMain[22][index].critical }}</span>-->
-                    <!--                  </span>-->
-                </a-table>
+                  <a-table rowKey="type"
+                     :columns="this.$i18n.locale=='zh-CN'?defectColumns:this.$i18n.locale=='en-US'?defectColumnsEn:defectColumns"
+                     :data-source="reportMain[53]"
+                     bordered
+                     :pagination="false">
+                  </a-table>
                 </pre>
               </a-col>
             </a-row>
 
             <a-row>
-              <a-card title="通用" type="inner">
+              <a-card :title="$t('sampleInspectReportM.general')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[17]"
                     bordered
                     :pagination="false">
@@ -688,21 +691,21 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 17, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 17, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                       <a-button-group slot="action1" slot-scope="text, record, index">
                         <span>{{ reportMain[17][index].minor }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[17][index].minorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 17)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[17][index].minorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 17)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -710,11 +713,11 @@
                     <a-button-group slot="action2" slot-scope="text, record, index">
                       <span>{{ reportMain[17][index].major }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[17][index].majorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 17)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[17][index].majorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 17)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -722,11 +725,11 @@
                     <a-button-group slot="action3" slot-scope="text, record, index">
                       <span>{{ reportMain[17][index].critical }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[17][index].criticalEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 17)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[17][index].criticalEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 17)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -737,11 +740,11 @@
             </a-row>
 
             <a-row :style="{ marginTop: '12px' }">
-              <a-card title="附件功能符合性" type="inner">
+              <a-card :title="$t('sampleInspectReportM.accessoriesFunctional')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[18]"
                     bordered
                     :pagination="false">
@@ -752,21 +755,21 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 18, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 18, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                       <a-button-group slot="action1" slot-scope="text, record, index">
                         <span>{{ reportMain[18][index].minor }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[18][index].minorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 18)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[18][index].minorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 18)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -774,11 +777,11 @@
                     <a-button-group slot="action2" slot-scope="text, record, index">
                       <span>{{ reportMain[18][index].major }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[18][index].majorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 18)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[18][index].majorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 18)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -786,11 +789,11 @@
                     <a-button-group slot="action3" slot-scope="text, record, index">
                       <span>{{ reportMain[18][index].critical }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[18][index].criticalEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 18)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[18][index].criticalEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 18)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -801,11 +804,11 @@
             </a-row>
 
             <a-row :style="{ marginTop: '12px' }">
-              <a-card title="工艺" type="inner">
+              <a-card :title="$t('sampleInspectReportM.workmanship')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[19]"
                     bordered
                     :pagination="false">
@@ -816,21 +819,21 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 19, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 19, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                       <a-button-group slot="action1" slot-scope="text, record, index">
                         <span>{{ reportMain[19][index].minor }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[19][index].minorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 19)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[19][index].minorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 19)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -838,11 +841,11 @@
                     <a-button-group slot="action2" slot-scope="text, record, index">
                       <span>{{ reportMain[19][index].major }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[19][index].majorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 19)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[19][index].majorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 19)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -850,11 +853,11 @@
                     <a-button-group slot="action3" slot-scope="text, record, index">
                       <span>{{ reportMain[19][index].critical }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[19][index].criticalEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 19)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[19][index].criticalEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 19)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -865,11 +868,11 @@
             </a-row>
 
             <a-row :style="{ marginTop: '12px' }">
-              <a-card title="实验室测试" type="inner">
+              <a-card :title="$t('sampleInspectReportM.laboratoryTest')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[20]"
                     bordered
                     :pagination="false">
@@ -880,21 +883,21 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 20, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 20, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                       <a-button-group slot="action1" slot-scope="text, record, index">
                         <span>{{ reportMain[20][index].minor }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[20][index].minorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 20)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[20][index].minorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 20)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -902,11 +905,11 @@
                     <a-button-group slot="action2" slot-scope="text, record, index">
                       <span>{{ reportMain[20][index].major }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[20][index].majorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 20)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[20][index].majorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 20)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -914,11 +917,11 @@
                     <a-button-group slot="action3" slot-scope="text, record, index">
                       <span>{{ reportMain[20][index].critical }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[20][index].criticalEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 20)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[20][index].criticalEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 20)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -929,11 +932,11 @@
             </a-row>
 
             <a-row :style="{ marginTop: '12px' }">
-              <a-card title="另外特殊的主题（针对PL和PE）" type="inner">
+              <a-card :title="$t('sampleInspectReportM.otherSpecificTopic')" type="inner">
                 <pre>
                   <a-table
                     rowKey="checkPointsNo"
-                    :columns="columns"
+                    :columns="this.$i18n.locale=='zh-CN'?columns:this.$i18n.locale=='en-US'?columnsEn:columns"
                     :data-source="reportMain[21]"
                     bordered
                     :pagination="false">
@@ -944,21 +947,21 @@
                       <a-row :style="{ marginTop: '6px' }" />
                       <a-button type="primary"
                                 @click="addQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 21, index)">
-                        提交
+                        {{ $t('common.submit') }}
                       </a-button>
                       <a-button type="primary"
                                 @click="subtractQuestion(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, 21, index)">
-                        删除
+                        {{ $t('common.delete') }}
                       </a-button>
                     </a-button-group>
                       <a-button-group slot="action1" slot-scope="text, record, index">
                         <span>{{ reportMain[21][index].minor }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[21][index].minorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 21)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].minorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[21][index].minorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '次要', 'minor', index, 21)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -966,11 +969,11 @@
                     <a-button-group slot="action2" slot-scope="text, record, index">
                       <span>{{ reportMain[21][index].major }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[21][index].majorEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 21)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].majorEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[21][index].majorEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '主要', 'major', index, 21)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -978,11 +981,11 @@
                     <a-button-group slot="action3" slot-scope="text, record, index">
                       <span>{{ reportMain[21][index].critical }}</span>
                         <a-row :style="{ marginTop: '6px' }" />
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[21][index].criticalEnable=='F'"
                                   @click="addMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 21)">
                           <a-icon type="plus-circle"/>
                         </a-button>
-                        <a-button type="primary" :disabled="reportMain[9][index].criticalEnable=='F'"
+                        <a-button type="primary" :disabled="reportMain[21][index].criticalEnable=='F'"
                                   @click="subtractMinor(reportMain[0], reportMain[3], reportMain[1], record.itemMainNo, record.itemMediumNo, record.checkPointsNo, record.checkPointsCn, '重要', 'critical', index, 21)">
                           <a-icon type="minus-circle"/>
                         </a-button>
@@ -1016,27 +1019,6 @@
         title: '测试方法/要求',
         dataIndex: 'testMethodReqsCn',
       },
-      // {
-      //   title: '次要',
-      //   dataIndex: 'minor',
-      //   align: 'center',
-      //   // width: 250,
-      //   // fixed: true,
-      // },
-      // {
-      //   title: '主要',
-      //   dataIndex: 'major',
-      //   align: 'center',
-      //   // width: 250,
-      //   // fixed: true,
-      // },
-      // {
-      //   title: '重要',
-      //   dataIndex: 'critical',
-      //   align: 'center',
-      //   // width: 250,
-      //   // fixed: true,
-      // },
       {
         title: '发现问题',
         dataIndex: 'action11',
@@ -1063,6 +1045,41 @@
       },
     ]
 
+  const columnsEn = [
+      {
+        title: 'Check Points',
+        dataIndex: 'checkPointsEn',
+      },
+      {
+        title: 'Test Method/Requirements',
+        dataIndex: 'testMethodReqsEn',
+      },
+      {
+        title: 'Finding Questions',
+        dataIndex: 'action11',
+        align: 'center',
+        scopedSlots: { customRender: 'action11' },
+      },
+    {
+        title: 'Minor',
+        dataIndex: 'action1',
+        align: 'center',
+        scopedSlots: { customRender: 'action1' },
+      },
+      {
+        title: 'Major',
+        dataIndex: 'action2',
+        align: 'center',
+        scopedSlots: { customRender: 'action2' },
+      },
+      {
+        title: 'Critical',
+        dataIndex: 'action3',
+        align: 'center',
+        scopedSlots: { customRender: 'action3' },
+      },
+    ]
+
   const defectColumns = [
     {
       title: '项目',
@@ -1083,24 +1100,28 @@
       dataIndex: 'critical',
       align: 'center',
     },
-    // {
-    //   title: '次要',
-    //   dataIndex: 'actionA',
-    //   align: 'center',
-    //   scopedSlots: { customRender: 'actionA' },
-    // },
-    // {
-    //   title: '主要',
-    //   dataIndex: 'actionB',
-    //   align: 'center',
-    //   scopedSlots: { customRender: 'actionB' },
-    // },
-    // {
-    //   title: '重要',
-    //   dataIndex: 'actionC',
-    //   align: 'center',
-    //   scopedSlots: { customRender: 'actionC' },
-    // },
+  ]
+
+  const defectColumnsEn = [
+    {
+      title: 'Item',
+      dataIndex: 'typeEn',
+    },
+    {
+      title: 'Minor',
+      dataIndex: 'minor',
+      align: 'center',
+    },
+    {
+      title: 'Major',
+      dataIndex: 'major',
+      align: 'center',
+    },
+    {
+      title: 'Critical',
+      dataIndex: 'critical',
+      align: 'center',
+    },
   ]
 
   export default {
@@ -1112,14 +1133,19 @@
     },
     data () {
       return {
+        // traceabilityCode: '',
         findQuestion: '',
         columns,
+        columnsEn,
         defectColumns,
+        defectColumnsEn,
         selectedRowKeys: [],
         visible: false,
         loading: true,
         confirmLoading: false,
         url: {
+          addTraceabilityCode: "quality/sampleInspectReportM/addTraceabilityCode",
+          subtractTraceabilityCode: "quality/sampleInspectReportM/subtractTraceabilityCode",
           addMinor: "quality/sampleInspectReportM/addMinor",
           subtractMinor: "quality/sampleInspectReportM/subtractMinor",
           updateInspectorDecision: "quality/sampleInspectReportM/updateInspectorDecision",
@@ -1176,7 +1202,7 @@
               this.reportMain[90] = '1'
               this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[90])
             }
-            this.$message.warn(`验货结果：拒绝`)
+            // this.$message.warn(`验货结果：拒绝`)
           } else {
             // this.$message.info(`${checkPointsCn} | ${defectType} +1`)
             if (this.reportMain[90] == '0') {
@@ -1205,7 +1231,7 @@
               this.reportMain[90] = '1'
               this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[90])
             }
-            this.$message.warn(`验货结果：拒绝`)
+            // this.$message.warn(`验货结果：拒绝`)
           } else {
             // this.$message.info(`${checkPointsCn} | ${defectType} +1`)
             if (this.reportMain[90] == '0') {
@@ -1234,7 +1260,7 @@
               this.reportMain[90] = '1'
               this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[90])
             }
-            this.$message.warn(`验货结果：拒绝`)
+            // this.$message.warn(`验货结果：拒绝`)
           } else {
             // this.$message.info(`${checkPointsCn} | ${defectType} +1`)
             if (this.reportMain[90] == '0') {
@@ -1292,7 +1318,7 @@
               this.reportMain[90] = '0'
               this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[90])
             }
-            this.$message.success(`验货结果：接受`)
+            // this.$message.success(`验货结果：接受`)
           } else {
             if (this.reportMain[90] == '1') {
               //Do nothing
@@ -1326,7 +1352,7 @@
               this.reportMain[90] = '0'
               this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[90])
             }
-            this.$message.success(`验货结果：接受`)
+            // this.$message.success(`验货结果：接受`)
           } else {
             if (this.reportMain[90] == '1') {
               //Do nothing
@@ -1360,7 +1386,7 @@
               this.reportMain[90] = '0'
               this.updateInspectorDecision(custOdrNo, versionNo, styleShorten, this.reportMain[90])
             }
-            this.$message.success(`验货结果：接受`)
+            // this.$message.success(`验货结果：接受`)
           } else {
             if (this.reportMain[90] == '1') {
               //Do nothing
@@ -1390,6 +1416,15 @@
         pp[1] = versionNo
         pp[2] = styleShorten
         pp[3] = inspectorDecision
+        if (this.reportMain[90]==undefined||this.reportMain[90]=='9') {
+          this.reportMain[90] = '0'
+          pp[3] = '0'
+        }
+        if (this.reportMain[90]=='0') {
+          this.$message.success(`验货结果：接受`)
+        } else if (this.reportMain[90]=='1') {
+          this.$message.warn(`验货结果：拒绝`)
+        }
         let pssr = pp.toString()
         getAction(this.url.updateInspectorDecision, {pssr: pssr}).then((res) => {
           if (res.success) {
@@ -1400,10 +1435,59 @@
           }
         })
         this.$forceUpdate()
+        this.$emit('freshPage')
+      },
+
+      handleTraceabilityCode(e) {
+        this.traceabilityCode = e.target.value
       },
 
       handleQuestion(e) {
         this.findQuestion = e.target.value
+      },
+
+      // 添加可追溯编码
+      addTraceabilityCode(custOdrNo, versionNo, traceabilityCode) {
+        let pp = new Array(3)
+        let traceCode = this.traceabilityCode.trim()
+        pp[0] = custOdrNo
+        pp[1] = versionNo
+        if (traceCode == '') {
+          this.$message.warning('提交内容不能为空！')
+          return
+        }
+        pp[2] = traceCode
+        let pssr = pp.toString()
+        this.reportMain[200] = traceCode
+        getAction(this.url.addTraceabilityCode, {pssr: pssr}).then((res) => {
+          if (res.success) {
+            this.$message.success(res.message)
+            console.log(`提交成功!`)
+          }
+          if (res.code === 510) {
+            this.$message.warning(res.message)
+          }
+        })
+        this.$forceUpdate()
+      },
+
+      // {{ $t('common.delete') }}可追溯编码
+      subtractTraceabilityCode(custOdrNo, versionNo) {
+        let pp = new Array(2)
+        pp[0] = custOdrNo
+        pp[1] = versionNo
+        let pssr = pp.toString()
+        this.reportMain[200] = ''
+        getAction(this.url.subtractTraceabilityCode, {pssr: pssr}).then((res) => {
+          if (res.success) {
+            this.$message.success(res.message)
+            console.log(`{{ $t('common.delete') }}成功!`)
+          }
+          if (res.code === 510) {
+            this.$message.warning(res.message)
+          }
+        })
+        this.$forceUpdate()
       },
 
       // 提交问题
@@ -1436,7 +1520,7 @@
         this.$forceUpdate()
       },
 
-      // 删除问题
+      // {{ $t('common.delete') }}问题
       subtractQuestion(custOdrNo, versionNo, styleShorten, itemMainNo, itemMediumNo, checkPointsNo, items, index) {
         let pp = new Array(6)
         pp[0] = custOdrNo
@@ -1452,7 +1536,7 @@
         getAction(this.url.subtractQuestion, {pssr: pssr}).then((res) => {
           if (res.success) {
             this.$message.success(res.message)
-            console.log(`删除成功!`)
+            console.log(`{{ $t('common.delete') }}成功!`)
           }
           if (res.code === 510) {
             this.$message.warning(res.message)

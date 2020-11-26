@@ -181,6 +181,7 @@
           {{dataSource[index].客户订单 }}
         </span>
 
+        <!--------订单交期-------->
         <span
           :style="{color: dataSource[index].验货结果=='0'?'green':dataSource[index].验货结果=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
           slot="actionCustReqDate"
@@ -209,6 +210,7 @@
         <!--          {{dataSource[index].颜色 }}-->
         <!--        </span>-->
 
+        <!--------订单类别-------->
         <span
           :style="{color: dataSource[index].验货结果=='0'?'green':dataSource[index].验货结果=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
           slot="actionOdrKind"

@@ -229,18 +229,18 @@
           :style="{color: dataSource[index].验货结果=='0'?'green':dataSource[index].验货结果=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
           slot="actionSizeQty"
           slot-scope="text, record, index">
-            <a-popover trigger="click" placement="left">
-              <template slot="content">
-                <a-table size="small"
-                         :columns="sizeColumns"
-                         :pagination="false"
-                         bordered
-                         :dataSource="odrQty">
-                </a-table>
-              </template>
-              <a style="background-color: #FFCCFF">{{ dataSource[index].订单数 }}</a>
-            </a-popover>
-          </span>
+          <a-popover trigger="click" placement="left">
+            <template slot="content">
+              <a-table size="small"
+                       :columns="sizeColumns"
+                       :pagination="false"
+                       bordered
+                       :dataSource="odrQty">
+              </a-table>
+            </template>
+            <a style="background-color: #FFCCFF">{{ dataSource[index].订单数 }}</a>
+          </a-popover>
+        </span>
 
 
         <!--------满箱状态-------->
@@ -252,11 +252,24 @@
           <div>
             {{ dataSource[index].finishMark=='N'?dataSource[index].oweTqty:undefined }}
           </div>
-          <div align="center">
-            <img width="24" height="24" v-if="dataSource[index].finishMark=='Y'" src="@/assets/boxFull.png">
-            <img width="30" height="24" v-else-if="dataSource[index].finishMark=='N'" src="@/assets/boxEmpty.png">
-            <img width="24" height="24" v-else src="@/assets/unknown.png">
-          </div>
+
+          <a-popover trigger="click" placement="left">
+            <template slot="content">
+              <a-table size="small"
+                       :columns="sizeColumns1"
+                       :pagination="false"
+                       bordered
+                       :dataSource="locArea">
+              </a-table>
+            </template>
+            <div align="center">
+              <img width="24" height="24" v-if="dataSource[index].finishMark=='Y'" src="@/assets/boxFull.png">
+              <img width="30" height="24" v-else-if="dataSource[index].finishMark=='N'" src="@/assets/boxEmpty.png">
+              <img width="24" height="24" v-else src="@/assets/unknown.png">
+            </div>
+          </a-popover>
+
+
           <div align="center">
             {{ dataSource[index].满箱日期==undefined?'':dataSource[index].满箱日期 }}
           </div>
@@ -268,26 +281,30 @@
           slot="actionInspectorDecision"
           slot-scope="text, record, index">
             <a-row>
-              <a-col v-show="dataSource[index].验货结果=='0'||dataSource[index].验货结果=='1'" :span="12"
-                     :style="{textAlign: 'right'}">
+              <a-col :xl="8">
+                <a @click="handleStd(record)">
+                  <img width="20" height="20" src="@/assets/standard.png">
+                </a>
+              </a-col>
+              <a-col :xl="8" v-show="dataSource[index].验货结果=='0'||dataSource[index].验货结果=='1'" >
                 <a @click="handleReportMList(record)">
                   <img width="24" height="24" v-if="dataSource[index].验货结果=='0'" src="@/assets/accepted.png">
                   <img width="24" height="24" v-else-if="dataSource[index].验货结果=='1'" src="@/assets/rejected.png">
                 </a>
               </a-col>
-              <a-col v-show="dataSource[index].验货结果==undefined">
+              <a-col :xl="8" v-show="dataSource[index].验货结果==undefined">
                 <a @click="handleReportMAdd1(record, index)">
                   <img width="20" height="20" src="@/assets/add.png">
                 </a>
               </a-col>
-              <a-col v-show="dataSource[index].验货结果=='1'">
+              <a-col :xl="8" v-show="dataSource[index].验货结果=='1'">
                 <a @click="handleReportMRework1(record)">
                   <img width="20" height="20" src="@/assets/add1.png">
                 </a>
               </a-col>
-              <a-col v-show="dataSource[index].验货结果=='9'">
+              <a-col :xl="8" v-show="dataSource[index].验货结果=='9'">
                 <a @click="handleReportMList(record)">
-                  <img width="26" height="26" src="@/assets/toBeInspect.png">
+                  <img width="24" height="24" src="@/assets/toBeInspect.png">
                 </a>
               </a-col>
               <!--              <a-col v-show="dataSource[index].验货结果=='0'||dataSource[index].验货结果=='1'" :span="12" :style="{textAlign: 'left'}">-->
@@ -547,10 +564,6 @@
     <!-- 翻箱 -->
     <sampleInspectReportMRework1-modal ref="reportMRework1Modal" @refreshPage="refreshPage" :custOdrNo="custOdrNo"/>
 
-    <!--    &lt;!&ndash; 验货报告 &ndash;&gt;-->
-    <!--    <sampleInspectReportM-list ref="reportMList" @ok="reportMListOk" :custOdrNo="custOdrNo"/>-->
-
-
     <!-- table区域-end -->
 
 
@@ -592,6 +605,7 @@
   import SampleInspectReportMAdd1Modal from '@/views/quality/modules/SampleInspectReportMAdd1Modal'
   import SampleInspectReportMRework1Modal from '@/views/quality/modules/SampleInspectReportMRework1Modal'
   import SampleInspectReportMList from '@/views/quality/SampleInspectReportMList'
+  import SampleInspectStdList from '@/views/quality/SampleInspectStdList'
 
 
   import { getLoginfo, getVisitInfo } from '@/api/api'
@@ -603,6 +617,18 @@
     },
     {
       title: '数量',
+      dataIndex: 'y'
+    }
+
+  ]
+
+  const sizeColumns1 = [
+    {
+      title: 'SIZE',
+      dataIndex: 'x'
+    },
+    {
+      title: '数量(存放地点)',
       dataIndex: 'y'
     }
 
@@ -638,11 +664,13 @@
       JDate,
       SampleInspectReportMAdd1Modal,
       SampleInspectReportMRework1Modal,
-      SampleInspectReportMList
+      SampleInspectReportMList,
+      SampleInspectStdList,
     },
     data() {
       return {
         sizeColumns,
+        sizeColumns1,
         value: 'today',
         description: '全流程表管理页面',
         custOdrQty: [
@@ -657,6 +685,7 @@
         ],
         height: 180,
         odrQty: [],
+        locArea: [],
         stockData: [],
         inspectReport: '',
         inspectData: [],
@@ -818,6 +847,7 @@
           exportXlsUrl: 'order/wholeProcessReport/exportXls',
           importExcelUrl: 'order/wholeProcessReport/importExcel',
           getSizeQty: '/order/wholeProcessReport/getSizeQty',
+          getLocArea: '/order/wholeProcessReport/getLocArea',
           getStockData: '/order/wholeProcessReport/getStockData',
           getInspectReport: '/order/wholeProcessReport/getInspectReport',
           insertReportM: '/quality/sampleInspectReportM/insertReportM',
@@ -867,10 +897,12 @@
 
       handleReportMList: function(record) {
         this.custOdrNo = record.客户订单
-        console.log(`客户订单1：${this.custOdrNo}`)
         this.$router.push({ name: 'quality-SampleInspectReportM', params: { custOdrNo: this.custOdrNo } })
-        // this.$router.push({path:'/quality/SampleInspectReportM'})
-        // this.$router.push({ name: 'quality', params: {custOdrNo}, path: `SampleInspectReportM/${custOdrNo}` })
+      },
+
+      handleStd: function(record) {
+        this.factOdrNo = record.factOdrNoIn
+        this.$router.push({ name: 'quality-SampleInspectStd', params: { factOdrNo: this.factOdrNo } })
       },
 
       onClickRow(record, index) {
@@ -882,6 +914,7 @@
               this.selectedRowKeys = keys
               this.rowIndex = index
               this.getSizeQty(this.selectedRowKeys)
+              this.getLocArea(this.selectedRowKeys)
               this.getStockData(this.selectedRowKeys)
               this.getInspectReport(record.客户订单)
             }
@@ -896,6 +929,22 @@
           if (res.success) {
             this.odrQty = JSON.parse(JSON.stringify(res.result).replace(/size_no/g, 'x').replace(/odr_qty/g, 'y'))
             // console.log(`工厂订单：${this.odrQty}`)
+          }
+          if (res.code === 510) {
+            this.$message.warning(res.message)
+          }
+          // this.loadData()
+          this.loading = false
+        })
+      },
+
+      // 将【工厂订单】传给后端，获取【SIZE】、【存放区域】
+      getLocArea(currentKey) {
+        let pssr = currentKey.toString().trim()
+        getAction(this.url.getLocArea, { pssr: pssr }).then((res) => {
+          if (res.success) {
+            this.locArea = JSON.parse(JSON.stringify(res.result).replace(/size_no/g, 'x').replace(/loc_area/g, 'y'))
+            // console.log(`工厂订单：${this.locArea}`)
           }
           if (res.code === 510) {
             this.$message.warning(res.message)
@@ -951,6 +1000,12 @@
 
       queryOrder(dates) {
         this.value = dates
+        this.queryParam.接单日期_begin = ''
+        this.queryParam.接单日期_end = ''
+        this.queryParam.factOdrNoIn = ''
+        this.queryParam.接单日期 = ''
+        this.queryParam.抵扣工厂订单 = ''
+        this.queryParam.finishMark = ''
         let startDate = new Date()
         let endDate = new Date()
         if (dates == 'finishNoTwoDays') {
@@ -1010,7 +1065,8 @@
     created() {
       this.queryOrder('today')
       this.loadData()
-    }
+    },
+
   }
 </script>
 <style scoped>

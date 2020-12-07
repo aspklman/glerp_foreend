@@ -23,12 +23,12 @@
           label="proDept">
           <a-input placeholder="请输入proDept" v-decorator="['proDept', {}]" />
         </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="customNo">
-          <a-input placeholder="请输入customNo" v-decorator="['customNo', {}]" />
-        </a-form-item>
+<!--        <a-form-item-->
+<!--          :labelCol="labelCol"-->
+<!--          :wrapperCol="wrapperCol"-->
+<!--          label="customNo">-->
+<!--          <a-input placeholder="请输入customNo" v-decorator="['customNo', {}]" />-->
+<!--        </a-form-item>-->
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -137,7 +137,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'factNo','proDept','customNo','接单日期','订单交期','抵扣工厂订单','工厂订单','客户订单','型体编号','型体名称','颜色','目的地','订单数'))
+          this.form.setFieldsValue(pick(this.model,'factNo','proDept','接单日期','订单交期','抵扣工厂订单','工厂订单','客户订单','型体编号','型体名称','颜色','目的地','订单数'))
 		  //时间格式化
         });
 

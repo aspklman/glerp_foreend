@@ -70,9 +70,9 @@
           {{ record.inspectDate.toString().slice(0,10) }}
         </span>
 
-        <span :style="{color: record.inspectorDecision=='0'?'green':record.inspectorDecision=='1'?'red':''}"
+        <span :style="{color: record.inspectorDecision=='0'?'green':record.inspectorDecision=='1'?'red':record.inspectorDecision=='9'?'#C71585':''}"
               slot="actionInspectorDecision" slot-scope="text, record, index">
-          {{ record.inspectorDecision=='0'?$t('sampleInspectReportM.accepted'):record.inspectorDecision=='1'?$t('sampleInspectReportM.rejected'):'' }}
+          {{ record.inspectorDecision=='0'?$t('sampleInspectReportM.accepted'):record.inspectorDecision=='1'?$t('sampleInspectReportM.rejected'):record.inspectorDecision=='9'?$t('sampleInspectReportM.toBeInspect'):'' }}
         </span>
 
         <span slot="action" slot-scope="text, record">

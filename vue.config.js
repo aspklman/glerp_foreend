@@ -22,7 +22,7 @@ module.exports = {
   },
   */
 
-  // APP部署
+  // //APP部署
   // publicPath:'./',
 
   configureWebpack: {},

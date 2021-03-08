@@ -46,9 +46,9 @@
                     <div align="center">
                       <img v-if="reportMain[90]=='0'" src="@/assets/accepted.png">
                       <img v-else-if="reportMain[90]=='1'" src="@/assets/rejected.png">
-                      <img v-else src="">
+                      <img v-else-if="reportMain[90]=='9'" src="@/assets/toBeInspect.png">
                     </div>
-                    <h2 :style="{ textAlign: 'center', color: reportMain[90]=='0'?'green':reportMain[90]=='1'?'red':'white' }">{{reportMain[90]=='0'?$t('sampleInspectReportM.accepted'):reportMain[90]=='1'?$t('sampleInspectReportM.rejected'):''}}</h2>
+                    <h2 :style="{ textAlign: 'center', color: reportMain[90]=='0'?'green':reportMain[90]=='1'?'red':reportMain[90]=='9'?'#C71585':'white' }">{{reportMain[90]=='0'?$t('sampleInspectReportM.accepted'):reportMain[90]=='1'?$t('sampleInspectReportM.rejected'):reportMain[90]=='9'?$t('sampleInspectReportM.toBeInspect'):''}}</h2>
                   </a-col>
                 </a-row>
                 <a-row :style="{ marginTop: '24px' }">
@@ -1471,7 +1471,7 @@
         this.$forceUpdate()
       },
 
-      // {{ $t('common.delete') }}可追溯编码
+      // 删除可追溯编码
       subtractTraceabilityCode(custOdrNo, versionNo) {
         let pp = new Array(2)
         pp[0] = custOdrNo
@@ -1520,7 +1520,7 @@
         this.$forceUpdate()
       },
 
-      // {{ $t('common.delete') }}问题
+      // 删除问题
       subtractQuestion(custOdrNo, versionNo, styleShorten, itemMainNo, itemMediumNo, checkPointsNo, items, index) {
         let pp = new Array(6)
         pp[0] = custOdrNo

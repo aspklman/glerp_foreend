@@ -17,12 +17,6 @@
             </a-form-item>
           </a-col>
           <template v-if="toggleSearchStatus">
-
-<!--            <a-col :md="6" :sm="8">-->
-<!--              <a-form-item label="型体编号">-->
-<!--                <a-input placeholder="请输入型体编号" v-model="queryParam.型体编号"></a-input>-->
-<!--              </a-form-item>-->
-<!--            </a-col>-->
           </template>
           <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
@@ -39,35 +33,8 @@
       </a-form>
     </div>
 
-<!--    &lt;!&ndash; 操作按钮区域 &ndash;&gt;-->
-<!--    <div class="table-operator">-->
-<!--      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>-->
-<!--      <a-button type="primary" icon="download" @click="handleExportXls('验货抽检标准')">导出</a-button>-->
-<!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"-->
-<!--                @change="handleImportExcel">-->
-<!--        <a-button type="primary" icon="import">导入</a-button>-->
-<!--      </a-upload>-->
-<!--      <a-dropdown v-if="selectedRowKeys.length > 0">-->
-<!--        <a-menu slot="overlay">-->
-<!--          <a-menu-item key="1" @click="batchDel">-->
-<!--            <a-icon type="delete"/>-->
-<!--            删除-->
-<!--          </a-menu-item>-->
-<!--        </a-menu>-->
-<!--        <a-button style="margin-left: 8px"> 批量操作-->
-<!--          <a-icon type="down"/>-->
-<!--        </a-button>-->
-<!--      </a-dropdown>-->
-<!--    </div>-->
-
     <!-- table区域-begin -->
     <div>
-<!--      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">-->
-<!--        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{-->
-<!--        selectedRowKeys.length }}</a>项-->
-<!--        <a style="margin-left: 24px" @click="onClearSelected">清空</a>-->
-<!--      </div>-->
-
       <a-table
         ref="table"
         size="middle"
@@ -80,41 +47,27 @@
         :customRow="onClickRow"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange, type: 'radio', columnTitle: '选择行'}"
         @change="handleTableChange">
-
         <span slot="action" slot-scope="text, record">
-<!--          <a @click="handleEdit(record)">编辑</a>-->
           <a @click="handleEdit(record)">{{inspectMain[0]==record.工厂订单?'详情':''}}</a>
-
-<!--          <a-divider type="vertical"/>-->
-<!--          <a-dropdown>-->
-<!--            <a class="ant-dropdown-link">更多 <a-icon type="down"/></a>-->
-<!--            <a-menu slot="overlay">-->
-<!--              <a-menu-item>-->
-<!--                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">-->
-<!--                  <a>删除</a>-->
-<!--                </a-popconfirm>-->
-<!--              </a-menu-item>-->
-<!--            </a-menu>-->
-<!--          </a-dropdown>-->
         </span>
-
       </a-table>
     </div>
     <!-- table区域-end -->
 
     <!-- 表单区域 -->
     <sampleInspectStd-modal ref="modalForm" @ok="modalFormOk" :inspectMain="inspectMain"></sampleInspectStd-modal>
+
   </a-card>
 </template>
 
 <script>
   import SampleInspectStdModal from './modules/SampleInspectStdModal'
-  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import { GuoliListMixin } from '@/mixins/GuoliListMixin'
   import { getAction, postAction, deleteAction } from '@/api/manage'
 
   export default {
     name: 'SampleInspectStdList',
-    mixins: [JeecgListMixin],
+    mixins: [GuoliListMixin],
     components: {
       SampleInspectStdModal
     },
@@ -122,38 +75,9 @@
       return {
         description: '验货抽检标准管理页面',
         inspectMain: [],
-        // factOdrNo,
-        // cust_odr_no,
-        // artic_no,
-        // style_no,
-        // ctn_qty_ttl,
-        // cus_qty_ttl,
-        // ctn_qty_aql_ttl,
-        // sample_qty_aql_ttl,
-        // func_qty_aql_ttl,
-        // str_qty_aql,
+        routeParam: '',
         // 表头
         columns: [
-          // {
-          //   title: '#',
-          //   dataIndex: '',
-          //   key:'rowIndex',
-          //   width:60,
-          //   align:"center",
-          //   customRender:function (t,r,index) {
-          //     return parseInt(index)+1;
-          //   }
-          //  },
-          // {
-          //      title: 'factNo',
-          //      align:"center",
-          //      dataIndex: 'factNo'
-          //     },
-          // {
-          //      title: 'proDept',
-          //      align:"center",
-          //      dataIndex: 'proDept'
-          //     },
           {
             title: '工厂订单',
             align: 'center',
@@ -184,26 +108,6 @@
             align: 'center',
             dataIndex: '订单总双数'
           },
-          // {
-          //   title: 'AQL标准箱数',
-          //   align: 'center',
-          //   dataIndex: 'aql标准箱数'
-          // },
-          // {
-          //   title: 'AQL标准双数',
-          //   align: 'center',
-          //   dataIndex: 'aql标准双数'
-          // },
-          // {
-          //      title: '功能性检测双数',
-          //      align:"center",
-          //      dataIndex: '功能性检测双数'
-          //     },
-          // {
-          //      title: '结构性检测双数',
-          //      align:"center",
-          //      dataIndex: '结构性检测双数'
-          //     },
           {
             title: '操作',
             dataIndex: 'action',
@@ -217,17 +121,13 @@
           deleteBatch: '/quality/sampleInspectStd/deleteBatch',
           exportXlsUrl: 'quality/sampleInspectStd/exportXls',
           importExcelUrl: 'quality/sampleInspectStd/importExcel',
-          getInspectDetail: '/quality/sampleInspectStd/getInspectDetail',
+          getInspectDetail: '/quality/sampleInspectStd/getInspectDetail'
         }
       }
     },
-    computed: {
-      importExcelUrl: function() {
-        return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
-      },
-    },
 
     methods: {
+
       onClickRow(record) {
         return {
           on: {
@@ -254,9 +154,9 @@
       },
 
       getInspectDetail(pssr) {
-        getAction(this.url.getInspectDetail, {pssr: pssr}).then((res) => {
+        getAction(this.url.getInspectDetail, { pssr: pssr }).then((res) => {
           if (res.success) {
-            this.inspectMain[10] = res.result;
+            this.inspectMain[10] = res.result
           }
           if (res.code === 510) {
             this.$message.warning(res.message)
@@ -264,12 +164,19 @@
         })
       },
 
-      // handleEdit(record) {
-      //
-      // },
+      queryOrder(factOdrNo) {
+        this.queryParam.工厂订单 = factOdrNo
+        this.searchQuery()
+      }
 
+    },
 
+    created() {
+      this.routeParam = this.$route.params.factOdrNo
+      this.queryOrder(this.routeParam)
+      this.loadData()
     }
+
   }
 </script>
 <style scoped>

@@ -334,6 +334,7 @@ module.exports = {
     maxDefectAccept: '我们能接受的最大缺陷',
     accepted: '接受',
     rejected: '拒绝',
+    toBeInspect: '待验',
     inspect: '验货',
     orderDetail: '订单信息',
     factStyleNo: '工厂型体编号',
@@ -344,6 +345,10 @@ module.exports = {
 
 
 
+  },
+
+  custom: {
+    customFnm: '客户简称',
   },
 
   Page: {

@@ -5,7 +5,7 @@ import { constantRouterMap } from '@/config/router.config'
 Vue.use(Router)
 
 export default new Router({
-  // 极简部署、APP部署
+  // // 极简部署、APP部署
   // mode: 'hash',
   // JAR/WAR部署
   mode: 'history',

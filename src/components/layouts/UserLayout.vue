@@ -25,7 +25,7 @@
 <!--          <a href="https://github.com/zhangdaiscott/jeecg-boot" target="_blank">条款</a>-->
         </div>
         <div class="copyright">
-          {{ this.$t('common.copyRight') }} &copy; 2020 <a href="http://www.guoligroup.com.cn/" target="_blank"> {{this.$t('common.guoliTech')}} </a> {{this.$t('common.make')}}
+          {{ this.$t('common.copyRight') }} &copy; 2021 <a href="http://www.guoligroup.com.cn/" target="_blank"> {{this.$t('common.guoliTech')}} </a> {{this.$t('common.make')}}
         </div>
       </div>
     </div>

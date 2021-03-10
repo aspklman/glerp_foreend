@@ -44,7 +44,7 @@ module.exports = {
     pleaseEnterPassword: '请输入密码',
     pleaseEnterVCode: '请输入验证码',
     welcome: '欢迎',
-    welcomeToERP: '欢迎来到国立科技ERP系统',
+    welcomeToERP: '欢迎访问国立科技MES系统',
     back: '回来',
     loginFailed: '登录失败',
     logout: '退出登录',

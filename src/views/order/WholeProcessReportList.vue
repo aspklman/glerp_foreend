@@ -242,6 +242,7 @@
             <a
               :style="{color: dataSource[index].验货结果=='0'?'green':dataSource[index].验货结果=='1'?'red':dataSource[index].finishMark=='Y'?'blue':dataSource[index].finishMark=='N'?'GoldEnrod':'black'}"
               :title="sizeQtyMessage">{{ dataSource[index].订单数 }}</a>
+<!--            <a style="background-color: #FFCCFF">{{ dataSource[index].订单数 }}</a>-->
           </a-popover>
         </span>
 
@@ -270,6 +271,11 @@
               <img width="30" height="24" v-else-if="dataSource[index].finishMark=='N'" src="@/assets/boxEmpty.png">
               <img width="24" height="24" v-else src="@/assets/unknown.png">
             </a>
+<!--            <div align="center">-->
+<!--              <img width="24" height="24" v-if="dataSource[index].finishMark=='Y'" src="@/assets/boxFull.png">-->
+<!--              <img width="30" height="24" v-else-if="dataSource[index].finishMark=='N'" src="@/assets/boxEmpty.png">-->
+<!--              <img width="24" height="24" v-else src="@/assets/unknown.png">-->
+<!--            </div>-->
           </a-popover>
 
 
@@ -289,7 +295,13 @@
                   <img width="20" height="20" src="@/assets/standard.png">
                 </a>
               </a-col>
-              <a-col :xl="8" v-show="dataSource[index].验货结果=='0'||dataSource[index].验货结果=='1'">
+<!--              <a-col :xl="8" v-show="dataSource[index].验货结果=='0'||dataSource[index].验货结果=='1'">-->
+<!--                <a @click="handleReportMList(record)" :title="inspectReportMessage" />-->
+<!--                <a @click="handleStd(record)">-->
+<!--                  <img width="20" height="20" src="@/assets/standard.png">-->
+<!--                </a>-->
+<!--              </a-col>-->
+              <a-col :xl="8" v-show="dataSource[index].验货结果=='0'||dataSource[index].验货结果=='1'" >
                 <a @click="handleReportMList(record)" :title="inspectReportMessage">
                   <img width="24" height="24" v-if="dataSource[index].验货结果=='0'" src="@/assets/accepted.png">
                   <img width="24" height="24" v-else-if="dataSource[index].验货结果=='1'" src="@/assets/rejected.png">
@@ -297,16 +309,19 @@
               </a-col>
               <a-col :xl="8" v-show="dataSource[index].验货结果==undefined">
                 <a @click="handleReportMAdd1(record, index)" :title="addReportMessage">
+<!--                <a @click="handleReportMAdd1(record, index)">-->
                   <img width="20" height="20" src="@/assets/add.png">
                 </a>
               </a-col>
               <a-col :xl="8" v-show="dataSource[index].验货结果=='1'">
                 <a @click="handleReportMRework1(record)" :title="add1ReportMessage">
+<!--                <a @click="handleReportMRework1(record)">-->
                   <img width="20" height="20" src="@/assets/add1.png">
                 </a>
               </a-col>
               <a-col :xl="8" v-show="dataSource[index].验货结果=='9'">
                 <a @click="handleReportMList(record)" :title="toBeInspectMessage">
+<!--                <a @click="handleReportMList(record)">-->
                   <img width="24" height="24" src="@/assets/toBeInspect.png">
                 </a>
               </a-col>
@@ -1082,7 +1097,7 @@
     created() {
       this.queryOrder('today')
       this.loadData()
-    }
+    },
 
   }
 </script>

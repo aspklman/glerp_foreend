@@ -192,11 +192,11 @@
           }
         ],
         url: {
-          list: '/scan/vacode/list',
-          delete: '/scan/vacode/delete',
-          deleteBatch: '/scan/vacode/deleteBatch',
-          exportXlsUrl: 'scan/vacode/exportXls',
-          importExcelUrl: 'scan/vacode/importExcel'
+          list: '/scan/basic/vacode/list',
+          delete: '/scan/basic/vacode/delete',
+          deleteBatch: '/scan/basic/vacode/deleteBatch',
+          exportXlsUrl: 'scan/basic/vacode/exportXls',
+          importExcelUrl: 'scan/basic/vacode/importExcel'
         }
       }
     },

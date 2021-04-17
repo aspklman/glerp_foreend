@@ -278,9 +278,12 @@
 <!--            </div>-->
           </a-popover>
 
-
           <div align="center">
             {{ dataSource[index].满箱日期==undefined?'':dataSource[index].满箱日期 }}
+          </div>
+
+          <div align="center">
+            {{ dataSource[index].locArea==undefined?'':dataSource[index].locArea }}
           </div>
         </span>
 

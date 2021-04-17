@@ -76,8 +76,8 @@
         vacodeNm:{rules: [{ required: true, message: '请输入增值名称!' }]},
         },
         url: {
-          add: "/scan/vacode/add",
-          edit: "/scan/vacode/edit",
+          add: "/scan/basic/vacode/add",
+          edit: "/scan/basic/vacode/edit",
         },
       }
     },

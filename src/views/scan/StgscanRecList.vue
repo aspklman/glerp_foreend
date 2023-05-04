@@ -7,7 +7,7 @@
         <a-row :gutter="24">
           <a-col :md="5" :sm="7">
             <a-form-item label="扫描日期">
-              <j-date placeholder="请选择日期" v-model="queryParam.recDate"/>
+              <j-date placeholder="请选择日期" v-model="queryParam.recDate" />
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="8">
@@ -439,7 +439,7 @@
     created() {
       // let today = dateFormat('yyyyMMdd', new Date())
       // this.queryParam.recDate = today
-      this.queryParam.stkNo = 'GC'
+      this.queryParam.stkNo = 'DS'
       this.queryParam.locateNo = '01'
     },
 
@@ -460,7 +460,7 @@
         // }
         // if (userNo == null || userNo == '') {
         //   this.audioFile = this.addressPrefix + 'hammer.mp3'
-        //   this.audioFile = require("@/assets/audio/other/hammer.mp3")
+        //   this.audioFile = require("@/assets/hammer.mp3")
         //   this.$refs.audio.load()
         //   this.errorMessage = '获取登录用户名失败，请尝试退出再重新登录！'
         //   return
@@ -473,7 +473,7 @@
         let recTime = dateFormat('HHmmss', new Date())
         if (recDate == undefined || recDate == null || recDate == '') {
           // this.audioFile = this.addressPrefix + "hammer.mp3"
-          this.audioFile = require("@/assets/audio/other/hammer.mp3")
+          this.audioFile = require("@/assets/hammer.mp3")
           this.$refs.audio.load()
           this.errorMessage = '请选择扫描日期！'
           this.queryParam.barNo = ''
@@ -487,7 +487,7 @@
         let stkNo = this.queryParam.stkNo
         // if (stkNo.length == 0) {
         //   this.audioFile = this.addressPrefix + 'hammer.mp3'
-        //   this.audioFile = require("@/assets/audio/other/hammer.mp3")
+        //   this.audioFile = require("@/assets/hammer.mp3")
         //   this.$refs.audio.load()
         //   this.errorMessage = '请选择仓库！'
         //   this.queryParam.barNo = ''
@@ -502,7 +502,7 @@
           */
         if (barNo.length != 6 && barNo.length != 12) {
           // this.audioFile = this.addressPrefix + 'lengtherror.mp3'
-          this.audioFile = require("@/assets/audio/other/lengtherror.mp3")
+          this.audioFile = require("@/assets/lengtherror.mp3")
           this.$refs.audio.load()
           this.errorMessage = '条码长度错误(地点6位|外箱12位)：' + barNo
           this.queryParam.barNo = ''
@@ -521,7 +521,7 @@
         })
         if (recYearMonth <= monthlySettlement) {
           // this.audioFile = this.addressPrefix + 'yyj.mp3'
-          this.audioFile = require("@/assets/audio/other/yyj.mp3")
+          this.audioFile = require("@/assets/yyj.mp3")
           this.$refs.audio.load()
           this.errorMessage = '已月结，不允许扫描，请检查扫描日期！'
           this.queryParam.barNo = ''
@@ -549,14 +549,14 @@
           })
           if (this.queryParam.locArea == null) {
             // this.audioFile = this.addressPrefix + 'areaerror.mp3'
-            this.audioFile = require("@/assets/audio/other/areaerror.mp3")
+            this.audioFile = require("@/assets/areaerror.mp3")
             this.$refs.audio.load()
             this.errorMessage = '存放地点错误：' + barNo.toUpperCase()
             this.queryParam.barNo = ''
             return
           } else {
             // this.audioFile = this.addressPrefix + 'notify.mp3'
-            this.audioFile = require("@/assets/audio/other/notify.mp3")
+            this.audioFile = require("@/assets/notify.mp3")
             this.$refs.audio.load()
             this.errorMessage = '已设置新的存放地点：' + barNo.toUpperCase()
             this.locAreaStatus = 'NEW'
@@ -568,6 +568,7 @@
         /*
           1.获取订单、型体、外箱编号等数据
           2.客户是【爱派客】和【爱派客(香港)】时，将仓库改为【爱派客汀山成品仓(DS)】
+          3.客户是【科柔】时，将仓库改为【科柔汀山成品仓(KR)】
          */
         let orderData = ''
         await getAction(this.url.getOrderData, { pssr: barNo }).then((res) => {
@@ -589,18 +590,20 @@
         })
         if (orderData == null) {
           // this.audioFile = this.addressPrefix + 'outboxerror.mp3'
-          this.audioFile = require("@/assets/audio/other/outboxerror.mp3")
+          this.audioFile = require("@/assets/outboxerror.mp3")
           this.$refs.audio.load()
           this.errorMessage = '外箱编号错误：' + barNo
           this.queryParam.barNo = ''
           return
         } else {
           if (this.customNo == 'CR002' || this.customNo == 'GT018') {
-            stkNo = 'DS'
-            this.queryParam.stkNo = 'DS'
-          } else {
-            stkNo = 'GC'
-            this.queryParam.stkNo = 'GC'
+            if (this.factOdrNo.substr(0,4) == 'ACZL') {
+              stkNo = 'KR'
+              this.queryParam.stkNo = 'KR'
+            } else {
+              stkNo = 'DS'
+              this.queryParam.stkNo = 'DS'
+            }
           }
         }
         /*
@@ -617,7 +620,7 @@
         })
         if (repeatScan == true) {
           // this.audioFile = this.addressPrefix + 'repeatscan.mp3'
-          this.audioFile = require("@/assets/audio/other/repeatscan.mp3")
+          this.audioFile = require("@/assets/repeatscan.mp3")
           this.$refs.audio.load()
           this.errorMessage = '重复扫描：' + barNo
           this.queryParam.barNo = ''
@@ -643,7 +646,7 @@
         })
         if (scanQty < outboxQty) {
           // this.audioFile = this.addressPrefix + 'hammer.mp3'
-          this.audioFile = require("@/assets/audio/other/hammer.mp3")
+          this.audioFile = require("@/assets/hammer.mp3")
           this.$refs.audio.load()
           this.errorMessage = '成型包装未扫描或未产生回馈单：' + barNo
           this.queryParam.barNo = ''
@@ -668,7 +671,7 @@
         })
         if (noGenOrder != null && noGenOrder != '' && noGenOrder != this.factOdrNo) {
           // this.audioFile = this.addressPrefix + 'hammer.mp3'
-          this.audioFile = require("@/assets/audio/other/hammer.mp3")
+          this.audioFile = require("@/assets/hammer.mp3")
           this.$refs.audio.load()
           this.errorMessage = '上一张订单未产生入库单，请检查！'
           this.queryParam.barNo = ''
@@ -726,7 +729,7 @@
               oldFactOdrNo = this.factOdrNo
               this.locAreaStatus = 'NEW'
               // this.audioFile = this.addressPrefix + 'hammer.mp3'
-              this.audioFile = require("@/assets/audio/other/hammer.mp3")
+              this.audioFile = require("@/assets/hammer.mp3")
               this.$refs.audio.load()
               this.queryParam.barNo = ''
               return
@@ -741,7 +744,7 @@
                 this.errorMessage = '旧订单，已将存放地点从【' + this.queryParam.locArea + '】改为【' + lastLocArea + '】'
               }
               // this.audioFile = this.addressPrefix + 'notify.mp3'
-              this.audioFile = require("@/assets/audio/other/notify.mp3")
+              this.audioFile = require("@/assets/notify.mp3")
               this.$refs.audio.load()
             }
           }
@@ -751,7 +754,7 @@
           */
         if (this.queryParam.locArea == null || this.queryParam.locArea == undefined) {
           // this.audioFile = this.addressPrefix + 'hammer.mp3'
-          this.audioFile = require("@/assets/audio/other/hammer.mp3")
+          this.audioFile = require("@/assets/hammer.mp3")
           this.$refs.audio.load()
           this.errorMessage = '请先扫描存放地点条码，再扫描外箱编号条码！'
           this.queryParam.barNo = ''
@@ -769,7 +772,7 @@
           this.errorMessage = ''
         } else {
           // this.audioFile = this.addressPrefix + 'victory.mp3'
-          this.audioFile = require("@/assets/audio/other/victory.mp3")
+          this.audioFile = require("@/assets/victory.mp3")
           this.$refs.audio.load()
           this.errorMessage = '订单' + this.factOdrNo + '入库扫描已全部完成！'
         }
@@ -799,6 +802,8 @@
         let endDate = new Date()
         let interval = endDate - startDate
         console.log(startDate + '/' + endDate + '/' + interval)
+        console.log('用户1：' + this.$store.state.user.username)
+        console.log('用户2：' + this.$store.getters.userInfo.username)
 
         /*
           1.插入扫描记录
@@ -871,7 +876,7 @@
 
       //设置声音文件
       setAudioFile(audioFileName) {
-        const requireComponents = require.context('@/assets/audio/number', false, /\.mp3/)
+        const requireComponents = require.context('@/assets', false, /\.mp3/)
         requireComponents.keys().forEach(fileName => {
           // 组件实例
           const reqCom = requireComponents(fileName)

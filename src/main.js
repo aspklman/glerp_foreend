@@ -3,6 +3,7 @@ import App from './App.vue'
 import Storage from 'vue-ls'
 import router from './router'
 import store from './store/'
+import dataV from '@jiaminghi/data-view';     //(大屏使用-2021/9/16)
 
 import { VueAxios } from "@/utils/request"
 
@@ -18,6 +19,14 @@ import VueApexCharts from 'vue-apexcharts'
 
 import preview from 'vue-photo-preview'
 import 'vue-photo-preview/dist/skin.css'
+
+// 按需引入vue-awesome图标    (大屏使用-2021/9/16)
+import Icon from 'vue-awesome/components/Icon';
+import 'vue-awesome/icons/chart-bar.js';
+import 'vue-awesome/icons/chart-area.js';
+import 'vue-awesome/icons/chart-pie.js';
+import 'vue-awesome/icons/chart-line.js';
+import 'vue-awesome/icons/align-left.js';
 
 import {
   ACCESS_TOKEN,
@@ -60,6 +69,7 @@ Vue.use(vueBus);
 Vue.use(JeecgComponents);
 //国际化第二步
 Vue.use(VueI18n)
+Vue.use(dataV);   // (大屏使用-2021/9/16)
 
 //国际化第三步
 const i18n = new VueI18n({
@@ -73,6 +83,21 @@ const i18n = new VueI18n({
     'vi-VN': LangVIVN,
   }
 })
+
+// 全局注册图标
+Vue.component('icon', Icon);   // (大屏使用-2021/9/16)
+
+// 适配flex
+import '@/common/flexible.js';   // (大屏使用-2021/9/16)
+
+// 引入全局css
+import './assets/scss/style.scss';   // (大屏使用-2021/9/16)
+
+//引入echart
+import echarts from 'echarts'   // (大屏使用-2021/9/16)
+Vue.prototype.$echarts = echarts   // (大屏使用-2021/9/16)
+
+Vue.config.productionTip = false;   // (大屏使用-2021/9/16)
 
 new Vue({
   router,

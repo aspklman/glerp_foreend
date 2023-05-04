@@ -44,7 +44,7 @@ module.exports = {
     pleaseEnterPassword: 'Please Enter Password',
     pleaseEnterVCode: 'Please Enter Verification Code',
     welcome: 'Welcome to ',
-    welcomeToERP: 'Welcome to Guoli technology ERP system',
+    welcomeToERP: 'Welcome to the Apex EAM system',
     back: 'come back',
     loginFailed: 'Login Failed',
     logout: 'Logout',

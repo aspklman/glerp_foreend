@@ -1,7 +1,7 @@
 <template>
   <div class="footer">
     <div class="links">
-      <a href="http://www.guoligroup.com.cn/" target="_blank">{{this.$t('common.guoliTechCompany')}} {{this.$t('common.homePage')}}</a>
+      <a href="http://www.apexshoe.com/" target="_blank">{{this.$t('common.guoliTechCompany')}} {{this.$t('common.homePage')}}</a>
 <!--      <a href="https://github.com/zhangdaiscott/jeecg-boot" target="_blank">-->
 <!--        <a-icon type="github"/>-->
 <!--      </a>-->
@@ -11,7 +11,7 @@
     <div class="copyright">
       {{ this.$t('common.copyRight') }}
       <a-icon type="copyright"/>
-      2020 <span>{{ this.$t('common.guoliTech') }} {{this.$t('common.allRightsReserved')}}</span>
+      2023 <span>{{ this.$t('common.guoliTech') }} {{this.$t('common.allRightsReserved')}}</span>
     </div>
   </div>
 </template>

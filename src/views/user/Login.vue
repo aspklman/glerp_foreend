@@ -5,7 +5,9 @@
         :activeKey="customActiveKey"
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
         @change="handleTabClick">
-        <a-tab-pane key="tab1" :tab="this.$t('common.accountPasswordLogin')">
+<!--        <a-tab-pane key="tab1" :tab="this.$t('common.accountPasswordLogin')">-->
+        <a-tab-pane key="tab1" :tab="''">
+
 
           <a-form-item>
             <a-radio-group

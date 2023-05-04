@@ -88,6 +88,13 @@ const queryUserRoleMap = (params)=>getAction("/sys/user/queryUserRoleMap",params
 // 重复校验
 const duplicateCheck = (params)=>getAction("/sys/duplicate/check",params);
 
+// 固定资产
+const getKindNoMainList = (params)=>getAction("/asset/basicMainKind/list",params);
+const getKindNoMidList = (params)=>getAction("/asset/basicMidKind/list",params);
+const getKindNoSmallList = (params)=>getAction("/asset/basicSmallKind/list",params);
+const getAssetVendormList = (params)=>getAction("/asset/assetVendorm/list",params);
+const getOrgUnitList = (params)=>getAction("/asset/orgUnit/list",params);
+const getAssetNoList = (params)=>getAction("/asset/assetRecord/list",params);
 
 //客户管理
 const getCustomList = (params)=>getAction("/order/custom/list",params);     //****** 第一步：定义
@@ -176,6 +183,14 @@ export {
   queryTreeListForRole,
 
   getCustomList,    //****** 第二步：输出
+
+  getKindNoMainList,      //固定资产-大分类
+  getKindNoMidList,       //固定资产-中分类
+  getKindNoSmallList,     //固定资产-明细类
+  getAssetVendormList,    //固定资产-供应商
+  getOrgUnitList,         //固定资产-OA组织信息表
+  getAssetNoList,         //固定资产-资产档案
+
   getBrandList,     //品牌
   getCountryList,   //目的地
   getStylemList,    //型体

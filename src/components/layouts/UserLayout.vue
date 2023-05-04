@@ -7,12 +7,16 @@
 <!--        </div>-->
         <div class="header">
           <a href="/">
-            <img src="~@/assets/logo.png" class="logo" alt="logo">
-            <span class="title"> {{this.$t('common.guoliTech')}} </span>
+            <img width="160" height="200" src="~@/assets/logo.png" class="logo" alt="logo">
+            <br>
+<!--            <span class="title"> {{this.$t('common.guoliTechCompany')}} </span>-->
+            <span class="title"> 爱派客EAM系统 </span>
+            <br>
           </a>
         </div>
+
         <div class="desc">
-          {{this.$t('common.stockCode')}}：300716
+<!--          {{this.$t('common.stockCode')}}：300716-->
         </div>
       </div>
 
@@ -25,7 +29,7 @@
 <!--          <a href="https://github.com/zhangdaiscott/jeecg-boot" target="_blank">条款</a>-->
         </div>
         <div class="copyright">
-          {{ this.$t('common.copyRight') }} &copy; 2021 <a href="http://www.guoligroup.com.cn/" target="_blank"> {{this.$t('common.guoliTech')}} </a> {{this.$t('common.make')}}
+          {{ this.$t('common.copyRight') }} &copy; 2023 <a href="http://www.apexshoe.com/" target="_blank"> {{this.$t('common.guoliTech')}} </a> {{this.$t('common.make')}}
         </div>
       </div>
     </div>
@@ -81,7 +85,9 @@
         text-align: center;
 
         .header {
-          height: 44px;
+          /*height: 44px;*/
+          height: 88px;
+          /*line-height: 44px;*/
           line-height: 44px;
 
           .badge {
@@ -95,7 +101,8 @@
           }
 
           .logo {
-            height: 32px;
+            /*height: 32px;*/
+            height: 110px;
             vertical-align: middle;
             margin-right: 16px;
             border-style: none;
@@ -103,6 +110,7 @@
 
           .title {
             font-size: 26px;
+            /*font-size: 22px;*/
             color: rgba(0, 0, 0, .85);
             font-family: "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
             font-weight: 600;

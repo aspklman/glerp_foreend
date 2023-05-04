@@ -44,7 +44,7 @@ module.exports = {
     pleaseEnterPassword: 'Hãy nhập mật khẩu',
     pleaseEnterVCode: 'Hãy nhập mật khẩu',
     welcome: 'Chào mừng đến ',
-    welcomeToERP: 'Chào mừng đến hệ thống ROP của kênh Guoli',
+    welcomeToERP: 'Chào mừng đến với hệ thống EAM',
     back: 'quay lại.',
     loginFailed: 'Lỗi đăng nhập',
     logout: 'Đăng xuất',

@@ -94,6 +94,7 @@ const getKindNoMidList = (params)=>getAction("/asset/basicMidKind/list",params);
 const getKindNoSmallList = (params)=>getAction("/asset/basicSmallKind/list",params);
 const getAssetVendormList = (params)=>getAction("/asset/assetVendorm/list",params);
 const getOrgUnitList = (params)=>getAction("/asset/orgUnit/list",params);
+const getOrgGroupList = (params)=>getAction("/asset/orgGroup/list",params);
 const getAssetNoList = (params)=>getAction("/asset/assetRecord/list",params);
 
 //客户管理
@@ -189,6 +190,7 @@ export {
   getKindNoSmallList,     //固定资产-明细类
   getAssetVendormList,    //固定资产-供应商
   getOrgUnitList,         //固定资产-OA组织信息表
+  getOrgGroupList,         //固定资产-OA班组表
   getAssetNoList,         //固定资产-资产档案
 
   getBrandList,     //品牌

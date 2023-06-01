@@ -8,15 +8,15 @@
 
 
     <div class="no-print" style="text-align: left; padding-bottom: 20px">
-      <a-button v-print="'#printContent'" ghost type="primary">
+      <a-button v-print="'#printAssetCard'" ghost type="primary">
         打印
       </a-button>
     </div>
 
-    <section ref="print" id="printContent" class="wholeReport">
+    <section ref="print" id="printAssetCard" class="wholeReport">
 
 <!--      <a-table :columns="columns"-->
-<!--               :data-source="assetData"-->
+<!--               :data-source="assetCard"-->
 <!--               bordered-->
 <!--               :showHeader="false"-->
 <!--               :pagination="false">-->
@@ -24,7 +24,7 @@
 
 <!--          </span>-->
 <!--&lt;!&ndash;          <span slot="actionAssetName" slot-scope="text, record, index">&ndash;&gt;-->
-<!--&lt;!&ndash;            {{ assetData[0].assetName }}&ndash;&gt;-->
+<!--&lt;!&ndash;            {{ assetCard.assetName }}&ndash;&gt;-->
 <!--&lt;!&ndash;          </span>&ndash;&gt;-->
 <!--      </a-table>-->
 
@@ -32,15 +32,15 @@
       <a-row :gutter="16">
         <a-col :span="24">
           <a-card title="固定资产卡" :bordered="false">
-            资产编号：{{ assetData[0].assetNo }}
+            资产编号：{{ assetCard.assetNo }}
             <br>
-            资产名称：{{ assetData[0].assetName }}
+            资产名称：{{ assetCard.assetName }}
             <br>
-            使用厂别：{{ assetData[0].factLocation_dictText}}
+            使用厂别：{{ assetCard.factLocation_dictText}}
             <br>
-<!--            使用部门：{{ assetData[0].deptNo }}-->
+<!--            使用部门：{{ assetCard.deptNo }}-->
 <!--            <br>-->
-            验收日期：{{ assetData[0].acceptDate.substring(0,10) }}
+            验收日期：<span v-if="assetCard.acceptDate">{{ assetCard.acceptDate.substring(0,4) + '-' + assetCard.acceptDate.substring(4,6) + '-' + assetCard.acceptDate.substring(6) }}</span>
           </a-card>
         </a-col>
 <!--        <a-col :span="8">-->
@@ -87,7 +87,7 @@
 
   export default {
     name: 'AssetCardModal',
-    props: ['assetData'],
+    props: ['assetCard'],
     components: {
       // AssetCardModal,
       // BarMultid,

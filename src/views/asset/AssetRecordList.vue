@@ -22,6 +22,12 @@
             </a-form-item>
           </a-col>
         <template v-if="toggleSearchStatus">
+          <a-col :md="6" :sm="8">
+            <a-form-item :label="班组">
+              <j-select-org-group v-model="queryParam.deptNo" />
+            </a-form-item>
+          </a-col>
+
 <!--          <a-col :md="6" :sm="8">-->
 <!--            <a-form-item label="单位">-->
 <!--              <a-input placeholder="请输入单位" v-model="queryParam.unit"></a-input>-->
@@ -65,10 +71,10 @@
 
     <!-- table区域-begin -->
     <div>
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
-        <a style="margin-left: 24px" @click="onClearSelected">清空</a>
-      </div>
+<!--      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">-->
+<!--        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项-->
+<!--        <a style="margin-left: 24px" @click="onClearSelected">清空</a>-->
+<!--      </div>-->
 
       <a-table
         ref="table"
@@ -80,11 +86,23 @@
         :pagination="ipagination"
         :loading="loading"
         :customRow="onClickRow"
-        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange, type: 'radio', columnTitle: '选择行'}"
         @change="handleTableChange">
 
+        <!--------验收日期-------->
+        <span
+          slot="actionAcceptDate"
+          slot-scope="text, record, index">
+          <span v-if="record.acceptDate">{{ record.acceptDate.substring(0,4) + '-' + record.acceptDate.substring(4,6) + '-' +  record.acceptDate.substring(6,8) }}</span>
+        </span>
+
+        <!--------使用状况-------->
+        <span :style="{color: record.state=='1'?'green':record.state=='2'?'blue':record.state=='3'?'greenyellow':record.state=='4'?'orange':record.state=='5'?'red':record.state=='6'?'purple':''}"
+              slot="actionState" slot-scope="text, record, index">
+          {{ record.state_dictText }}
+        </span>
+
         <span slot="action" slot-scope="text, record">
-          <a v-has="'assetrecord:detail'" @click="handleDetail(record)">详情</a>
           <a v-has="'assetrecord:edit'" @click="handleEdit(record)">编辑</a>
 
           <a-divider type="vertical" />
@@ -92,7 +110,13 @@
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
             <a-menu slot="overlay">
               <a-menu-item>
+                <a v-has="'assetrecord:detail'" @click="handleDetail(record)">详情</a>
+              </a-menu-item>
+              <a-menu-item>
                 <a v-has="'assetrecord:assetCard'" @click="handleAssetCard(record)">固定资产卡</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a v-has="'assetrecord:assetInspect'" @click="handleAssetInspect(record)">固定资产验收单</a>
               </a-menu-item>
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
@@ -111,7 +135,10 @@
     <assetRecord-modal ref="modalForm" @ok="modalFormOk"></assetRecord-modal>
 
     <!-- 固定资产卡 -->
-    <assetCard-modal ref="assetCardModal" :assetData="assetData" />
+    <assetCard-modal ref="assetCardModal" :assetCard="assetCard" />
+
+    <!-- 固定资产验收单 -->
+    <assetInspect-modal ref="assetInspectModal" :assetInspect="assetInspect" />
 
   </a-card>
 </template>
@@ -119,31 +146,38 @@
 <script>
   import AssetRecordModal from './modules/AssetRecordModal'
   import AssetCardModal from './modules/AssetCardModal'
+  import AssetInspectModal from './modules/AssetInspectModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import JSelectOrgUnit from '../../components/jeecgbiz/JSelectOrgUnit'
+  import JSelectOrgGroup from '../../components/jeecgbiz/JSelectOrgGroup'
 
   export default {
     name: "AssetRecordList",
     mixins:[JeecgListMixin],
     components: {
+      JSelectOrgGroup,
       AssetRecordModal,
       AssetCardModal,
+      AssetInspectModal,
+      JSelectOrgUnit,
     },
     data () {
       return {
         description: '资产档案表管理页面',
-        assetData: [],
+        assetCard: {},
+        assetInspect: {},
         // 表头
         columns: [
-          {
-            title: '#',
-            dataIndex: '',
-            key:'rowIndex',
-            width:60,
-            align:"center",
-            customRender:function (t,r,index) {
-              return parseInt(index)+1;
-            }
-          },
+          // {
+          //   title: '#',
+          //   dataIndex: '',
+          //   key:'rowIndex',
+          //   width:60,
+          //   align:"center",
+          //   customRender:function (t,r,index) {
+          //     return parseInt(index)+1;
+          //   }
+          // },
 		   // {
        //      title: '厂区编号',
        //      align:"center",
@@ -159,7 +193,7 @@
             title: '资产名称',
             align:"center",
             dataIndex: 'assetName',
-         sorter: true,
+            sorter: true,
            },
 		   // {
        //      title: '单位',
@@ -191,28 +225,30 @@
        //      align:"center",
        //      dataIndex: 'factCentre'
        //     },
+          {
+            title: '班组',
+            align:"center",
+            dataIndex: 'deptNo',
+            sorter: true,
+          },
 		   {
             title: '使用厂别',
             align:"center",
             dataIndex: 'factLocation_dictText',
-         sorter: true,
+            sorter: true,
            },
-		   // {
-       //      title: '使用部门',
-       //      align:"center",
-       //      dataIndex: 'deptNo'
-       //     },
 		   // {
        //      title: '资产来源',
        //      align:"center",
        //      dataIndex: 'kind'
        //     },
-		   {
-            title: '验收日期',
-            align:"center",
-            dataIndex: 'acceptDate',
-         sorter: true,
-           },
+        {
+          title: '验收日期',
+          align: 'center',
+          dataIndex: 'acceptDate',
+          sorter: true,
+          scopedSlots: { customRender: 'actionAcceptDate' }
+        },
 		   // {
        //      title: '原始单价',
        //      align:"center",
@@ -241,19 +277,20 @@
 		   {
             title: '使用状况',
             align:"center",
-            dataIndex: 'state_dictText',
-         sorter: true,
+            dataIndex: 'state',
+            sorter: true,
+            scopedSlots: { customRender: 'actionState' },
            },
 		   // {
        //      title: '折旧方法',
        //      align:"center",
        //      dataIndex: 'depreciation'
        //     },
-		   // {
-       //      title: '保管人',
-       //      align:"center",
-       //      dataIndex: 'custodian'
-       //     },
+		   {
+            title: '保管人',
+            align:"center",
+            dataIndex: 'custodian'
+           },
 		   // {
        //      title: '制造商',
        //      align:"center",
@@ -344,18 +381,18 @@
        //      align:"center",
        //      dataIndex: 'custodianUser'
        //     },
-          {
-            title: '建立人',
-            align:"center",
-            dataIndex: 'createBy',
-            sorter: true,
-          },
-          {
-            title: '建立日期',
-            align:"center",
-            dataIndex: 'createTime',
-            sorter: true,
-          },
+       //    {
+       //      title: '建立人',
+       //      align:"center",
+       //      dataIndex: 'createBy',
+       //      sorter: true,
+       //    },
+       //    {
+       //      title: '建立日期',
+       //      align:"center",
+       //      dataIndex: 'createTime',
+       //      sorter: true,
+       //    },
           {
             title: '操作',
             dataIndex: 'action',
@@ -377,26 +414,31 @@
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
     }
   },
-    methods: {
-      handleAssetCard: function(record) {
-        this.$refs.assetCardModal.edit(record);
-      },
+  methods: {
+    handleAssetCard: function(record) {
+      this.$refs.assetCardModal.edit(record);
+    },
 
-      onClickRow(record) {
-        return {
-          on: {
-            click: () => {
-              let keys = []
-              keys.push(record.id)
-              this.selectedRowKeys = keys
-              this.recordId = record.id
-              this.assetData[0] = record
-            }
+    handleAssetInspect: function(record) {
+      this.$refs.assetInspectModal.edit(record);
+    },
+
+    onClickRow(record) {
+      return {
+        on: {
+          click: () => {
+            let keys = []
+            keys.push(record.id)
+            this.selectedRowKeys = keys
+            this.recordId = record.id
+            this.assetCard = record
+            this.assetInspect = record
           }
         }
-      },
-    }
+      }
+    },
   }
+}
 </script>
 <style scoped>
   @import '~@assets/less/common.less'

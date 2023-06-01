@@ -8,10 +8,10 @@
     @cancel="handleCancel"
     :footer="title!='新增'?null:footer"
     cancelText="关闭">
-    
+
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-      
+
 <!--        <a-form-item-->
 <!--          :labelCol="labelCol"-->
 <!--          :wrapperCol="wrapperCol"-->
@@ -111,17 +111,17 @@
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
-              label="原使用部门">
-              <a-input placeholder="自动获取原使用部门，无须填写！" v-decorator="['deptNoOld', {}]" :disabled="true" />
+              label="原班组">
+              <a-input placeholder="自动获取原班组，无须填写！" v-decorator="['deptNoOld', {}]" :disabled="true" />
             </a-form-item>
           </a-col>
           <a-col :span="12" :gutter="7">
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
-              label="现使用部门">
-<!--              <a-input placeholder="请输入现使用部门" v-decorator="['deptNo', {}]" />-->
-              <j-select-org-unit v-decorator="['deptNo', validatorRules.deptNo]" ></j-select-org-unit>
+              label="现班组">
+<!--              <a-input placeholder="请输入现班组" v-decorator="['deptNo', {}]" />-->
+              <j-select-org-group v-decorator="['deptNo', validatorRules.deptNo]" ></j-select-org-group>
             </a-form-item>
           </a-col>
         </a-row>
@@ -314,8 +314,49 @@
           </a-col>
         </a-row>
 
+        <hr align=center color=#987cb9 SIZE=1>
+        <br>
 
-		
+        <a-row type="flex" justify="space-between">
+          <a-col :span="12" :gutter="7">
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="创建人">
+              <a-input placeholder="" v-decorator="['createBy', {}]" :disabled="true"/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12" :gutter="7">
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="创建日期">
+              <a-input placeholder="" v-decorator="['createTime', {}]" :disabled="true"/>
+            </a-form-item>
+          </a-col>
+        </a-row>
+
+<!--        <a-row type="flex" justify="space-between">-->
+<!--          <a-col :span="12" :gutter="7">-->
+<!--            <a-form-item-->
+<!--              :labelCol="labelCol"-->
+<!--              :wrapperCol="wrapperCol"-->
+<!--              label="修改人">-->
+<!--              <a-input placeholder="" v-decorator="['updateBy', {}]" :disabled="true"/>-->
+<!--            </a-form-item>-->
+<!--          </a-col>-->
+<!--          <a-col :span="12" :gutter="7">-->
+<!--            <a-form-item-->
+<!--              :labelCol="labelCol"-->
+<!--              :wrapperCol="wrapperCol"-->
+<!--              label="修改日期">-->
+<!--              <a-input placeholder="" v-decorator="['updateTime', {}]" :disabled="true"/>-->
+<!--            </a-form-item>-->
+<!--          </a-col>-->
+<!--        </a-row>-->
+
+
+
       </a-form>
     </a-spin>
   </a-modal>
@@ -330,11 +371,13 @@
   import JSelectOrgUnit from '../../../components/jeecgbiz/JSelectOrgUnit'
   import JSelectAssetNo from '../../../components/jeecgbiz/JSelectAssetNo'
   import { getAction } from '../../../api/manage'
+  import JSelectOrgGroup from '../../../components/jeecgbiz/JSelectOrgGroup'
 
 
   export default {
     name: "AssetChangeModal",
     components: {
+      JSelectOrgGroup,
       JSelectAssetNo,
       JDate,
       JDictSelectTag,
@@ -362,7 +405,7 @@
           assetNo:{rules: [{ required: true, message: '请输入资产编号!' }]},
           state:{rules: [{ required: true, message: '请输入资产编号!' }], initialValue: '1'},
           factLocation:{rules: [{ required: true, message: '请选择现使用厂别!' }]},
-          deptNo:{rules: [{ required: true, message: '请选择现使用部门!' }]},
+          deptNo:{rules: [{ required: true, message: '请选择现班组!' }]},
           location:{rules: [{ required: true, message: '请输入现存放位置!' }]},
           locationFl:{rules: [{ required: true, message: '请选择现存放楼层！' }]},
           locationDl:{rules: [{ required: true, message: '自动获取现存放区域，无须填写！' }]},
@@ -394,7 +437,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'factNo','changeNo','changeDt','assetNo','stateOld','factOld','factCentreOld','factLocationOld','deptNoOld','locationOld','custodianOld','custodianManagerOld','custodianUserOld','locationFlOld','locationDlOld','locationFactOld','state','fact','factCentre','factLocation','deptNo','location','custodian','custodianManager','custodianUser','locationFl','locationDl','locationFact','notes'))
+          this.form.setFieldsValue(pick(this.model,'factNo','changeNo','changeDt','assetNo','stateOld','factOld','factCentreOld','factLocationOld','deptNoOld','locationOld','custodianOld','custodianManagerOld','custodianUserOld','locationFlOld','locationDlOld','locationFactOld','state','fact','factCentre','factLocation','deptNo','location','custodian','custodianManager','custodianUser','locationFl','locationDl','locationFact','notes','createBy','createTime','updateBy','updateTime'))
 		  //时间格式化
         });
 
@@ -408,6 +451,19 @@
         // 触发表单验证
         this.form.validateFields((err, values) => {
           if (!err) {
+            // 如果原值和现值相同，无须异动
+            if (this.form.getFieldValue('stateOld') == this.form.getFieldValue('state') &&
+                this.form.getFieldValue('factLocationOld') == this.form.getFieldValue('factLocation') &&
+                this.form.getFieldValue('deptNoOld') == this.form.getFieldValue('deptNo') &&
+                this.form.getFieldValue('locationOld') == this.form.getFieldValue('location') &&
+                this.form.getFieldValue('locationFlOld') == this.form.getFieldValue('locationFl') &&
+                this.form.getFieldValue('locationDlOld') == this.form.getFieldValue('locationDl') &&
+                this.form.getFieldValue('locationFactOld') == this.form.getFieldValue('locationFact') &&
+                this.form.getFieldValue('custodianOld') == this.form.getFieldValue('custodian') &&
+                this.form.getFieldValue('custodianUserOld') == this.form.getFieldValue('custodianUser')) {
+              that.$message.warning('现值和原值相同，无须异动！');
+              return;
+            }
             that.confirmLoading = true;
             let httpurl = '';
             let method = '';
@@ -420,7 +476,7 @@
             }
             let formData = Object.assign(this.model, values);
             //时间格式化
-            
+
             console.log(formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){
@@ -495,6 +551,7 @@
         let pssr = pp.toString()
         getAction(this.url.getAssetDetailByNo, { pssr: pssr }).then((res) => {
           if (res.success) {
+            // 原值
             this.form.setFieldsValue({ 'stateOld': res.result.state })
             this.form.setFieldsValue({ 'factLocationOld': res.result.factLocation })
             this.form.setFieldsValue({ 'deptNoOld': res.result.deptNo })
@@ -504,6 +561,16 @@
             this.form.setFieldsValue({ 'locationFactOld': res.result.locationFact })
             this.form.setFieldsValue({ 'custodianOld': res.result.custodian })
             this.form.setFieldsValue({ 'custodianUserOld': res.result.custodianUser })
+            // 现值
+            this.form.setFieldsValue({ 'state': res.result.state })
+            this.form.setFieldsValue({ 'factLocation': res.result.factLocation })
+            this.form.setFieldsValue({ 'deptNo': res.result.deptNo })
+            this.form.setFieldsValue({ 'location': res.result.location })
+            this.form.setFieldsValue({ 'locationFl': res.result.locationFl })
+            this.form.setFieldsValue({ 'locationDl': res.result.locationDl })
+            this.form.setFieldsValue({ 'locationFact': res.result.locationFact })
+            this.form.setFieldsValue({ 'custodian': res.result.custodian })
+            this.form.setFieldsValue({ 'custodianUser': res.result.custodianUser })
             // console.log('使用状况：' + res.result.state);
             // this.$message.success(res.message)
             // console.log(`提交成功!`)

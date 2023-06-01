@@ -82,6 +82,13 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
 
+        <!--------验收日期-------->
+        <span
+          slot="actionChangeDt"
+          slot-scope="text, record, index">
+          {{ record.changeDt.substring(0,4) + '-' + record.changeDt.substring(4,6) + '-' +  record.changeDt.substring(6,8) }}
+        </span>
+
         <span slot="action" slot-scope="text, record">
           <a v-has="'assetchange:detail'" @click="handleDetail(record)">详情</a>
 <!--          <a v-has="'assetchange:edit'" @click="handleEdit(record)">编辑</a>-->
@@ -146,7 +153,8 @@
 		   {
             title: '异动日期',
             align:"center",
-            dataIndex: 'changeDt'
+            dataIndex: 'changeDt',
+            scopedSlots: {customRender: 'actionChangeDt'}
            },
           {
             title: '资产编号',
@@ -269,12 +277,12 @@
        //      dataIndex: 'notes'
        //     },
           {
-            title: '建立人',
+            title: '创建人',
             align:"center",
             dataIndex: 'createBy'
           },
           {
-            title: '建立日期',
+            title: '创建日期',
             align:"center",
             dataIndex: 'createTime'
           },
@@ -300,7 +308,7 @@
     }
   },
     methods: {
-     
+
     }
   }
 </script>

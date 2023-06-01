@@ -20,16 +20,15 @@
                              dictCode="asset_fact_location"/>
         </p>
 
-        使用部门名称:
+        班组名称:
         <a-input-search
           :style="{width:'150px',marginBottom:'15px'}"
-          placeholder="请输入使用部门名称"
-          v-model="queryParam.departmentName"
+          placeholder="请输入班组名称"
+          v-model="queryParam.groupName"
           @search="onSearch"
         ></a-input-search>
         <a-button @click="searchReset(1)" style="margin-left: 20px" icon="redo">重置</a-button>
-<!--        <a-text style="color: blue; paddingLeft: 16px">注意：如果找不到，请至菜单【基础资料->使用部门】新增！</a-text>-->
-        <!--使用部门列表-->
+        <!--班组列表-->
         <a-table
           ref="table"
           :scroll="scrollTrigger"
@@ -48,11 +47,11 @@
 
 <script>
   import { filterObj } from '@/utils/util'
-  import { getOrgUnitList } from '@/api/api'
+  import { getOrgGroupList } from '@/api/api'
   import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'
 
   export default {
-    name: 'JSelectOrgUnitModal',
+    name: 'JSelectOrgGroupModal',
     components: {
       JDictSelectTag,
     },
@@ -60,9 +59,19 @@
     data() {
       return {
         queryParam: {
-          departmentNo: ''
+          groupNo: ''
         },
         columns: [
+          {
+            title: '班组编号',
+            align: 'center',
+            dataIndex: 'groupNo'
+          },
+          {
+            title: '班组名称',
+            align: 'center',
+            dataIndex: 'groupName'
+          },
           {
             title: '使用部门编号',
             align: 'center',
@@ -102,8 +111,8 @@
         scrollTrigger: {},
         dataSource: [],
         selectedKeys: [],
-        departmentNameArr: [],
-        title: '选择使用部门',
+        groupNameArr: [],
+        title: '选择班组',
         ipagination: {
           current: 1,
           pageSize: 10,
@@ -116,7 +125,7 @@
           total: 0
         },
         isorter: {
-          column: 'departmentNo',
+          column: 'groupNo',
           order: 'asc'
         },
         selectedRowKeys: [],
@@ -132,6 +141,12 @@
     },
 
     computed: {
+      filterDepartmentNo() {
+        this.loadData()
+      },
+    },
+
+    computed: {
       filterCompanyNo() {
         this.loadData()
       },
@@ -144,7 +159,7 @@
           this.ipagination.current = 1
         }
         let params = this.getQueryParams()//查询条件
-        getOrgUnitList(params).then((res) => {
+        getOrgGroupList(params).then((res) => {
           if (res.success) {
             this.dataSource = res.result.records
             this.ipagination.total = res.result.total
@@ -185,7 +200,7 @@
           that.loadData(1)
         }
         that.selectedRowKeys = []
-        that.departmentNameArr = []
+        that.groupNameArr = []
         that.selectedKeys = []
       },
       close() {
@@ -204,17 +219,17 @@
       handleSubmit() {
         let that = this
         for (let i = 0, len = this.selectedRowKeys.length; i < len; i++) {
-          this.getdepartmentNos(this.selectedRowKeys[i])
+          this.getgroupNos(this.selectedRowKeys[i])
         }
-        that.$emit('ok', that.departmentNameArr.join(','))
+        that.$emit('ok', that.groupNameArr.join(','))
         that.close()
       },
-      // 遍历匹配,获取【使用部门编号】
-      getdepartmentNos(rowId) {
+      // 遍历匹配,获取【班组编号】
+      getgroupNos(rowId) {
         let dataSource = this.dataSource
         for (let i = 0, len = dataSource.length; i < len; i++) {
           if (rowId === dataSource[i].id) {
-            this.departmentNameArr.push(dataSource[i].departmentNo)
+            this.groupNameArr.push(dataSource[i].groupNo)
           }
         }
       },

@@ -1,21 +1,44 @@
 <template>
   <a-modal
     :title="title"
-    :width="1580"
+    :width="1500"
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleOk"
+    :footer="title=='详情'?null:footer"
     @cancel="handleCancel"
     cancelText="关闭">
-    
+
+
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-      
+
 <!--        <a-form-item-->
 <!--          :labelCol="labelCol"-->
 <!--          :wrapperCol="wrapperCol"-->
 <!--          label="厂区编号">-->
 <!--          <a-input placeholder="请输入厂区编号" v-decorator="['factNo', {}]" />-->
+<!--        </a-form-item>-->
+
+
+<!--        <a-form-item label="异步加载" style="width: 300px">-->
+<!--          <j-search-select-tag-->
+<!--            placeholder="请做出你的选择"-->
+<!--            v-model="asyncSelectValue"-->
+<!--            dict="v_org_unit, department_name, department_no"-->
+<!--            :async="true">-->
+<!--          </j-search-select-tag>-->
+<!--          {{ asyncSelectValue }}-->
+<!--        </a-form-item>-->
+
+<!--        <a-form-item label="下拉搜索" style="width: 300px">-->
+<!--          <j-search-select-tag-->
+<!--            @change="handleChange"-->
+<!--            placeholder="请做出你的选择"-->
+<!--            v-model="selectValue"-->
+<!--            :dictOptions="dictOptions">-->
+<!--          </j-search-select-tag>-->
+<!--          {{ selectValue }}-->
 <!--        </a-form-item>-->
 
 
@@ -96,7 +119,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="资产名称">
-              <a-input placeholder="自动获取资产名称，无须填写！" v-decorator="['assetName', validatorRules.assetName]" :disabled="true" />
+              <a-input placeholder="请输入资产名称" v-decorator="['assetName', validatorRules.assetName]" />
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -279,9 +302,9 @@
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
-              label="使用部门">
-<!--              <a-input placeholder="请输入使用部门" v-decorator="['deptNo', {}]" />-->
-              <j-select-org-unit v-decorator="['deptNo', validatorRules.deptNo]" ></j-select-org-unit>
+              label="班组">
+<!--              <a-input placeholder="请输入班组" v-decorator="['deptNo', {}]" />-->
+              <j-select-org-group v-decorator="['deptNo', validatorRules.deptNo]" ></j-select-org-group>
             </a-form-item>
           </a-col>
           <a-col :span="8" :gutter="7">
@@ -477,7 +500,7 @@
 <!--          <a-input placeholder="请输入管理经理" v-decorator="['custodianManager', {}]" />-->
 <!--        </a-form-item>-->
 
-		
+
       </a-form>
     </a-spin>
   </a-modal>
@@ -494,21 +517,38 @@
   import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'
   import JSelectAssetVendorm from '../../../components/jeecgbiz/JSelectAssetVendorm'
   import { getAction } from '@/api/manage'
-  import JSelectOrgUnit from '../../../components/jeecgbiz/JSelectOrgUnit'
+  import JSelectOrgGroup from '../../../components/jeecgbiz/JSelectOrgGroup'
+  import JSearchSelectTag from '../../../components/dict/JSearchSelectTag'
 
   export default {
     name: "AssetRecordModal",
     components: {
-      JSelectOrgUnit,
+      JSelectOrgGroup,
       JSelectAssetVendorm,
       JDate,
       JSelectKindNoMain,
       JSelectKindNoMid,
       JSelectKindNoSmall,
       JDictSelectTag,
+      JSearchSelectTag,
     },
     data () {
       return {
+        selectValue:"",
+        asyncSelectValue:"",
+        dictOptions:[],
+
+        // dictOptions:[{
+        //   text:"选项一",
+        //   value:"1"
+        // },{
+        //   text:"选项二",
+        //   value:"2"
+        // },{
+        //   text:"选项三",
+        //   value:"3"
+        // }],
+
         assetName: '',
         title:"操作",
         visible: false,
@@ -539,7 +579,7 @@
           rate:{rules: [{ required: true, message: '请输入折旧率!' }], initialValue: 0 },
           residual:{rules: [{ required: true, message: '请输入残值率!' }], initialValue: 0 },
           factLocation:{rules: [{ required: true, message: '请选择使用厂别!' }]},
-          deptNo:{rules: [{ required: true, message: '请选择使用部门!' }]},
+          deptNo:{rules: [{ required: true, message: '请选择班组!' }]},
           locationFact:{rules: [{ required: true, message: '请选择存放厂区!' }]},
           locationDl:{rules: [{ required: true, message: '请选择存放区域!' }]},
           locationFl:{rules: [{ required: true, message: '请选择存放楼层!' }]},
@@ -551,13 +591,38 @@
           edit: "/asset/assetRecord/edit",
           getAssetNo: "/asset/assetRecord/getAssetNo",
           getAssetName: "/asset/basicSmallKind/getAssetName",
+          getOrgUnit: "/asset/orgUnit/getOrgUnit",
+          getDepreciationYears: "/asset/basicMidKind/getDepreciationYears",
         },
       }
     },
     created () {
 
     },
+
+
+
+
+
     methods: {
+      // handleChange () {
+      //   let pp = new Array(1)
+      //   pp[0] = this.form.getFieldValue('factLocation')
+      //   let pssr = pp.toString()
+      //   // console.log('部门：' + pssr)
+      //   getAction(this.url.getOrgUnit, {pssr: pssr}).then((res) => {
+      //     if (res.success) {
+      //       this.dictOptions = res.result;
+      //       console.log('部门：' + res.result.text);
+      //       // this.$message.success(res.message)
+      //       // console.log(`提交成功!`)
+      //     }
+      //     if (res.code === 510) {
+      //       // this.$message.warning(res.message)
+      //     }
+      //   })
+      // },
+
 
       add () {
         this.edit({});
@@ -671,6 +736,7 @@
         let pp = new Array(1)
         pp[0] = catalogId
         let pssr = pp.toString()
+        //-------------------------------------------------------------------
         await getAction(this.url.getAssetNo, {pssr: pssr}).then((res) => {
           if (res.success) {
             // console.log(res.result)
@@ -684,6 +750,7 @@
             // this.$message.warning(res.message)
           }
         })
+        //-------------------------------------------------------------------
         await getAction(this.url.getAssetName, {pssr: pssr}).then((res) => {
           if (res.success) {
             console.log(res.result)
@@ -691,6 +758,27 @@
             this.form.setFieldsValue({'assetName': res.result.assetName})
             this.form.setFieldsValue({'midKind': res.result.kindNoMid})
             this.form.setFieldsValue({'kindNo': res.result.kindNoMain})
+            // console.log(res.result);
+            // this.$message.success(res.message)
+            // console.log(`提交成功!`)
+          }
+          if (res.code === 510) {
+            // this.$message.warning(res.message)
+          }
+        })
+        //-------------------------------------------------------------------
+        let kindNoMid = catalogId.substring(0,1)
+        console.log('中分类编号：' + kindNoMid)
+        await getAction(this.url.getDepreciationYears, {pssr: kindNoMid}).then((res) => {
+          if (res.success) {
+            console.log(res.result.depreciationYears)
+            console.log(res.result.residualValueRate)
+            let rate = Math.round(res.result.depreciationYears / 100 * 100);
+            let num = res.result.depreciationYears * 12;
+            let residual = res.result.residualValueRate;
+            this.form.setFieldsValue({'rate': rate})
+            this.form.setFieldsValue({'num': num})
+            this.form.setFieldsValue({'residual': residual})
             // console.log(res.result);
             // this.$message.success(res.message)
             // console.log(`提交成功!`)
@@ -723,5 +811,8 @@
 </script>
 
 <style lang="less" scoped>
+  .a{
+    color: mediumvioletred;
+  }
 
 </style>
